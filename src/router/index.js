@@ -1,14 +1,23 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
 import Home from '../views/Home.vue'
+import Feed from '../views/Feed.vue'
 
 Vue.use(VueRouter)
 
 const routes = [
   {
     path: '/',
-    name: 'Home',
-    component: Home
+    redirect: '/discover'
+  },
+  {
+    path: '/discover',
+    name: 'Discover',
+    component: Feed
+  },
+  {
+    path: '/recipe/:id',
+    component: () => import(/* webpackChunkName: "about" */ '../views/Recipe.vue')
   },
   {
     path: '/about',
