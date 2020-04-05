@@ -1,0 +1,96 @@
+<template>
+  <div class="section">
+    <div class="container">
+      <div class="section">
+        <h1 class="title">{{`${user.firstName} ${user.lastName}`}}</h1>
+        <span
+          class="subtitle is-6 is-italic"
+        >{{`member since: ${new Date(user.createdAt).toLocaleDateString()}`}}</span>
+      </div>
+      <div class="section">
+        <h2 class="subtitle is-4">{{`${user.firstName}'s recipes`}}</h2>
+        <hr />
+        <b-table :data="recipes">
+          <template slot-scope="props">
+            <b-table-column field="name" label="Recipe">
+              <router-link :to="`/recipe/${props.row._id}`">{{ props.row.name }}</router-link>
+            </b-table-column>
+            <b-table-column field="dietTypes" label="Diets">
+              <div class="tags">
+                <span
+                  class="tag"
+                  v-for="(diet, i) in props.row.dietTypes.slice(0,5)"
+                  :index="i"
+                  :key="i"
+                >{{diet}}</span>
+              </div>
+            </b-table-column>
+            <b-table-column
+              field="ratings"
+              label="Rating"
+              centered
+            >{{ countAvg(props.row.ratings) }}</b-table-column>
+            <b-table-column field="date" label="Date added" numeric>
+              <span class="tag is-info">{{ props.row.dateAdded.toLocaleDateString() }}</span>
+            </b-table-column>
+          </template>
+
+          <template slot="empty">
+            <section class="section">
+              <div class="content has-text-grey has-text-centered">
+                <p>
+                  <b-icon icon="emoticon-sad" size="is-large"></b-icon>
+                </p>
+                <p>Nothing here.</p>
+              </div>
+            </section>
+          </template>
+        </b-table>
+      </div>
+    </div>
+    <b-loading :active.sync="isLoading" :is-full-page="false"></b-loading>
+  </div>
+</template>
+
+<script>
+import { mapActions, mapGetters } from "vuex";
+export default {
+  data() {
+    return {
+      isLoading: false
+    };
+  },
+  computed: {
+    ...mapGetters(["getUserRecipes", "getUser"]),
+    user() {
+      return this.getUser(this.$route.params.id);
+    },
+    recipes() {
+      return this.getUserRecipes(this.user._id);
+    }
+  },
+  mounted() {},
+  methods: {
+    ...mapActions(["fetchRecipes", "fetchUser"]),
+    countAvg(arr) {
+      if (arr && arr.length > 0)
+        return (
+          Math.round((arr.reduce((a, b) => a + b, 0) / arr.length) * 10) / 10
+        );
+    }
+  },
+  beforeRouteEnter(to, from, next) {
+    next(async vm => {
+      vm.isLoading = true;
+      await vm.fetchUser(to.params.id);
+
+      //TODO optimize fetch
+      await vm.fetchRecipes();
+      vm.isLoading = false;
+    });
+  }
+};
+</script>
+
+<style>
+</style>

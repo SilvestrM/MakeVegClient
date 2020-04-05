@@ -43,12 +43,14 @@
                 <p>
                   <time
                     :datetime="recipe.dateAdded"
-                  >{{`${recipe.dateAdded.getDate()}/${recipe.dateAdded.getMonth()}/${recipe.dateAdded.getFullYear()}`}}</time>
+                  >{{`${recipe.dateAdded.getDate()}/${recipe.dateAdded.getMonth()}/${recipe.dateAdded.getFullYear()} `}}</time>
                   &nbsp;
                 </p>
                 <p>
-                  by&nbsp;
-                  <span>{{recipe.author}}</span>
+                  by &nbsp;
+                  <router-link :to="`/user/${author._id}`">
+                    <span class="is-italic">{{`${author.firstName} ${author.lastName}`}}</span>
+                  </router-link>
                 </p>
               </div>
             </div>
@@ -118,6 +120,10 @@ export default {
     ...mapGetters(["getRecipe", "getUser"]),
     recipe() {
       return this.getRecipe(this.$route.params.id);
+    },
+    author() {
+      console.log(this.getUser(this.recipe.author));
+      return this.getUser(this.recipe.author);
     },
     photos() {
       const arr = [];

@@ -1,6 +1,5 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
-import Home from '../views/Home.vue'
 import Feed from '../views/Feed.vue'
 
 Vue.use(VueRouter)
@@ -18,6 +17,10 @@ const routes = [
   {
     path: '/recipe/:id',
     component: () => import(/* webpackChunkName: "about" */ '../views/Recipe.vue')
+  },
+  {
+    path: '/user/:id',
+    component: () => import(/* webpackChunkName: "about" */ '../views/UserProfile.vue')
   },
   {
     path: '/about',

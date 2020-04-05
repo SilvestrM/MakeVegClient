@@ -112,6 +112,9 @@ const recipes = {
             } else {
                 if (state.recipe) return state.recipe
             }
+        },
+        getUserRecipes: (state) => (id) => {
+            return state.recipes.filter(recipe => recipe.author === id)
         }
     }
 }

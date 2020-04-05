@@ -11,13 +11,9 @@ const users = {
     mutations: {
         addUser: (state, data) => state.users.push(data),
         setUser: (state, data) => {
-            data.dateAdded = new Date(data.dateAdded)
             state.user = data
         },
         setUsers: (state, data) => {
-            data.forEach(data => {
-                data.dateAdded = new Date(data.dateAdded)
-            })
             state.users = data
         },
         updateCategory: (state, data) => {
@@ -27,7 +23,7 @@ const users = {
         removeCategory: (state, id) => (state.users = state.users.filter(category => category._id !== id))
     },
     actions: {
-        async fetchsers({ commit, state }) {
+        async fetchUsers({ commit, state }) {
             await axios.get(state.url).then(resolve => {
                 commit('setUsers', resolve.data)
             })
@@ -44,7 +40,8 @@ const users = {
             const user = state.users.find(user => user._id === id)
             if (!user) {
                 await axios.get(`${state.url}${id}`).then(resolve => {
-                    commit('setuser', resolve.data)
+                    console.log(resolve.data);
+                    commit('setUser', resolve.data)
                 })
                     .catch(reason => {
                         Toast.open({
