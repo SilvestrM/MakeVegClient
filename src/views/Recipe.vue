@@ -48,7 +48,7 @@
                 </p>
                 <p>
                   by &nbsp;
-                  <router-link :to="`/user/${author._id}`">
+                  <router-link :to="`/user/${author._id}/recipes`">
                     <span class="is-italic">{{`${author.firstName} ${author.lastName}`}}</span>
                   </router-link>
                 </p>
@@ -155,6 +155,7 @@ export default {
       vm.isLoading = true;
       await vm.fetchRecipe(to.params.id);
       await vm.fetchUser(vm.getRecipe(to.params.id).author);
+      console.log(vm.getRecipe(to.params.id).author);
       vm.isLoading = false;
     });
   },

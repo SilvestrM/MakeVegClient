@@ -17,7 +17,7 @@
         </div>
       </div>
     </div>
-    <b-loading :active.sync="isLoading" :is-full-page="false"></b-loading>
+    <b-loading :active.sync="isLoading" :is-full-page="true"></b-loading>
   </div>
 </template>
 

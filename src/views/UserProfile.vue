@@ -10,7 +10,7 @@
       <div class="section">
         <h2 class="subtitle is-4">{{`${user.firstName}'s recipes`}}</h2>
         <hr />
-        <b-table :data="recipes">
+        <b-table :data="recipes" :loading="isLoading">
           <template slot-scope="props">
             <b-table-column field="name" label="Recipe">
               <router-link :to="`/recipe/${props.row._id}`">{{ props.row.name }}</router-link>
@@ -48,7 +48,7 @@
         </b-table>
       </div>
     </div>
-    <b-loading :active.sync="isLoading" :is-full-page="false"></b-loading>
+    <!-- <b-loading :active.sync="isLoading" :is-full-page="false"></b-loading> -->
   </div>
 </template>
 
