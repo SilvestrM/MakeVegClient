@@ -11,12 +11,14 @@ const recipes = {
     mutations: {
         addRecipe: (state, data) => state.recipes.push(data),
         setRecipe: (state, data) => {
-            data.dateAdded = new Date(data.dateAdded)
+            data.createdAt = new Date(data.createdAt)
+            data.cookTime = new Date(data.cookTime)
             state.recipe = data
         },
         updateRecipes: (state, data) => {
             data.forEach(data => {
-                data.dateAdded = new Date(data.dateAdded)
+                data.createdAt = new Date(data.createdAt)
+                data.cookTime = new Date(data.cookTime)
             })
             state.recipes = data
         },
@@ -24,7 +26,7 @@ const recipes = {
             const i = state.recipes.findIndex(category => category._id === data._id)
             if (i !== -1) state.recipes.splice(i, 1, data)
         },
-        removeCategory: (state, id) => (state.recipes = state.recipes.filter(category => category._id !== id))
+        deleteRecipe: (state, id) => (state.recipes = state.recipes.filter(category => category._id !== id))
     },
     actions: {
         async fetchRecipes({ commit, state }) {
@@ -44,6 +46,7 @@ const recipes = {
             const recipe = state.recipes.find(recipe => recipe._id === id)
             if (!recipe) {
                 await axios.get(`${state.url}${id}`).then(resolve => {
+                    console.log(resolve.data);
                     commit('setRecipe', resolve.data)
                 })
                     .catch(reason => {
@@ -56,22 +59,51 @@ const recipes = {
                     })
             }
         },
-        /* async addCategory({ commit }, category) {
-            //rounding the color
-            category.color = Math.round(category.color);
-            await ipc.callMain('addCategory', category)
-                .then(resolve => {
-                    Toast.open({
-                        message: `Category ${resolve.name} added!`,
-                        position: 'is-bottom'
-                    })
-                    commit('newCategory', resolve)
+        async addRecipe({ commit, state, rootGetters }, data) {
+            data.author = rootGetters.getLoggedIn._id
+            await axios.post(`${state.url}`, data, { headers: { Authorization: `Bearer ${localStorage.jwt}` } })
+                .then(async res => {
+                    const recipe = res.data
+                    if (data.images.length !== 0) {
+                        const formData = new FormData()
+                        data.images.forEach((image) => {
+                            formData.append(`images`, image)
+                        })
+                        await axios.post(`${state.url}upload/${recipe._id}`, formData, {
+                            headers: {
+                                'Content-Type': 'multipart/form-data'
+                            }
+                        })
+                            .then(images => {
+                                console.log("processed img", images.data);
+                                recipe.images = images.data
+                                commit('addRecipe', recipe)
+                            })
+                            .catch(reason => {
+                                recipe.images = []
+                                commit('addRecipe', recipe)
+                                Toast.open({
+                                    duration: 5000,
+                                    message: `Error adding images: ${reason}`,
+                                    position: 'is-bottom',
+                                    type: 'is-warning'
+                                })
+                                throw reason;
+                            })
+                    } else {
+                        commit('addRecipe', recipe)
+                    }
                 })
                 .catch(reason => {
+                    Toast.open({
+                        message: `Error adding data: ${reason}`,
+                        position: 'is-bottom',
+                        type: 'is-danger'
+                    })
                     throw reason;
                 })
         },
-        async updateCategory({ commit }, category) {
+        /*async updateCategory({ commit }, category) {
             category.color = Math.round(category.color);
             await ipc.callMain('updateCategory', category)
                 .then(resolve => {
@@ -84,21 +116,27 @@ const recipes = {
                 .catch(reason => {
                     throw reason;
                 })
-        },
-        async removeCategory({ commit }, category) {
-            await ipc.callMain('removeCategory', category)
-                .then(() => {
+        },*/
+        async deleteRecipe({ commit, state }, id) {
+            await axios.delete(`${state.url}${id}`, { headers: { Authorization: `Bearer ${localStorage.jwt}` } })
+                .then(res => {
+                    console.log(res.data);
+                    commit('deleteRecipe', res.data._id)
                     Toast.open({
-                        message: `Category ${category.name} removed!`,
-                        type: 'is-danger',
-                        position: 'is-bottom'
+                        message: `Recipe ${res.data.name} successfuly deleted`,
+                        position: 'is-bottom',
+                        type: 'is-success'
                     })
-                    commit('removeCategory', category._id)
                 })
                 .catch(reason => {
+                    Toast.open({
+                        message: `Error deleting data: ${reason}`,
+                        position: 'is-bottom',
+                        type: 'is-danger'
+                    })
                     throw reason;
                 })
-        } */
+        }
     },
     getters: {
         getRecipes(state) {

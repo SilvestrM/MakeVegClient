@@ -6,11 +6,11 @@
           <div class="column is-two-thirds">
             <b-carousel :autoplay="false" :indicator-inside="true" :overlay="gallery">
               <b-carousel-item v-for="(item, i) in photos" :key="i">
-                <a @click="switchGallery(true)" class="image is-16by9">
+                <a @click="switchGallery(false)" class="image is-16by9" style="max-height:10rem">
                   <img :src="item" />
                 </a>
               </b-carousel-item>
-              <span v-if="gallery" @click="switchGallery(false)" class="modal-close is-large" />
+              <!-- <span v-if="gallery" @click="switchGallery(false)" class="modal-close is-large" /> -->
               <!-- <template slot="indicators" slot-scope="props">
             <figure class="al image" :draggable="false">
               <img :draggable="false" :src="props.i" :title="props.i" />
@@ -42,8 +42,8 @@
               <div class="level-item">
                 <p>
                   <time
-                    :datetime="recipe.dateAdded"
-                  >{{`${recipe.dateAdded.getDate()}/${recipe.dateAdded.getMonth()}/${recipe.dateAdded.getFullYear()} `}}</time>
+                    :datetime="recipe.createdAt"
+                  >{{`${recipe.createdAt.getDate()}/${recipe.createdAt.getMonth()}/${recipe.createdAt.getFullYear()} `}}</time>
                   &nbsp;
                 </p>
                 <p>
@@ -76,7 +76,7 @@
                     <i class="mdi mdi-timelapse"></i>
                   </span>
                   Estimated cooking time:
-                  <em>{{recipe.cookTime}}min</em>
+                  <em>{{`${recipe.cookTime.getHours() * 60 + recipe.cookTime.getMinutes()} min`}}</em>
                 </p>
               </div>
               <hr />
@@ -113,7 +113,8 @@ export default {
   data() {
     return {
       gallery: false,
-      isLoading: false
+      isLoading: false,
+      images: []
     };
   },
   computed: {
@@ -122,17 +123,20 @@ export default {
       return this.getRecipe(this.$route.params.id);
     },
     author() {
-      console.log(this.getUser(this.recipe.author));
       return this.getUser(this.recipe.author);
     },
     photos() {
       const arr = [];
-      arr.push(this.recipe.imageURL);
-      arr.push(this.recipe.imageURL);
+      this.images.forEach(img => {
+        if (img.data !== undefined)
+          arr.push(`data:image/jpeg;base64,${this.$encodeb64(img.data)}`);
+      });
       return arr;
     }
   },
-  mounted() {},
+  mounted() {
+    console.log(typeof this.recipe.cookTime);
+  },
   methods: {
     ...mapActions(["fetchRecipe", "fetchUser"]),
     switchGallery(value) {
@@ -155,7 +159,7 @@ export default {
       vm.isLoading = true;
       await vm.fetchRecipe(to.params.id);
       await vm.fetchUser(vm.getRecipe(to.params.id).author);
-      console.log(vm.getRecipe(to.params.id).author);
+      vm.images = vm.getRecipe(to.params.id).images;
       vm.isLoading = false;
     });
   },

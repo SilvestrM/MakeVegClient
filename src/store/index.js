@@ -23,7 +23,7 @@ export default new Vuex.Store({
     actions: {
         async initApp({ commit }) {
             if (localStorage.jwt) {
-                axios.defaults.headers.common.Authorisation = `Bearer ${localStorage.jwt}`
+                axios.defaults.headers.Authorisation = `Bearer ${localStorage.jwt}`
                 await axios.get("/api/auth", { headers: { Authorization: `Bearer ${localStorage.jwt}` } })
                     .then(res => {
                         console.log(res.data);

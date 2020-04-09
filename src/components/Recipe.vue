@@ -2,7 +2,7 @@
   <article class="card">
     <figure class="card-image">
       <p class="image is-4by3">
-        <img :src="recipe.imageURL" />
+        <img :src="imgData" />
       </p>
     </figure>
     <div class="card-header">
@@ -43,8 +43,8 @@
       <div class="card-footer-item">
         added on:
         <time
-          :datetime="recipe.dateAdded"
-        >{{`${recipe.dateAdded.getDate()}/${recipe.dateAdded.getMonth()}/${recipe.dateAdded.getFullYear()}`}}</time>
+          :datetime="recipe.createdAt"
+        >{{`${recipe.createdAt.getDate()}/${recipe.createdAt.getMonth()}/${recipe.createdAt.getFullYear()}`}}</time>
       </div>
       <div class="card-footer-item">
         <div class="rate is-hidden">{{rate = countAvg(recipe.ratings)}}</div>
@@ -57,6 +57,15 @@
 <script>
 export default {
   props: ["recipe"],
+  computed: {
+    imgData() {
+      return this.recipe.images.length > 0
+        ? `data:image/jpeg;base64,${this.$encodeb64(
+            this.recipe.images[0].data
+          )}`
+        : "";
+    }
+  },
   methods: {
     countAvg(arr) {
       if (arr && arr.length > 0)

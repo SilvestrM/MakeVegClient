@@ -35,7 +35,7 @@
           <template v-else>
             <b-navbar-item tag="div">
               <div class="buttons">
-                <a class="button is-primary" :href="`/user/${sessionUser._id}`">
+                <a class="button is-primary" :href="`/add/recipe`">
                   <b-icon icon="plus-circle" size style="margin-right:.15rem;" />&nbsp;Add a recipe
                 </a>
 
