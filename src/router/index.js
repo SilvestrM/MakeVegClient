@@ -2,6 +2,8 @@ import Vue from 'vue'
 import VueRouter from 'vue-router'
 import Feed from '../views/Feed.vue'
 
+import store from '../store/index'
+
 Vue.use(VueRouter)
 
 const routes = [
@@ -63,36 +65,47 @@ const router = new VueRouter({
 
 //
 router.beforeEach((to, from, next) => {
-  if (to.matched.some(record => record.meta.requiresAuth)) {
-    if (localStorage.getItem('jwt') == null) {
-      next({
-        path: '/login',
-        params: { nextUrl: to.fullPath }
-      })
-    } else {
-      //const user = JSON.parse(localStorage.getItem('user'))
-      /* if (to.matched.some(record => record.meta.is_admin)) {
-        if (user.is_admin == 1) {
-          next()
-        }
-        else {
-          next({ name: 'userboard' })
-        }
+  store.dispatch('initApp').then(() => {
+    if (to.matched.some(record => record.meta.requiresAuth)) {
+      if (localStorage.getItem('jwt') !== store.state.loggedIn.tokens.authToken) {
+        console.log(store.state.loggedIn.tokens.authToken);
+        next({
+          path: '/login',
+          params: { nextUrl: to.fullPath }
+        })
       } else {
+        //const user = JSON.parse(localStorage.getItem('user'))
+        if (to.matched.some(record => record.meta.isAdmin)) {
+          if (!store.state.loggedIn.tokens.adminToken) {
+            next({ path: '/' })
+
+          } else {
+            if (localStorage.getItem('admin') !== store.state.loggedIn.tokens.adminToken) {
+              next({ path: '/' })
+            }
+            else {
+              next()
+            }
+          }
+          next({ path: '/' })
+        }
         next()
-      }*/
+      }
+    } else if (to.matched.some(record => record.meta.guest)) {
+      if (localStorage.getItem('jwt') == null) {
+        next()
+      }
+      else {
+        next({ name: 'Discover' })
+      }
+    } else {
       next()
     }
-  } else if (to.matched.some(record => record.meta.guest)) {
-    if (localStorage.getItem('jwt') == null) {
-      next()
-    }
-    else {
-      next({ name: 'Discover' })
-    }
-  } else {
-    next()
-  }
+
+  })
+    .catch(reason => {
+      throw new Error(`Init app failed... ${reason}`)
+    })
 })
 
 export default router

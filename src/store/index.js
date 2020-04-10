@@ -24,9 +24,11 @@ export default new Vuex.Store({
     actions: {
         async initApp({ commit }) {
             if (localStorage.jwt) {
+                //Todo admin token check
                 axios.defaults.headers.Authorisation = `Bearer ${localStorage.jwt}`
                 await axios.get("/api/auth", { headers: { Authorization: `Bearer ${localStorage.jwt}` } })
                     .then(res => {
+                        console.log(res.data);
                         commit("loginChange", res.data)
                     })
                     .catch(reason => {
@@ -72,8 +74,10 @@ export default new Vuex.Store({
             commit('loginChange', null)
         },
         async addToken({ commit }, user) {
+            console.log(user.tokens.authToken);
             localStorage.removeItem("jwt");
-            localStorage.setItem("jwt", user.tokens[0].token);
+            localStorage.setItem("jwt", user.tokens.authToken);
+
             commit('loginChange', user)
         },
 

@@ -55,8 +55,6 @@ export default {
             /* localStorage.removeItem("jwt");
             localStorage.setItem("jwt", res.tokens[0].token); */
 
-            console.log(this.$route.params.nextUrl);
-
             if (localStorage.getItem("jwt").length > 0) {
               if (this.$route.params.nextUrl != null) {
                 this.$router.push(this.$route.params.nextUrl);

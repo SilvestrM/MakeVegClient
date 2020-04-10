@@ -13,7 +13,10 @@
     </div>
     <div class="section">
       <div class="container">
-        <h2 class="subtitle is-4">{{`${user.firstName}'s recipes`}}</h2>
+        <h2 class="subtitle is-4">
+          <template v-if="me">{{`Your recipes`}}</template>
+          <template v-else>{{`${user.firstName}'s recipes`}}</template>
+        </h2>
         <hr />
         <b-table :data="recipes" :loading="isLoading">
           <template slot-scope="props">
@@ -54,7 +57,7 @@
                 <p>
                   <b-icon icon="emoticon-sad" size="is-large"></b-icon>
                 </p>
-                <p>Nothing here.</p>
+                <p>No recipes found</p>
               </div>
             </section>
           </template>

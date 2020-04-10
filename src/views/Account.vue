@@ -36,7 +36,7 @@
                   label="My Recipes"
                 ></b-menu-item>
               </b-menu-list>
-              <b-menu-list label="Admin Management">
+              <b-menu-list v-if="isAdmin" label="Admin Management">
                 <b-menu-item icon="account" label="Users"></b-menu-item>
                 <b-menu-item icon="chef-hat" label="Recipes"></b-menu-item>
               </b-menu-list>
@@ -61,14 +61,16 @@ export default {
     };
   },
   computed: {
-    ...mapGetters(["getUserRecipes", "getUser"]),
+    ...mapGetters(["getUserRecipes", "getUser", "getLoggedIn"]),
     user() {
-      return this.getUser(this.$route.params.id);
+      //return this.getUser(this.$route.params.id);
+      return this.getLoggedIn;
+    },
+    isAdmin() {
+      return this.user.tokens.adminToken ? true : false;
     }
   },
-  mounted() {
-    console.log(this.$route.params);
-  },
+  mounted() {},
   methods: {
     ...mapActions(["fetchRecipes", "fetchUser"]),
     countAvg(arr) {

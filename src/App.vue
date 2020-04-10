@@ -72,7 +72,7 @@
       <div class="container">
         <div class="columns">
           <div class="column is-one-third">
-            <router-link to="about">About</router-link>
+            <router-link to="/about">About</router-link>
           </div>
           <div class="column is-two-thirds">
             <p
