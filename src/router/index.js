@@ -37,7 +37,13 @@ const routes = [
     path: '/user/:id',
     name: 'Account',
     meta: { requiresAuth: true },
-    component: () => import('../views/Account.vue')
+    component: () => import('../views/Account.vue'),
+    children: [
+      {
+        path: 'account',
+        component: () => import('../views/settings/Account.vue')
+      }
+    ]
   },
   {
     path: '/about',

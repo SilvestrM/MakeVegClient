@@ -1,13 +1,18 @@
 <template>
-  <div class="section">
-    <div class="container">
-      <div class="section">
-        <h1 class="title">{{`${user.firstName} ${user.lastName}`}}</h1>
-        <span
-          class="subtitle is-6 is-italic"
-        >{{`member since: ${new Date(user.createdAt).toLocaleDateString()}`}}{{me}}</span>
+  <div class>
+    <!-- <div class="container"> -->
+    <div class="hero is-info is-medium">
+      <div class="hero-body">
+        <div class="container">
+          <h1 class="title">{{`${user.firstName} ${user.lastName}`}}</h1>
+          <span
+            class="subtitle is-6 is-italic"
+          >{{`member since: ${new Date(user.createdAt).toLocaleDateString()}`}}{{me}}</span>
+        </div>
       </div>
-      <div class="section">
+    </div>
+    <div class="section">
+      <div class="container">
         <h2 class="subtitle is-4">{{`${user.firstName}'s recipes`}}</h2>
         <hr />
         <b-table :data="recipes" :loading="isLoading">
@@ -56,6 +61,7 @@
         </b-table>
       </div>
     </div>
+    <!-- </div> -->
     <!-- <b-loading :active.sync="isLoading" :is-full-page="false"></b-loading> -->
   </div>
 </template>
@@ -78,7 +84,7 @@ export default {
       return this.getUserRecipes(this.user._id);
     }
   },
-  mounted() {
+  async mounted() {
     if (
       this.$store.state.loggedIn._id !== undefined &&
       this.$store.state.loggedIn._id === this.$route.params.id
@@ -130,6 +136,14 @@ export default {
         vm.me = true;
       } */
       //TODO optimize fetch
+      await vm.fetchRecipes();
+      vm.isLoading = false;
+    });
+  },
+  beforeRouteUpdate(to, from, next) {
+    next(async vm => {
+      vm.isLoading = true;
+      await vm.fetchUser(to.params.id);
       await vm.fetchRecipes();
       vm.isLoading = false;
     });

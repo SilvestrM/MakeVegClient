@@ -51,9 +51,9 @@ export default {
       if (this.pass.length > 0) {
         await this.login({ email: this.email, pass: this.pass })
           .then(() => {
-            const res = this.getLoggedIn;
-            localStorage.removeItem("jwt");
-            localStorage.setItem("jwt", res.tokens[0].token);
+            //const res = this.getLoggedIn;
+            /* localStorage.removeItem("jwt");
+            localStorage.setItem("jwt", res.tokens[0].token); */
 
             console.log(this.$route.params.nextUrl);
 
@@ -61,10 +61,9 @@ export default {
               if (this.$route.params.nextUrl != null) {
                 this.$router.push(this.$route.params.nextUrl);
               } else {
-                if (this.isModal) {
-                  this.$parent.close();
-                } else {
-                  this.$router.push("/");
+                if (this.isModal) this.$parent.close();
+                if (this.$route.path !== "/discover") {
+                  this.$router.push("/discover");
                 }
               }
             }

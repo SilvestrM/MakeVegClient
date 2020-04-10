@@ -27,7 +27,7 @@
           <b-navbar-item tag="div" v-if="logged === false">
             <div class="buttons">
               <a class="button is-primary" @click="isLoginModalActive = true">Log in</a>
-              <a class="button is-light">
+              <a class="button is-light" @click="isRegisterModalActive = true">
                 <strong>Sign up</strong>
               </a>
             </div>
@@ -54,7 +54,7 @@
                 <b-icon icon="account" size style="margin-right:.15rem;" />
                 <span class="has-text-weight-medium">{{sessionUser.firstName}}</span>
               </template>
-              <b-navbar-item tag="a" class :href="`/user/${sessionUser._id}`">
+              <b-navbar-item tag="router-link" class :to="`/user/${sessionUser._id}`">
                 <b-icon icon="cogs" size="is-small" style="margin-right:.15rem;" />
                 <span>Settings</span>
               </b-navbar-item>
@@ -63,23 +63,6 @@
                 <strong>Sign out</strong>
               </b-navbar-item>
             </b-navbar-dropdown>
-            <!-- <b-navbar-item>
-              <b-dropdown tag="div" icon="account" position="is-bottom-left" append-to-body>
-                <a class="navbar-item" role="button" slot="trigger">
-                  <b-icon icon="account" size="is-small" style="margin-right:.15rem;" />
-                  <span>{{sessionUser.firstName}}</span>
-                  <b-icon icon="menu-down"></b-icon>
-                </a>
-                <b-dropdown-item has-link active tag="a" class :href="`/user/${sessionUser._id}`">
-                  <b-icon icon="cogs" size="is-small" style="margin-right:.15rem;" />
-                  <span>Settings</span>
-                </b-dropdown-item>
-                <b-dropdown-item has-link tag="a" class @click="logoutDialog">
-                  <b-icon icon="logout" size="is-small" style="margin-right:.15rem;" />
-                  <strong>Sign out</strong>
-                </b-dropdown-item>
-              </b-dropdown>
-            </b-navbar-item>-->
           </template>
         </template>
       </b-navbar>
@@ -109,17 +92,28 @@
     >
       <LoginForm :isModal="true" />
     </b-modal>
+    <b-modal
+      :active.sync="isRegisterModalActive"
+      has-modal-card
+      trap-focus
+      aria-role="dialog"
+      aria-modal
+    >
+      <RegisterForm :isModal="true" />
+    </b-modal>
   </div>
 </template>
 <script>
 import LoginForm from "./components/LoginForm";
+import RegisterForm from "./components/RegisterForm";
 import { mapGetters } from "vuex";
 
 export default {
   props: ["isModal"],
   data() {
     return {
-      isLoginModalActive: false
+      isLoginModalActive: false,
+      isRegisterModalActive: false
     };
   },
   computed: {
@@ -153,7 +147,8 @@ export default {
     this.sessionUser = this.$store.getLoggedIn; */
   },
   components: {
-    LoginForm
+    LoginForm,
+    RegisterForm
   }
 };
 </script>

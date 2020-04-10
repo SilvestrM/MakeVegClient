@@ -40,7 +40,6 @@ const users = {
             const user = state.users.find(user => user._id === id)
             if (!user) {
                 await axios.get(`${state.url}${id}`).then(resolve => {
-                    console.log(resolve.data);
                     commit('setUser', resolve.data)
                 })
                     .catch(reason => {
@@ -109,6 +108,10 @@ const users = {
             } else {
                 if (state.user) return state.user
             }
+        },
+        isDuplicateMail: (state) => (email) => {
+            console.log(state.users.filter(user => user.email === email));
+            return state.users.filter(user => user.email === email).length === 0 ? false : true
         }
     }
 }
