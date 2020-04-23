@@ -1,6 +1,15 @@
 <template>
   <div class="section">
     <div class="container">
+      <div class="level">
+        <div class="level-left"></div>
+        <div class="level-item">
+          <b-field label="Search" expanded>
+            <b-input size="is-medium" expanded type="search" icon="magnify" @input="search"></b-input>
+          </b-field>
+        </div>
+        <div class="level-right"></div>
+      </div>
       <div class="columns">
         <div class="column is-full">
           <div class="columns is-tablet is-multiline is-2">

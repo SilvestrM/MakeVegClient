@@ -37,13 +37,23 @@ const routes = [
   },
   {
     path: '/user/:id',
-    name: 'Account',
+    name: 'Settings',
     meta: { requiresAuth: true },
-    component: () => import('../views/Account.vue'),
+    component: () => import('../views/Settings.vue'),
     children: [
       {
         path: 'account',
         component: () => import('../views/settings/Account.vue')
+      },
+      {
+        path: 'manage_users',
+        meta: { isAdmin: true },
+        component: () => import('../views/admin/Users.vue')
+      },
+      {
+        path: 'manage_recipes',
+        meta: { isAdmin: true },
+        component: () => import('../views/admin/Recipes.vue')
       }
     ]
   },
@@ -65,47 +75,41 @@ const router = new VueRouter({
 
 //
 router.beforeEach((to, from, next) => {
-  store.dispatch('initApp').then(() => {
-    if (to.matched.some(record => record.meta.requiresAuth)) {
-      if (localStorage.getItem('jwt') !== store.state.loggedIn.tokens.authToken) {
-        console.log(store.state.loggedIn.tokens.authToken);
-        next({
-          path: '/login',
-          params: { nextUrl: to.fullPath }
-        })
-      } else {
-        //const user = JSON.parse(localStorage.getItem('user'))
-        if (to.matched.some(record => record.meta.isAdmin)) {
-          if (!store.state.loggedIn.tokens.adminToken) {
-            next({ path: '/' })
-
-          } else {
-            if (localStorage.getItem('admin') !== store.state.loggedIn.tokens.adminToken) {
-              next({ path: '/' })
-            }
-            else {
-              next()
-            }
-          }
-          next({ path: '/' })
-        }
-        next()
-      }
-    } else if (to.matched.some(record => record.meta.guest)) {
-      if (localStorage.getItem('jwt') == null) {
-        next()
-      }
-      else {
-        next({ name: 'Discover' })
-      }
+  //store.dispatch('initApp').then(() => {
+  if (to.matched.some(record => record.meta.requiresAuth)) {
+    if (localStorage.getItem('jwt') !== store.state.loggedIn.tokens.authToken) {
+      console.log(store.state.loggedIn.tokens.authToken);
+      next({
+        path: '/login',
+        params: { nextUrl: to.fullPath }
+      })
     } else {
+      //const user = JSON.parse(localStorage.getItem('user'))
+      if (to.matched.some(record => record.meta.isAdmin)) {
+        if (!store.state.loggedIn.tokens.adminToken) {
+          next({ path: '/' })
+        } else {
+          next()
+        }
+      } else {
+        next()
+      }
+    }
+  } else if (to.matched.some(record => record.meta.guest)) {
+    if (localStorage.getItem('jwt') == null) {
       next()
     }
+    else {
+      next({ name: 'Discover' })
+    }
+  } else {
+    next()
+  }
 
-  })
+  /* })
     .catch(reason => {
       throw new Error(`Init app failed... ${reason}`)
-    })
+    }) */
 })
 
 export default router

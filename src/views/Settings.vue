@@ -25,7 +25,7 @@
                 ></b-menu-item>
                 <b-menu-item
                   tag="router-link"
-                  to="/"
+                  :to="$route.path"
                   icon="card-bulleted-settings"
                   label="Preferences"
                 ></b-menu-item>
@@ -37,8 +37,20 @@
                 ></b-menu-item>
               </b-menu-list>
               <b-menu-list v-if="isAdmin" label="Admin Management">
-                <b-menu-item icon="account" label="Users"></b-menu-item>
-                <b-menu-item icon="chef-hat" label="Recipes"></b-menu-item>
+                <b-menu-item
+                  :to="`/user/${$route.params.id}/manage_users`"
+                  tag="router-link"
+                  :active="$route.path === `/user/${$route.params.id}/manage_users`"
+                  icon="account"
+                  label="Users"
+                ></b-menu-item>
+                <b-menu-item
+                  :to="`/user/${$route.params.id}/manage_recipes`"
+                  tag="router-link"
+                  :active="$route.path === `/user/${$route.params.id}/manage_recipes`"
+                  icon="chef-hat"
+                  label="Recipes"
+                ></b-menu-item>
               </b-menu-list>
             </b-menu>
           </div>

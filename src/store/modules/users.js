@@ -16,16 +16,24 @@ const users = {
         setUsers: (state, data) => {
             state.users = data
         },
-        updateCategory: (state, data) => {
-            const i = state.users.findIndex(category => category._id === data._id)
+        updateUser: (state, data) => {
+            const i = state.users.findIndex(user => user._id === data._id)
             if (i !== -1) state.users.splice(i, 1, data)
         },
         removeCategory: (state, id) => (state.users = state.users.filter(category => category._id !== id))
     },
     actions: {
-        async fetchUsers({ commit, state }) {
-            await axios.get(state.url).then(resolve => {
-                commit('setUsers', resolve.data)
+        async fetchFindUsers({ commit, state }, query) {
+            await axios.get(`${state.url}find/${query}`).then(resolve => {
+                if (resolve.data !== undefined) {
+                    commit('setUsers', resolve.data)
+                } else {
+                    Toast.open({
+                        message: `No users found`,
+                        position: 'is-bottom',
+                        type: 'is-info'
+                    })
+                }
             })
                 .catch(reason => {
                     Toast.open({
@@ -51,6 +59,20 @@ const users = {
                         throw reason;
                     })
             }
+        },
+        async updateUser({ commit, state, rootState }, data) {
+            await axios.patch(`${state.url}${rootState.loggedIn._id}`, data, { headers: { Authorization: `Bearer ${localStorage.jwt}` } })
+                .then(resolve => {
+                    console.log(resolve.data);
+                    commit('updateUser', resolve.data)
+                }).catch(reason => {
+                    Toast.open({
+                        message: `Error updating user: ${reason}`,
+                        position: 'is-bottom',
+                        type: 'is-danger'
+                    })
+                    throw reason;
+                })
         },
         /* async addCategory({ commit }, category) {
             //rounding the color

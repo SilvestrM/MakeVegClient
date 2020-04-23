@@ -71,7 +71,8 @@ const recipes = {
                         })
                         await axios.post(`${state.url}upload/${recipe._id}`, formData, {
                             headers: {
-                                'Content-Type': 'multipart/form-data'
+                                'Content-Type': 'multipart/form-data',
+                                Authorization: `Bearer ${localStorage.jwt}`
                             }
                         })
                             .then(images => {

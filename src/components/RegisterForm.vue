@@ -96,17 +96,17 @@ export default {
     }
   },
   methods: {
-    ...mapActions(["register", "fetchUsers"]),
+    ...mapActions(["register", "fetchFindUsers"]),
     async formHandle() {
       if (this.pass.length > 0) {
         if (this.pass === this.repass) {
           this.newUser.pass = this.pass;
-          await this.fetchUsers().then(async () => {
+          await this.fetchFindUsers(this.newUser.email).then(async () => {
             if (this.isDuplicateMail(this.newUser.email) === false) {
               await this.register(this.newUser)
                 .then(() => {
                   if (this.isModal) this.$parent.close();
-                  if (this.$route.path !== "/discover") {
+                  if (this.$route.fullPath !== "/discover") {
                     this.$router.push("/discover");
                   }
                 })

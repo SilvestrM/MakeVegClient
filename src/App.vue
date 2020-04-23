@@ -35,9 +35,9 @@
           <template v-else>
             <b-navbar-item tag="div">
               <div class="buttons">
-                <a class="button is-primary" :href="`/add/recipe`">
+                <router-link class="button is-primary" :to="`/add/recipe`">
                   <b-icon icon="plus-circle" size style="margin-right:.15rem;" />&nbsp;Add a recipe
-                </a>
+                </router-link>
 
                 <!-- <a class="button is-light" :href="`/user/${sessionUser._id}`">
                   <b-icon icon="cog" size="is-small" style="margin-right:.15em;" />
@@ -140,8 +140,8 @@ export default {
       this.$router.push("/");
     }
   },
-  async mounted() {
-    await this.$store.dispatch("initApp");
+  mounted() {
+    //this.$store.dispatch("initApp");
     /* this.isLoggedIn = this.$store.isLoggedIn;
     console.log(this.isLoggedIn);
     this.sessionUser = this.$store.getLoggedIn; */

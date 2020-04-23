@@ -48,9 +48,7 @@
                   open-on-focus
                   icon="label"
                   placeholder="Add an ingredient"
-                >
-                  <template slot="tag" slot-scope="props">{{props}}</template>
-                </b-taginput>
+                ></b-taginput>
               </b-field>
               <b-field label="Instructions">
                 <b-input
