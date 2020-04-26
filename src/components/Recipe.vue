@@ -77,5 +77,16 @@ export default {
 };
 </script>
 
-<style>
+<style lang="scss" scoped>
+.card-image .image img {
+  object-fit: cover !important;
+}
+.card {
+  transition: $speed;
+  &:hover {
+    box-shadow: 0 0.5em 1em -0.125em rgba($black, 0.1),
+      0 0px 0 1px rgba($black, 0.02);
+    transition: $speed;
+  }
+}
 </style>

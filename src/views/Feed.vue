@@ -1,32 +1,48 @@
 <template>
   <div class="section">
     <div class="container">
-      <div class="level">
-        <div class="level-left"></div>
-        <div class="level-item">
-          <b-field label="Search" expanded>
-            <b-input size="is-medium" expanded type="search" icon="magnify" @input="search"></b-input>
-          </b-field>
-        </div>
-        <div class="level-right"></div>
-      </div>
-      <div class="columns">
-        <div class="column is-full">
-          <div class="columns is-tablet is-multiline is-2">
-            <div
-              class="column is-full-mobile is-half-tablet is-half-desktop is-one-third-widescreen is-one-third-fullhd"
-              v-for="recipe in recipes"
-              :key="recipe._id"
-            >
-              <router-link :to="`/recipe/${recipe._id}`">
-                <Recipe :recipe="recipe" />
-              </router-link>
-            </div>
+      <div class="section">
+        <div class="columns is-centered">
+          <div class="column is-half">
+            <b-field label="Search" label-position="on-border" expanded>
+              <b-input
+                size="is-medium"
+                placeholder="Search by recipe name or diet"
+                expanded
+                type="search"
+                icon="magnify"
+                rounded
+                @input="search"
+              ></b-input>
+            </b-field>
+            <!-- <b-field horizontal label="Your preferences" label-position="on-border" expanded>
+              <b-taglist>
+                <b-tag closable v-for="(diet, i) in filters" :key="i">{{diet}}</b-tag>
+              </b-taglist>
+            </b-field>-->
           </div>
         </div>
       </div>
+      <div class="section">
+        <div class="columns" style="min-height: 60vh">
+          <div class="column is-full">
+            <div class="columns is-tablet is-multiline is-2">
+              <div
+                class="column recipe-card is-full-mobile is-half-tablet is-half-desktop is-one-third-widescreen is-one-third-fullhd"
+                v-for="recipe in recipes"
+                :key="recipe._id"
+              >
+                <router-link :to="`/recipe/${recipe._id}`">
+                  <Recipe :recipe="recipe" />
+                </router-link>
+              </div>
+            </div>
+            <b-message v-if="recipes.length === 0">No results</b-message>
+          </div>
+          <b-loading :active.sync="isLoading" :is-full-page="true"></b-loading>
+        </div>
+      </div>
     </div>
-    <b-loading :active.sync="isLoading" :is-full-page="true"></b-loading>
   </div>
 </template>
 
@@ -42,11 +58,28 @@ export default {
     };
   },
   computed: {
-    ...mapGetters({ recipes: "getRecipes" })
+    ...mapGetters(["getRecipes", "getLoggedIn"]),
+    recipes() {
+      return this.getRecipes;
+    },
+    filters() {
+      return this.getLoggedIn.settings.diets;
+    }
   },
   mounted() {},
   methods: {
-    ...mapActions(["fetchRecipes"]),
+    ...mapActions(["fetchRecipes", "fetchFindRecipes"]),
+    async search(query) {
+      if (query.length >= 1) {
+        this.isLoading = true;
+        await this.fetchFindRecipes(query);
+        this.isLoading = false;
+      } else if (query.length === 0) {
+        this.isLoading = true;
+        await this.fetchRecipes(query);
+        this.isLoading = false;
+      }
+    },
     countAvg(arr) {
       if (arr && arr !== [])
         return (

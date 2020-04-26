@@ -5,34 +5,52 @@
       <b-field label="Search">
         <b-input type="search" icon="magnify" @input="search"></b-input>
       </b-field>
-      <b-table :data="users" :loading="isLoading">
+      <b-table
+        detailed
+        detail-key="_id"
+        ref="table"
+        :data="users"
+        paginated
+        per-page="10"
+        :loading="isLoading"
+      >
         <template slot-scope="props">
           <b-table-column field="lastName" label="Name">
-            <router-link
-              :to="`/user/${props.row._id}/recipes`"
-            >{{`${props.row.firstName} ${props.row.lastName}`}}</router-link>
+            <button
+              class="button is-text"
+              @click="toggle(props.row)"
+            >{{`${props.row.firstName} ${props.row.lastName}`}}</button>
           </b-table-column>
-          <!-- <b-table-column field="dietTypes" label="Diets">
-              <div class="tags">
-                <span
-                  class="tag"
-                  v-for="(diet, i) in props.row.diets.slice(0,5)"
-                  :index="i"
-                  :key="i"
-                >{{diet}}</span>
-              </div>
-          </b-table-column>-->
-          <b-table-column field="createdAt" label="Date added" numeric>
-            <span class="tag is-info">{{ new Date(props.row.createdAt).toLocaleDateString() }}</span>
+          <b-table-column field="email" label="Email">
+            <span class>{{ props.row.email }}</span>
           </b-table-column>
           <b-table-column v-if="true" field="_id" label="Controls" numeric>
-            <button class="button is-text">
+            <!-- <button class="button is-text" @click="toggle(props.row)">
               <b-icon icon="pencil"></b-icon>
-            </button>
-            <button class="button is-text" @click="deleteDialog(props.row)">
-              <b-icon icon="delete"></b-icon>
-            </button>
+            </button>-->
+            <b-tooltip
+              type="is-light"
+              :delay="500"
+              position="is-bottom"
+              label="User profile"
+              animated
+            >
+              <router-link class="button is-text" :to="`/user/${props.row._id}/recipes`">
+                <b-icon icon="account"></b-icon>
+              </router-link>
+            </b-tooltip>
+            <b-tooltip type="is-light" :delay="500" position="is-bottom" label="Delete" animated>
+              <button class="button is-text" @click="deleteDialog(props.row)">
+                <b-icon icon="delete"></b-icon>
+              </button>
+            </b-tooltip>
           </b-table-column>
+        </template>
+
+        <template slot="detail" slot-scope="props">
+          <div class>
+            <UpdateUserRow :user="props.row" />
+          </div>
         </template>
 
         <template slot="empty">
@@ -52,7 +70,9 @@
 
 <script>
 import { mapActions, mapGetters } from "vuex";
+import UpdateUserRow from "../../components/UpdateUserRow";
 export default {
+  components: { UpdateUserRow },
   data() {
     return {
       query: "",
@@ -61,13 +81,10 @@ export default {
   },
   computed: {
     ...mapGetters(["getUsers"]),
-    users: {
-      get() {
-        return this.getUsers;
-      },
-      set(found) {
-        return found;
-      }
+    users() {
+      return this.getUsers.filter(
+        user => user._id !== this.$store.state.loggedIn._id
+      );
     }
   },
   async mounted() {
@@ -86,6 +103,9 @@ export default {
         await this.fetchFindUsers(query).then(() => {});
         this.isLoading = false;
       }
+    },
+    toggle(row) {
+      this.$refs.table.toggleDetails(row);
     },
     deleteDialog(user) {
       this.$buefy.dialog.prompt({

@@ -6,7 +6,7 @@
           <h1 class="title">{{`${user.firstName} ${user.lastName}`}}</h1>
           <span
             class="subtitle is-6 is-italic"
-          >{{`member since: ${new Date(user.createdAt).toLocaleDateString()}`}}</span>
+          >{{`Member since ${new Date(user.createdAt).toLocaleDateString('en-gb',{year: 'numeric', month: 'long', day: 'numeric' })}`}}</span>
         </div>
       </div>
     </div>

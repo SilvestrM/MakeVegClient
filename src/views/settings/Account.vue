@@ -79,6 +79,14 @@ export default {
   },
   computed: {
     ...mapGetters(["getLoggedIn", "isDuplicateMail"]),
+    // newUser: {
+    //   get() {
+    //     return this.user;
+    //   },
+    //   set(values) {
+    //     console.log(values);
+    //   }
+    // },
     diets() {
       return this.$store.getters.getDiets;
     }
@@ -87,7 +95,7 @@ export default {
     console.log(this.user);
   },
   methods: {
-    ...mapActions(["updateUser", "fetchFindUsers"]),
+    ...mapActions(["updateUserSelf", "fetchFindUsers"]),
     reset() {
       this.newUser.firstName = this.user.firstName;
       this.newUser.lastName = this.user.lastName;
@@ -104,7 +112,7 @@ export default {
           this.newUser.email === this.user.email
         ) {
           this.newUser._id = this.user._id;
-          await this.updateUser(this.newUser)
+          await this.updateUserSelf(this.newUser)
             .then(() => {
               // if (this.$route.fullPath !== `/user/${this.$route.params}/account`) {
               //   this.$router.push("/discover");

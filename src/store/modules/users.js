@@ -20,9 +20,10 @@ const users = {
             const i = state.users.findIndex(user => user._id === data._id)
             if (i !== -1) state.users.splice(i, 1, data)
         },
-        removeCategory: (state, id) => (state.users = state.users.filter(category => category._id !== id))
+        deleteUser: (state, id) => (state.users = state.users.filter(user => user._id !== id))
     },
     actions: {
+        //TODO users update
         async fetchFindUsers({ commit, state }, query) {
             await axios.get(`${state.url}find/${query}`).then(resolve => {
                 if (resolve.data !== undefined) {
@@ -60,63 +61,62 @@ const users = {
                     })
             }
         },
-        async updateUser({ commit, state, rootState }, data) {
-            await axios.patch(`${state.url}${rootState.loggedIn._id}`, data, { headers: { Authorization: `Bearer ${localStorage.jwt}` } })
+        async updateUser({ commit, state }, data) {
+            await axios.patch(`${state.url}`, data, { headers: { Authorization: `Bearer ${localStorage.jwt}` } })
                 .then(resolve => {
-                    console.log(resolve.data);
                     commit('updateUser', resolve.data)
                 }).catch(reason => {
                     Toast.open({
-                        message: `Error updating user: ${reason}`,
+                        message: `Error updating user: ${reason.response.data}`,
+                        position: 'is-bottom',
+                        type: 'is-warning'
+                    })
+                    throw reason;
+                })
+        },
+        async updateUserSelf({ commit, state }, data) {
+            await axios.patch(`${state.url}self`, data, { headers: { Authorization: `Bearer ${localStorage.jwt}` } })
+                .then(resolve => {
+                    commit('updateUser', resolve.data)
+                    commit('loginChange', resolve.data)
+                }).catch(reason => {
+                    Toast.open({
+                        message: `Error updating user: ${reason.response.data}`,
                         position: 'is-bottom',
                         type: 'is-danger'
                     })
                     throw reason;
                 })
         },
-        /* async addCategory({ commit }, category) {
-            //rounding the color
-            category.color = Math.round(category.color);
-            await ipc.callMain('addCategory', category)
-                .then(resolve => {
-                    Toast.open({
-                        message: `Category ${resolve.name} added!`,
-                        position: 'is-bottom'
+
+        async deleteUser({ commit, state, rootState }, id) {
+            if (id !== rootState.loggedIn._id) {
+                await axios.delete(`${state.url}${id}`, { headers: { Authorization: `Bearer ${localStorage.jwt}` } })
+                    .then(res => {
+                        console.log(res.data);
+                        commit('deleteUser', res.data._id)
+                        Toast.open({
+                            message: `User  ${res.data.firstName} ${res.data.lastName} successfuly deleted`,
+                            position: 'is-bottom',
+                            type: 'is-info'
+                        })
                     })
-                    commit('newCategory', resolve)
-                })
-                .catch(reason => {
-                    throw reason;
-                })
-        },
-        async updateCategory({ commit }, category) {
-            category.color = Math.round(category.color);
-            await ipc.callMain('updateCategory', category)
-                .then(resolve => {
-                    Toast.open({
-                        message: `Category ${resolve.name} updated!`,
-                        position: 'is-bottom'
+                    .catch(reason => {
+                        Toast.open({
+                            message: `Error deleting data: ${reason}`,
+                            position: 'is-bottom',
+                            type: 'is-danger'
+                        })
+                        throw reason;
                     })
-                    commit('updateCategory', resolve)
+            } else {
+                Toast.open({
+                    message: `You cannot delete yourself`,
+                    position: 'is-bottom',
+                    type: 'is-warning'
                 })
-                .catch(reason => {
-                    throw reason;
-                })
-        },
-        async removeCategory({ commit }, category) {
-            await ipc.callMain('removeCategory', category)
-                .then(() => {
-                    Toast.open({
-                        message: `Category ${category.name} removed!`,
-                        type: 'is-danger',
-                        position: 'is-bottom'
-                    })
-                    commit('removeCategory', category._id)
-                })
-                .catch(reason => {
-                    throw reason;
-                })
-        } */
+            }
+        }
     },
     getters: {
         getUsers(state) {

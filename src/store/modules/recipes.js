@@ -29,6 +29,27 @@ const recipes = {
         deleteRecipe: (state, id) => (state.recipes = state.recipes.filter(category => category._id !== id))
     },
     actions: {
+        async fetchFindRecipes({ commit, state }, query) {
+            await axios.get(`${state.url}find/${query}`).then(resolve => {
+                if (resolve.data !== undefined) {
+                    commit('updateRecipes', resolve.data)
+                } else {
+                    Toast.open({
+                        message: `Nothing found`,
+                        position: 'is-bottom',
+                        type: 'is-danger'
+                    })
+                }
+            })
+                .catch(reason => {
+                    Toast.open({
+                        message: `Error fetching data: ${reason}`,
+                        position: 'is-bottom',
+                        type: 'is-danger'
+                    })
+                    throw reason;
+                })
+        },
         async fetchRecipes({ commit, state }) {
             await axios.get(state.url).then(resolve => {
                 commit('updateRecipes', resolve.data)

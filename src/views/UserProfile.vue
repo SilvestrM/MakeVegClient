@@ -1,13 +1,16 @@
 <template>
   <div class>
     <!-- <div class="container"> -->
-    <div class="hero is-info is-medium">
+    <div
+      class="hero is-info is-medium"
+      :style="{'background':`url(${publicPath}images/board_food.jpg) center 62% / cover`}"
+    >
       <div class="hero-body">
         <div class="container">
-          <h1 class="title">{{`${user.firstName} ${user.lastName}`}}</h1>
+          <h1 class="title is-2">{{`${user.firstName} ${user.lastName}`}}</h1>
           <span
             class="subtitle is-6 is-italic"
-          >{{`member since: ${new Date(user.createdAt).toLocaleDateString()}`}}{{me}}</span>
+          >{{`Member since ${new Date(user.createdAt).toLocaleDateString('en-gb',{year: 'numeric', month: 'long', day: 'numeric' })}`}}</span>
         </div>
       </div>
     </div>
@@ -75,7 +78,8 @@ export default {
   data() {
     return {
       isLoading: false,
-      me: false
+      me: false,
+      publicPath: process.env.BASE_URL
     };
   },
   computed: {
@@ -154,5 +158,8 @@ export default {
 };
 </script>
 
-<style>
-</style>
+<style lang="scss" scoped>
+.hero {
+  // filter: saturate(50%) brightness(50%);
+}
+</style>>
