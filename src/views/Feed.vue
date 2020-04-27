@@ -4,10 +4,15 @@
       <div class="section">
         <div class="columns is-centered">
           <div class="column is-half">
-            <b-field label="Search" label-position="on-border" expanded>
+            <b-field
+              label="Search"
+              label-position="on-border"
+              message="Search by recipe name or diet"
+              expanded
+            >
               <b-input
                 size="is-medium"
-                placeholder="Search by recipe name or diet"
+                placeholder="Soup, vegetarian, ..."
                 expanded
                 type="search"
                 icon="magnify"

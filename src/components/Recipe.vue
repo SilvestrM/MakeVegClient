@@ -19,7 +19,7 @@
           class="tag is-medium"
         >{{type}}</span>
       </div>
-      <nav class="level is-mobile">
+      <!-- <nav class="level is-mobile">
         <div class="level-left">
           <a class="level-item">
             <span class="icon is-small">
@@ -37,18 +37,14 @@
             </span>
           </a>
         </div>
-      </nav>
+      </nav>-->
     </div>
     <div class="card-footer">
       <div class="card-footer-item">
-        added on:
-        <time
-          :datetime="recipe.createdAt"
-        >{{`${recipe.createdAt.getDate()}/${recipe.createdAt.getMonth()}/${recipe.createdAt.getFullYear()}`}}</time>
-      </div>
-      <div class="card-footer-item">
-        <div class="rate is-hidden">{{rate = countAvg(recipe.ratings)}}</div>
-        <b-rate disabled v-model="rate" icon="leaf" :max="5"></b-rate>
+        <span>
+          Added
+          <time :datetime="recipe.createdAt">{{recipe.createdAt.toLocaleDateString()}}</time>
+        </span>
       </div>
     </div>
   </article>

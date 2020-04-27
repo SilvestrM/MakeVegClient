@@ -18,7 +18,7 @@
             <b-icon icon="compass" />
             <strong class="has-text-weight-semibold" style="padding-left:0.25rem;">&nbsp;Discover</strong>
           </b-navbar-item>
-          <b-navbar-item v-if="logged" tag="router-link" :to="`/user/${sessionUser._id}/recipes`">
+          <b-navbar-item v-if="logged" tag="router-link" :to="`/user/${sessionUser._id}`">
             <strong class="has-text-weight-medium">My Recipes</strong>
           </b-navbar-item>
         </template>
@@ -34,19 +34,10 @@
           </b-navbar-item>
           <template v-else>
             <b-navbar-item tag="div">
-              <div class="buttons">
-                <router-link class="button is-primary" :to="`/add/recipe`">
-                  <b-icon icon="plus-circle" size style="margin-right:.15rem;" />&nbsp;Add a recipe
-                </router-link>
-
-                <!-- <a class="button is-light" :href="`/user/${sessionUser._id}`">
-                  <b-icon icon="cog" size="is-small" style="margin-right:.15em;" />
-                  {{sessionUser.firstName}}
-                </a>
-                <a @click="logoutDialog" class="button is-light">
-                  <strong>Sign out</strong>
-                </a>-->
-              </div>
+              <router-link class="button is-primary" :to="`/add/recipe`">
+                <b-icon custom-class="has-text-weight-light" icon="plus" />
+                <span class>New recipe</span>
+              </router-link>
             </b-navbar-item>
 
             <b-navbar-dropdown tag="div" icon="account" right>
@@ -54,7 +45,7 @@
                 <b-icon icon="account" size style="margin-right:.15rem;" />
                 <span class="has-text-weight-medium">{{sessionUser.firstName}}</span>
               </template>
-              <b-navbar-item tag="router-link" class :to="`/user/${sessionUser._id}`">
+              <b-navbar-item tag="router-link" class :to="`/user/${sessionUser._id}/settings`">
                 <b-icon icon="cogs" size="is-small" style="margin-right:.15rem;" />
                 <span>Settings</span>
               </b-navbar-item>

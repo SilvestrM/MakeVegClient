@@ -27,16 +27,21 @@ const routes = [
     component: () => import('../views/Recipe.vue')
   },
   {
+    path: '/recipe/:id/update',
+    meta: { requiresAuth: true },
+    component: () => import('../views/UpdateRecipe.vue')
+  },
+  {
     path: '/add/recipe',
     meta: { requiresAuth: true },
     component: () => import('../views/AddRecipe.vue')
   },
   {
-    path: '/user/:id/recipes',
+    path: '/user/:id',
     component: () => import('../views/UserProfile.vue')
   },
   {
-    path: '/user/:id',
+    path: '/user/:id/settings',
     name: 'Settings',
     meta: { requiresAuth: true },
     component: () => import('../views/Settings.vue'),

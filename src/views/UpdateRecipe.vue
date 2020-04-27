@@ -2,17 +2,20 @@
   <div class="section">
     <div class="container">
       <div class="section">
-        <h1 class="title">New Recipe</h1>
+        <h1 class="title">
+          Edit Recipe
+          <em class="has-text-grey has-text-weight-light">{{recipe.name}}</em>
+        </h1>
         <hr />
         <form action="post" @submit.prevent="formHandle">
           <div class="columns is-centered">
             <div class="column is-half is-narrow">
               <b-field label="Name">
-                <b-input v-model="recipe.name" type="text" placeholder="Recipe name" required></b-input>
+                <b-input v-model="updatedData.name" type="text" placeholder="Recipe name" required></b-input>
               </b-field>
               <b-field label="Diets">
                 <b-taginput
-                  v-model="recipe.dietTypes"
+                  v-model="updatedData.dietTypes"
                   :data="diets"
                   autocomplete
                   :allow-new="false"
@@ -24,7 +27,7 @@
               </b-field>
               <b-field label="Description">
                 <b-input
-                  v-model="recipe.description"
+                  v-model="updatedData.description"
                   type="textarea"
                   maxlength="500"
                   placeholder="Recipe description"
@@ -35,7 +38,7 @@
               <b-field label="Cooktime">
                 <b-timepicker
                   :increment-minutes="5"
-                  v-model="recipe.cookTime"
+                  v-model="updatedData.cookTime"
                   required
                   placeholder="Click to select..."
                   icon="clock"
@@ -43,7 +46,7 @@
               </b-field>
               <b-field class label="Ingredients">
                 <b-taginput
-                  v-model="recipe.ingredients"
+                  v-model="updatedData.ingredients"
                   :allow-new="true"
                   open-on-focus
                   icon="label"
@@ -52,7 +55,7 @@
               </b-field>
               <b-field label="Instructions">
                 <b-input
-                  v-model="recipe.instructions"
+                  v-model="updatedData.instructions"
                   type="textarea"
                   maxlength="1000"
                   placeholder="Recipe Instructions"
@@ -70,6 +73,7 @@
                   v-model="dropFiles"
                   multiple
                   drag-drop
+                  disabled
                 >
                   <section class="section">
                     <div class="content has-text-centered">
@@ -112,30 +116,39 @@ import { mapActions, mapGetters } from "vuex";
 export default {
   data() {
     return {
-      dropFiles: [],
-      recipe: {
-        name: "",
-        cookTime: new Date("00"),
-        description: "",
-        ingredients: [],
-        dietTypes: [],
-        instructions: "",
-        images: []
-      }
+      isLoading: false,
+      images: [],
+      dropFiles: []
     };
   },
   computed: {
-    ...mapGetters(["getLoggedIn"]),
+    ...mapGetters(["getLoggedIn", "getRecipe"]),
+    recipe() {
+      return this.getRecipe(this.$route.params.id);
+    },
+    updatedData() {
+      return {
+        _id: this.recipe._id,
+        name: this.recipe.name,
+        cookTime: this.recipe.cookTime,
+        description: this.recipe.description,
+        ingredients: this.recipe.ingredients,
+        dietTypes: this.recipe.dietTypes,
+        instructions: this.recipe.instructions
+      };
+      //images
+    },
     diets() {
       return this.$store.getters.getDiets;
     }
   },
   methods: {
-    ...mapActions(["addRecipe"]),
+    ...mapActions(["updateRecipe", "fetchRecipe"]),
     async formHandle() {
-      this.recipe.images = this.dropFiles;
-      await this.addRecipe(this.recipe).then(() => {
-        this.$router.push(`/user/${this.getLoggedIn._id}`);
+      // @todo images upload
+      // this.recipe.images = this.dropFiles;
+      await this.updateRecipe(this.updatedData).then(() => {
+        this.$router.push(`/recipe/${this.recipe._id}`);
       });
     },
     deleteDropFile(index) {
@@ -163,7 +176,25 @@ export default {
       });
     }
   },
-  components: {}
+  // async mounted() {
+  //   await this.fetchRecipe(this.$route.params.id);
+  // },
+  beforeRouteEnter(to, from, next) {
+    next(async vm => {
+      vm.isLoading = true;
+      await vm.fetchRecipe(to.params.id);
+      vm.images = vm.getRecipe(to.params.id).images;
+      vm.isLoading = false;
+    });
+  },
+  beforeRouteUpdater(to, from, next) {
+    next(async vm => {
+      vm.isLoading = true;
+      await vm.fetchRecipe(to.params.id);
+      vm.images = vm.getRecipe(to.params.id).images;
+      vm.isLoading = false;
+    });
+  }
 };
 </script>
 

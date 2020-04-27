@@ -18,8 +18,8 @@
               <b-menu-list icon="cogs" label="Settings">
                 <b-menu-item
                   tag="router-link"
-                  :active="$route.path === `/user/${$route.params.id}/account`"
-                  :to="`/user/${$route.params.id}/account`"
+                  :active="$route.path === `/user/${$route.params.id}/settings/account`"
+                  :to="`/user/${$route.params.id}/settings/account`"
                   icon="account-cog"
                   label="My Account"
                 ></b-menu-item>
@@ -31,23 +31,23 @@
                 ></b-menu-item>
                 <b-menu-item
                   tag="router-link"
-                  :to="`/user/${user._id}/recipes`"
+                  :to="`/user/${user._id}`"
                   icon="chef-hat"
                   label="My Recipes"
                 ></b-menu-item>
               </b-menu-list>
               <b-menu-list v-if="isAdmin" label="Admin Management">
                 <b-menu-item
-                  :to="`/user/${$route.params.id}/manage_users`"
+                  :to="`/user/${$route.params.id}/settings/manage_users`"
                   tag="router-link"
-                  :active="$route.path === `/user/${$route.params.id}/manage_users`"
+                  :active="$route.path === `/user/${$route.params.id}/settings/manage_users`"
                   icon="account"
                   label="Users"
                 ></b-menu-item>
                 <b-menu-item
-                  :to="`/user/${$route.params.id}/manage_recipes`"
+                  :to="`/user/${$route.params.id}/settings/manage_recipes`"
                   tag="router-link"
-                  :active="$route.path === `/user/${$route.params.id}/manage_recipes`"
+                  :active="$route.path === `/user/${$route.params.id}/settings/manage_recipes`"
                   icon="chef-hat"
                   label="Recipes"
                 ></b-menu-item>

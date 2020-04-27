@@ -1,8 +1,9 @@
 <template>
   <div class>
     <h3 class="title is-4">User management</h3>
+    <hr />
     <div class="section">
-      <b-field label="Search">
+      <b-field label="Search" message="Search by user's name or email">
         <b-input type="search" icon="magnify" @input="search"></b-input>
       </b-field>
       <b-table
@@ -35,7 +36,7 @@
               label="User profile"
               animated
             >
-              <router-link class="button is-text" :to="`/user/${props.row._id}/recipes`">
+              <router-link class="button is-text" :to="`/user/${props.row._id}`">
                 <b-icon icon="account"></b-icon>
               </router-link>
             </b-tooltip>
@@ -57,7 +58,7 @@
           <section class="section">
             <div class="content has-text-grey has-text-centered">
               <p>
-                <b-icon icon="exclamation" size="is-large"></b-icon>
+                <b-icon icon="alert-circle" size="is-large"></b-icon>
               </p>
               <p>Nothing found</p>
             </div>

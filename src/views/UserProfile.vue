@@ -45,9 +45,13 @@
               <span class="tag is-info">{{ props.row.createdAt.toLocaleDateString() }}</span>
             </b-table-column>
             <b-table-column v-if="me" field="_id" label="Controls" numeric>
-              <button class="button is-text">
+              <router-link
+                tag="button"
+                :to="`/recipe/${props.row._id}/update`"
+                class="button is-text"
+              >
                 <b-icon icon="pencil"></b-icon>
-              </button>
+              </router-link>
               <button class="button is-text" @click="deleteDialog(props.row)">
                 <b-icon icon="delete"></b-icon>
               </button>

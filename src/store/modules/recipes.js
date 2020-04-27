@@ -22,11 +22,11 @@ const recipes = {
             })
             state.recipes = data
         },
-        updateCategory: (state, data) => {
-            const i = state.recipes.findIndex(category => category._id === data._id)
+        updateRecipe: (state, data) => {
+            const i = state.recipes.findIndex(recipe => recipe._id === data._id)
             if (i !== -1) state.recipes.splice(i, 1, data)
         },
-        deleteRecipe: (state, id) => (state.recipes = state.recipes.filter(category => category._id !== id))
+        deleteRecipe: (state, id) => (state.recipes = state.recipes.filter(recipe => recipe._id !== id))
     },
     actions: {
         async fetchFindRecipes({ commit, state }, query) {
@@ -67,7 +67,6 @@ const recipes = {
             const recipe = state.recipes.find(recipe => recipe._id === id)
             if (!recipe) {
                 await axios.get(`${state.url}${id}`).then(resolve => {
-                    console.log(resolve.data);
                     commit('setRecipe', resolve.data)
                 })
                     .catch(reason => {
@@ -106,7 +105,7 @@ const recipes = {
                                 commit('addRecipe', recipe)
                                 Toast.open({
                                     duration: 5000,
-                                    message: `Error adding images: ${reason}`,
+                                    message: `Error adding images: ${reason.resolve} you need to add them later`,
                                     position: 'is-bottom',
                                     type: 'is-warning'
                                 })
@@ -125,24 +124,51 @@ const recipes = {
                     throw reason;
                 })
         },
-        /*async updateCategory({ commit }, category) {
-            category.color = Math.round(category.color);
-            await ipc.callMain('updateCategory', category)
+        async updateRecipe({ commit, state }, data) {
+            await axios.patch(`${state.url}`, data, { headers: { Authorization: `Bearer ${localStorage.jwt}` } })
                 .then(resolve => {
+                    console.log("jj");
+                    commit('updateRecipe', resolve.data)
+                }).catch(reason => {
                     Toast.open({
-                        message: `Category ${resolve.name} updated!`,
-                        position: 'is-bottom'
+                        message: `Error updating recipe: ${reason.response.data}`,
+                        position: 'is-bottom',
+                        type: 'is-warning'
                     })
-                    commit('updateCategory', resolve)
-                })
-                .catch(reason => {
                     throw reason;
                 })
-        },*/
+        },
+        async uploadImage({ commit, state }, data) {
+            const formData = new FormData()
+            data.images.forEach((image) => {
+                formData.append(`images`, image)
+            })
+            await axios.post(`${state.url}upload/${recipe._id}`, formData, {
+                headers: {
+                    'Content-Type': 'multipart/form-data',
+                    Authorization: `Bearer ${localStorage.jwt}`
+                }
+            })
+                .then(images => {
+                    console.log("processed img", images.data);
+                    recipe.images = images.data
+                    commit('addRecipe', recipe)
+                })
+                .catch(reason => {
+                    recipe.images = []
+                    commit('addRecipe', recipe)
+                    Toast.open({
+                        duration: 5000,
+                        message: `Error adding images: ${reason.resolve} you need to add them later`,
+                        position: 'is-bottom',
+                        type: 'is-warning'
+                    })
+                    throw reason;
+                })
+        },
         async deleteRecipe({ commit, state }, id) {
             await axios.delete(`${state.url}${id}`, { headers: { Authorization: `Bearer ${localStorage.jwt}` } })
                 .then(res => {
-                    console.log(res.data);
                     commit('deleteRecipe', res.data._id)
                     Toast.open({
                         message: `Recipe ${res.data.name} successfuly deleted`,
@@ -170,6 +196,7 @@ const recipes = {
             if (data) {
                 return data
             } else {
+                console.log(state.recipe);
                 if (state.recipe) return state.recipe
             }
         },
