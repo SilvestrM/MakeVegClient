@@ -65,6 +65,17 @@
             </div>
           </div>
           <div class="columns is-centered">
+            <div class="column is-half">
+              <b-carousel-list :data="updatedData.images">
+                <template slot="item" slot-scope="props">
+                  <figure class="3by4">
+                    <img :src="props.list" />
+                  </figure>
+                </template>
+              </b-carousel-list>
+            </div>
+          </div>
+          <div class="columns is-centered">
             <div class="column is-narrow">
               <b-field label="Upload Images" expanded>
                 <b-upload
@@ -117,8 +128,8 @@ export default {
   data() {
     return {
       isLoading: false,
-      images: [],
-      dropFiles: []
+      dropFiles: [],
+      images: []
     };
   },
   computed: {
@@ -134,9 +145,18 @@ export default {
         description: this.recipe.description,
         ingredients: this.recipe.ingredients,
         dietTypes: this.recipe.dietTypes,
-        instructions: this.recipe.instructions
+        instructions: this.recipe.instructions,
+        images: this.imagesFormatted
       };
       //images
+    },
+    imagesFormatted() {
+      const arr = [];
+      this.images.forEach(img => {
+        if (img.data !== undefined)
+          arr.push(`data:image/jpeg;base64,${this.$encodeb64(img.data)}`);
+      });
+      return arr;
     },
     diets() {
       return this.$store.getters.getDiets;

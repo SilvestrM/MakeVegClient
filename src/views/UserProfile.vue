@@ -42,7 +42,7 @@
               centered
             >{{ countAvg(props.row.ratings) }}</b-table-column>
             <b-table-column field="date" label="Date added" numeric>
-              <span class="tag is-info">{{ props.row.createdAt.toLocaleDateString() }}</span>
+              <span class="tag is-info">{{ new Date(props.row.createdAt).toLocaleDateString() }}</span>
             </b-table-column>
             <b-table-column v-if="me" field="_id" label="Controls" numeric>
               <router-link

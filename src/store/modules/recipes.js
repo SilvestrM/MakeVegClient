@@ -79,41 +79,17 @@ const recipes = {
                     })
             }
         },
-        async addRecipe({ commit, state, rootGetters }, data) {
+        async addRecipe({ dispatch, commit, state, rootGetters }, data) {
             data.author = rootGetters.getLoggedIn._id
+
             await axios.post(`${state.url}`, data, { headers: { Authorization: `Bearer ${localStorage.jwt}` } })
                 .then(async res => {
                     const recipe = res.data
                     if (data.images.length !== 0) {
-                        const formData = new FormData()
-                        data.images.forEach((image) => {
-                            formData.append(`images`, image)
-                        })
-                        await axios.post(`${state.url}upload/${recipe._id}`, formData, {
-                            headers: {
-                                'Content-Type': 'multipart/form-data',
-                                Authorization: `Bearer ${localStorage.jwt}`
-                            }
-                        })
-                            .then(images => {
-                                console.log("processed img", images.data);
-                                recipe.images = images.data
-                                commit('addRecipe', recipe)
-                            })
-                            .catch(reason => {
-                                recipe.images = []
-                                commit('addRecipe', recipe)
-                                Toast.open({
-                                    duration: 5000,
-                                    message: `Error adding images: ${reason.resolve} you need to add them later`,
-                                    position: 'is-bottom',
-                                    type: 'is-warning'
-                                })
-                                throw reason;
-                            })
-                    } else {
-                        commit('addRecipe', recipe)
+                        data._id = recipe._id
+                        recipe.images = await dispatch('uploadImage', data)
                     }
+                    commit('addRecipe', recipe)
                 })
                 .catch(reason => {
                     Toast.open({
@@ -138,33 +114,29 @@ const recipes = {
                     throw reason;
                 })
         },
-        async uploadImage({ commit, state }, data) {
+        async uploadImage({ state }, data) {
             const formData = new FormData()
+            console.log(data);
             data.images.forEach((image) => {
                 formData.append(`images`, image)
             })
-            await axios.post(`${state.url}upload/${recipe._id}`, formData, {
+            await axios.post(`${state.url}upload/${data._id}`, formData, {
                 headers: {
                     'Content-Type': 'multipart/form-data',
                     Authorization: `Bearer ${localStorage.jwt}`
                 }
+            }).then(images => {
+                console.log("processed img", images.data);
+                return images.data
+            }).catch(reason => {
+                Toast.open({
+                    duration: 5000,
+                    message: `Error adding images: ${reason.resolve} you need to add them later`,
+                    position: 'is-bottom',
+                    type: 'is-warning'
+                })
+                return []
             })
-                .then(images => {
-                    console.log("processed img", images.data);
-                    recipe.images = images.data
-                    commit('addRecipe', recipe)
-                })
-                .catch(reason => {
-                    recipe.images = []
-                    commit('addRecipe', recipe)
-                    Toast.open({
-                        duration: 5000,
-                        message: `Error adding images: ${reason.resolve} you need to add them later`,
-                        position: 'is-bottom',
-                        type: 'is-warning'
-                    })
-                    throw reason;
-                })
         },
         async deleteRecipe({ commit, state }, id) {
             await axios.delete(`${state.url}${id}`, { headers: { Authorization: `Bearer ${localStorage.jwt}` } })
