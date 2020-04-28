@@ -117,6 +117,7 @@ export default {
               // if (this.$route.fullPath !== `/user/${this.$route.params}/account`) {
               //   this.$router.push("/discover");
               // }
+              this.$router.push(`/user/${this.user._id}`);
             })
             .catch();
         } else {

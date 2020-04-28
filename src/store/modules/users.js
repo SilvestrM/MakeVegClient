@@ -93,7 +93,6 @@ const users = {
             if (id !== rootState.loggedIn._id) {
                 await axios.delete(`${state.url}${id}`, { headers: { Authorization: `Bearer ${localStorage.jwt}` } })
                     .then(res => {
-                        console.log(res.data);
                         commit('deleteUser', res.data._id)
                         Toast.open({
                             message: `User  ${res.data.firstName} ${res.data.lastName} successfuly deleted`,
@@ -132,7 +131,6 @@ const users = {
             }
         },
         isDuplicateMail: (state) => (email) => {
-            console.log(state.users.filter(user => user.email === email));
             return state.users.filter(user => user.email === email).length === 0 ? false : true
         }
     }

@@ -7,7 +7,7 @@
     </figure>
     <div class="card-header">
       <div class="card-header-title is-centered">
-        <h3 class="title is-4 is-capitalized">{{recipe.name}}</h3>
+        <h3 class="title is-5 is-capitalized">{{recipe.name}}</h3>
       </div>
     </div>
     <div class="card-content">

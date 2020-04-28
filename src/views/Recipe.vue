@@ -24,7 +24,7 @@
         <div class="level">
           <div class="level-left">
             <div class="level-item">
-              <h1 class="title is-capitalized">{{recipe.name}}</h1>
+              <h1 class="title is-italic has-text-weight-normal is-capitalized">{{recipe.name}}</h1>
             </div>
           </div>
           <div class="level-item">
@@ -96,12 +96,12 @@
       </div>
     </div>
 
-    <div class="section">
+    <!-- <div class="section">
       <div class="container">
         <hr />
         <h2 class="title is-5">Reviews</h2>
       </div>
-    </div>
+    </div>-->
     <b-loading :active.sync="isLoading" :is-full-page="false"></b-loading>
   </div>
 </template>
@@ -127,14 +127,11 @@ export default {
     photos() {
       const arr = [];
       this.images.forEach(img => {
-        if (img.data !== undefined)
-          arr.push(`data:image/jpeg;base64,${this.$encodeb64(img.data)}`);
+        if (img.data !== undefined);
+        arr.push(`data:image/jpeg;base64,${this.$encodeb64(img.data)}`);
       });
       return arr;
     }
-  },
-  mounted() {
-    console.log(typeof this.recipe.cookTime);
   },
   methods: {
     ...mapActions(["fetchRecipe", "fetchUser"]),

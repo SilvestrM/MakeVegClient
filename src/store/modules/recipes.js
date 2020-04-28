@@ -103,7 +103,6 @@ const recipes = {
         async updateRecipe({ commit, state }, data) {
             await axios.patch(`${state.url}`, data, { headers: { Authorization: `Bearer ${localStorage.jwt}` } })
                 .then(resolve => {
-                    console.log("jj");
                     commit('updateRecipe', resolve.data)
                 }).catch(reason => {
                     Toast.open({
@@ -116,7 +115,6 @@ const recipes = {
         },
         async uploadImage({ state }, data) {
             const formData = new FormData()
-            console.log(data);
             data.images.forEach((image) => {
                 formData.append(`images`, image)
             })
@@ -126,7 +124,6 @@ const recipes = {
                     Authorization: `Bearer ${localStorage.jwt}`
                 }
             }).then(images => {
-                console.log("processed img", images.data);
                 return images.data
             }).catch(reason => {
                 Toast.open({
@@ -168,7 +165,6 @@ const recipes = {
             if (data) {
                 return data
             } else {
-                console.log(state.recipe);
                 if (state.recipe) return state.recipe
             }
         },

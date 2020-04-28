@@ -21,7 +21,7 @@
           <template v-else>{{`${user.firstName}'s recipes`}}</template>
         </h2>
         <hr />
-        <b-table :data="recipes" :loading="isLoading">
+        <b-table :data="recipes" :paginated="paginated" per-page="10" :loading="isLoading">
           <template slot-scope="props">
             <b-table-column field="name" label="Recipe">
               <router-link :to="`/recipe/${props.row._id}`">{{ props.row.name }}</router-link>
@@ -45,16 +45,34 @@
               <span class="tag is-info">{{ new Date(props.row.createdAt).toLocaleDateString() }}</span>
             </b-table-column>
             <b-table-column v-if="me" field="_id" label="Controls" numeric>
-              <router-link
-                tag="button"
-                :to="`/recipe/${props.row._id}/update`"
-                class="button is-text"
-              >
-                <b-icon icon="pencil"></b-icon>
-              </router-link>
-              <button class="button is-text" @click="deleteDialog(props.row)">
-                <b-icon icon="delete"></b-icon>
-              </button>
+              <div class="buttons is-pulled-right">
+                <b-tooltip
+                  type="is-light"
+                  :delay="500"
+                  position="is-bottom"
+                  label="Edit recipe"
+                  animated
+                >
+                  <router-link
+                    tag="button"
+                    :to="`/recipe/${props.row._id}/update`"
+                    class="button is-text"
+                  >
+                    <b-icon icon="pencil"></b-icon>
+                  </router-link>
+                </b-tooltip>
+                <b-tooltip
+                  type="is-light"
+                  :delay="500"
+                  position="is-bottom"
+                  label="Delete recipe"
+                  animated
+                >
+                  <button class="button is-text" @click="deleteDialog(props.row)">
+                    <b-icon icon="delete"></b-icon>
+                  </button>
+                </b-tooltip>
+              </div>
             </b-table-column>
           </template>
 
@@ -93,6 +111,9 @@ export default {
     },
     recipes() {
       return this.getUserRecipes(this.user._id);
+    },
+    paginated() {
+      return this.recipes.length < 10 ? false : true;
     }
   },
   async mounted() {

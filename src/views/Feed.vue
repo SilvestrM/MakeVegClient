@@ -28,6 +28,7 @@
           </div>
         </div>
       </div>
+      <hr class="is-marginless" />
       <div class="section">
         <div class="columns" style="min-height: 60vh">
           <div class="column is-full">
@@ -41,10 +42,11 @@
                   <Recipe :recipe="recipe" />
                 </router-link>
               </div>
+              <b-loading can-cancel :active.sync="isLoading"></b-loading>
+              <!-- <b-skeleton :active="isLoading" height="20rem"></b-skeleton> -->
             </div>
-            <b-message v-if="recipes.length === 0">No results</b-message>
+            <b-message v-if="recipes.length === 0 && !isLoading">No results</b-message>
           </div>
-          <b-loading :active.sync="isLoading" :is-full-page="true"></b-loading>
         </div>
       </div>
     </div>

@@ -38,8 +38,8 @@ export default {
   props: ["isModal"],
   data() {
     return {
-      email: "idk@mail.com",
-      pass: "1234"
+      email: "",
+      pass: ""
     };
   },
   computed: {

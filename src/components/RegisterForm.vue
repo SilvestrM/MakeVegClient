@@ -83,8 +83,8 @@ export default {
       newUser: {
         firstName: "",
         lastName: "",
-        email: "idk@mail.com",
-        pass: "1234",
+        email: "",
+        pass: "",
         diets: []
       }
     };

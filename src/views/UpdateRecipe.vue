@@ -64,17 +64,23 @@
               </b-field>
             </div>
           </div>
+          <hr />
           <div class="columns is-centered">
-            <div class="column is-half">
-              <b-carousel-list :data="updatedData.images">
-                <template slot="item" slot-scope="props">
-                  <figure class="3by4">
-                    <img :src="props.list" />
-                  </figure>
-                </template>
-              </b-carousel-list>
+            <div class="column is-full">
+              <b-field label="Images">
+                <div class="has-background-white-ter">
+                  <b-carousel-list :items-to-show="2" :data="updatedData.images">
+                    <template slot="item" slot-scope="props">
+                      <figure class="16by9">
+                        <img :src="props.list" />
+                      </figure>
+                    </template>
+                  </b-carousel-list>
+                </div>
+              </b-field>
             </div>
           </div>
+          <b-message has-icon type="is-info">Updating images is not supported yet..</b-message>
           <div class="columns is-centered">
             <div class="column is-narrow">
               <b-field label="Upload Images" expanded>
@@ -113,7 +119,7 @@
           </div>
           <div class="columns is-centered">
             <div class="column is-narrow">
-              <button class="button is-primary" type="submit">Add a new recipe</button>
+              <button class="button is-primary" type="submit">Update recipe</button>
             </div>
           </div>
         </form>

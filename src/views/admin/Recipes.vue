@@ -3,7 +3,7 @@
     <h3 class="title is-4">Recipe management</h3>
     <hr />
     <div class="section">
-      <b-field label="Search" message="Search by recipe's name or diets">
+      <b-field label="Search" :message="[`Search by recipe's name or diets`]">
         <b-input type="search" icon="magnify" @input="search"></b-input>
       </b-field>
       <b-table
@@ -26,29 +26,53 @@
             <!-- <button class="button is-text" @click="toggle(props.row)">
               <b-icon icon="pencil"></b-icon>
             </button>-->
-            <b-tooltip
-              type="is-light"
-              :delay="500"
-              position="is-bottom"
-              label="Recipe profile"
-              animated
-            >
-              <router-link class="button is-text" :to="`/recipe/${props.row._id}`">
-                <b-icon icon="book-open"></b-icon>
-              </router-link>
-            </b-tooltip>
-            <b-tooltip type="is-light" :delay="500" position="is-bottom" label="Delete" animated>
-              <button class="button is-text" @click="deleteDialog(props.row)">
-                <b-icon icon="delete"></b-icon>
-              </button>
-            </b-tooltip>
+            <div class="buttons is-pulled-right">
+              <b-tooltip
+                type="is-light"
+                :delay="500"
+                position="is-bottom"
+                label="Recipe profile"
+                animated
+              >
+                <router-link class="button is-text" :to="`/recipe/${props.row._id}`">
+                  <b-icon icon="book-open"></b-icon>
+                </router-link>
+              </b-tooltip>
+              <b-tooltip
+                type="is-light"
+                :delay="500"
+                position="is-bottom"
+                label="Update recipe"
+                animated
+              >
+                <router-link
+                  tag="button"
+                  :to="`/recipe/${props.row._id}/update`"
+                  class="button is-text"
+                >
+                  <b-icon icon="pencil"></b-icon>
+                </router-link>
+              </b-tooltip>
+              <b-tooltip type="is-light" :delay="500" position="is-bottom" label="Delete" animated>
+                <button class="button is-text" @click="deleteDialog(props.row)">
+                  <b-icon icon="delete"></b-icon>
+                </button>
+              </b-tooltip>
+            </div>
           </b-table-column>
         </template>
 
         <template slot="detail" slot-scope="props">
-          <div class>
-            <UpdateUserRow :user="props.row" />
-          </div>
+          <b-field
+            horizontal
+            label="Author:"
+          >{{`${getUser(props.row.author).firstName} ${getUser(props.row.author).lastName}`}}</b-field>
+          <b-field horizontal label="Added:">{{new Date(props.row.createdAt).toLocaleDateString()}}</b-field>
+          <b-field
+            horizontal
+            label="Updated:"
+          >{{new Date(props.row.updatedAt).toLocaleDateString()}}</b-field>
+          <b-field horizontal label="Number of images:">{{props.row.images.length}}</b-field>
         </template>
 
         <template slot="empty">
@@ -68,9 +92,7 @@
 
 <script>
 import { mapActions, mapGetters } from "vuex";
-import UpdateUserRow from "../../components/UpdateUserRow";
 export default {
-  components: { UpdateUserRow },
   data() {
     return {
       query: "",
@@ -80,9 +102,10 @@ export default {
   computed: {
     ...mapGetters(["getRecipes", "getUser"]),
     recipes() {
-      return this.getRecipes.filter(
-        recipe => recipe.author !== this.$store.state.loggedIn._id
-      );
+      // return this.getRecipes.filter(
+      //   recipe => recipe.author !== this.$store.state.loggedIn._id
+      // );
+      return this.getRecipes;
     }
   },
   async mounted() {},

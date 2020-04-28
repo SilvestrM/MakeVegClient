@@ -3,6 +3,8 @@ $primary: #3B7523;
 $primary: #437A31;
 $primary-invert: findColorInvert($primary);
 
+$success: #91b162;
+
 $info: #ee7d32;
 $link:#ee7d32;
 $menu-item-active-background-color: #ee7d32;
@@ -12,8 +14,8 @@ $black: #080705;
 
 //$dropdown-content-z: 50;
 
-$family-primary: 'Maven Pro';
 $family-primary: 'Open Sans';
+$family-primary: 'Maven Pro', 'Open Sans';
 
 $colors: (
     "white": ($white, $black),

@@ -67,8 +67,8 @@
           </div>
           <div class="column is-two-thirds">
             <p
-              class="has-text-right"
-            >This website has been created as a school project for a subject TNPW2</p>
+              class="has-text-right is-italic"
+            >This website has been created as a school project for the subject TNPW2</p>
           </div>
         </div>
       </div>
