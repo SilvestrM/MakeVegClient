@@ -42,7 +42,7 @@
                 Created on
                 <time
                   :datetime="recipe.createdAt"
-                >{{`${recipe.createdAt.toLocaleDateString()} `}}</time>
+                >{{`${new Date(recipe.createdAt.toLocaleDateString())} `}}</time>
                 by
                 <router-link :to="`/user/${author._id}`">
                   <span class="is-italic">{{`${author.firstName} ${author.lastName}`}}</span>
@@ -77,7 +77,7 @@
                   <i class="mdi mdi-timelapse"></i>
                 </span>
                 Estimated cooking time:
-                <em>{{`${recipe.cookTime.getHours() * 60 + recipe.cookTime.getMinutes()} min`}}</em>
+                <em>{{`${new Date(recipe.cookTime).getHours() * 60 + new Date(recipe.cookTime).getMinutes()} min`}}</em>
               </p>
             </div>
             <div class="content has-text-left">

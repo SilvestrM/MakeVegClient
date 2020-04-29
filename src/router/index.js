@@ -7,6 +7,8 @@ import store from '../store/index'
 Vue.use(VueRouter)
 
 const routes = [
+
+  // Feed
   {
     path: '/',
     redirect: '/discover'
@@ -16,16 +18,22 @@ const routes = [
     name: 'Discover',
     component: Feed
   },
+
+  // Guest Login
   {
     path: '/login',
     name: 'Login',
     meta: { guest: true },
     component: () => import('../views/Login.vue')
   },
+
+  // Recipe
   {
     path: '/recipe/:id',
     component: () => import('../views/Recipe.vue')
   },
+
+  // Recipe add/update
   {
     path: '/recipe/:id/update',
     meta: { requiresAuth: true },
@@ -36,10 +44,14 @@ const routes = [
     meta: { requiresAuth: true },
     component: () => import('../views/AddRecipe.vue')
   },
+
+  // User Profile
   {
     path: '/user/:id',
     component: () => import('../views/UserProfile.vue')
   },
+
+  // Settings
   {
     path: '/user/:id/settings',
     name: 'Settings',
@@ -62,12 +74,11 @@ const routes = [
       }
     ]
   },
+
+  // About
   {
     path: '/about',
     name: 'About',
-    // route level code-splitting
-    // this generates a separate chunk (about.[hash].js) for this route
-    // which is lazy-loaded when the route is visited.
     component: () => import('../views/About.vue')
   }
 ]
@@ -80,17 +91,20 @@ const router = new VueRouter({
 
 //
 router.beforeEach((to, from, next) => {
-  //store.dispatch('initApp').then(() => {
+
+  // Checks if route is requies user to be authenticated
   if (to.matched.some(record => record.meta.requiresAuth)) {
+
+    // Checks if user is authenticated
     if (localStorage.getItem('jwt') !== store.state.loggedIn.tokens.authToken) {
-      console.log(store.state.loggedIn.tokens.authToken);
       next({
         path: '/login',
         params: { nextUrl: to.fullPath }
       })
     } else {
-      //const user = JSON.parse(localStorage.getItem('user'))
       if (to.matched.some(record => record.meta.isAdmin)) {
+
+        // Checks if user is admin
         if (!store.state.loggedIn.tokens.adminToken) {
           next({ path: '/' })
         } else {
@@ -100,6 +114,8 @@ router.beforeEach((to, from, next) => {
         next()
       }
     }
+
+    // Checks if route is requies user not to be authenticated
   } else if (to.matched.some(record => record.meta.guest)) {
     if (localStorage.getItem('jwt') == null) {
       next()
@@ -110,11 +126,6 @@ router.beforeEach((to, from, next) => {
   } else {
     next()
   }
-
-  /* })
-    .catch(reason => {
-      throw new Error(`Init app failed... ${reason}`)
-    }) */
 })
 
 export default router

@@ -50,7 +50,7 @@
 
         <template slot="detail" slot-scope="props">
           <div class>
-            <UpdateUserRow :user="props.row" />
+            <UpdateUserRow @updated="toggle(props.row)" :user="props.row" />
           </div>
         </template>
 

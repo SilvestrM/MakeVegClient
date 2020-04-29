@@ -69,7 +69,7 @@
             <div class="column is-full">
               <b-field label="Images">
                 <div class="has-background-white-ter">
-                  <b-carousel-list :items-to-show="2" :data="updatedData.images">
+                  <b-carousel-list :items-to-show="2" :data="imagesFormatted">
                     <template slot="item" slot-scope="props">
                       <figure class="16by9">
                         <img :src="props.list" />
@@ -151,8 +151,7 @@ export default {
         description: this.recipe.description,
         ingredients: this.recipe.ingredients,
         dietTypes: this.recipe.dietTypes,
-        instructions: this.recipe.instructions,
-        images: this.imagesFormatted
+        instructions: this.recipe.instructions
       };
       //images
     },

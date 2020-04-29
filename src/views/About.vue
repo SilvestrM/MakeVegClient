@@ -7,13 +7,13 @@
             <div class="column is-half">
               <div class="content">
                 <h1>About</h1>
-                <p>This web application allows sharing of recipes, especcially but not limited for people that follow some dietary restrictions eg. Vegetarianism, ...</p>
+                <p>This web application allows sharing recipes especially for but not limited to people that follow certain dietary restrictions, eg. Vegetarianism, ...</p>
                 <p>
-                  This website has been created by
+                  This website was created by
                   <a
                     class="is-italic"
                     href="http://screation.site"
-                  >Silvestr Mikeska</a> as a School Project at University of Hradec Hralove, Czechia.
+                  >Silvestr Mikeska</a> as a School Project at the University of Hradec Kralove, Czechia.
                 </p>
               </div>
             </div>

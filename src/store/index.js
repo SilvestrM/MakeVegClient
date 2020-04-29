@@ -31,12 +31,15 @@ export default new Vuex.Store({
                         commit("loginChange", res.data)
                     })
                     .catch(reason => {
-                        Toast.open({
-                            message: `Error fetching user: ${reason}`,
-                            position: 'is-bottom',
-                            type: 'is-danger'
-                        })
-                        throw reason;
+                        if (reason.response.status === 400) {
+                            localStorage.removeItem("jwt");
+                        } else {
+                            Toast.open({
+                                message: `Error fetching user: ${reason}`,
+                                position: 'is-bottom',
+                                type: 'is-danger'
+                            })
+                        }
                     })
             }
         },
@@ -73,7 +76,6 @@ export default new Vuex.Store({
             commit('loginChange', null)
         },
         async addToken({ commit }, user) {
-            console.log(user.tokens.authToken);
             localStorage.removeItem("jwt");
             localStorage.setItem("jwt", user.tokens.authToken);
 

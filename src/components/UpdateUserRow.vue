@@ -48,7 +48,9 @@ export default {
       data._id = this.user._id;
       data.email = this.user.email;
       await this.updateUser(data)
-        .then(() => {})
+        .then(() => {
+          this.$emit("updated");
+        })
         .catch();
     }
   }
