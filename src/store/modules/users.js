@@ -31,7 +31,6 @@ const users = {
                 } else {
                     Toast.open({
                         message: `No users found`,
-                        position: 'is-bottom',
                         type: 'is-info'
                     })
                 }
@@ -39,7 +38,6 @@ const users = {
                 .catch(reason => {
                     Toast.open({
                         message: `Error fetching data: ${reason}`,
-                        position: 'is-bottom',
                         type: 'is-danger'
                     })
                     throw reason;
@@ -54,7 +52,6 @@ const users = {
                     .catch(reason => {
                         Toast.open({
                             message: `Error fetching data: ${reason}`,
-                            position: 'is-bottom',
                             type: 'is-danger'
                         })
                         throw reason;
@@ -65,10 +62,13 @@ const users = {
             await axios.patch(`${state.url}`, data, { headers: { Authorization: `Bearer ${localStorage.jwt}` } })
                 .then(resolve => {
                     commit('updateUser', resolve.data)
+                    Toast.open({
+                        message: `User  ${resolve.data.firstName} ${resolve.data.lastName} successfully updated.`,
+                        type: 'is-success'
+                    })
                 }).catch(reason => {
                     Toast.open({
                         message: `Error updating user: ${reason.response.data}`,
-                        position: 'is-bottom',
                         type: 'is-warning'
                     })
                     throw reason;
@@ -79,10 +79,14 @@ const users = {
                 .then(resolve => {
                     commit('updateUser', resolve.data)
                     commit('loginChange', resolve.data)
+                    Toast.open({
+                        message: `Your account has been successfully updated.`,
+                        type: 'is-success'
+                    })
                 }).catch(reason => {
                     Toast.open({
+                        duration: 5000,
                         message: `Error updating user: ${reason.response.data}`,
-                        position: 'is-bottom',
                         type: 'is-danger'
                     })
                     throw reason;
@@ -96,14 +100,12 @@ const users = {
                         commit('deleteUser', res.data._id)
                         Toast.open({
                             message: `User  ${res.data.firstName} ${res.data.lastName} successfuly deleted`,
-                            position: 'is-bottom',
                             type: 'is-info'
                         })
                     })
                     .catch(reason => {
                         Toast.open({
                             message: `Error deleting data: ${reason}`,
-                            position: 'is-bottom',
                             type: 'is-danger'
                         })
                         throw reason;
@@ -111,7 +113,6 @@ const users = {
             } else {
                 Toast.open({
                     message: `You cannot delete yourself`,
-                    position: 'is-bottom',
                     type: 'is-warning'
                 })
             }

@@ -36,7 +36,6 @@ export default new Vuex.Store({
                         } else {
                             Toast.open({
                                 message: `Error fetching user: ${reason}`,
-                                position: 'is-bottom',
                                 type: 'is-danger'
                             })
                         }
@@ -47,11 +46,14 @@ export default new Vuex.Store({
             await axios.post(`${this.state.url}/register/`, data)
                 .then(res => {
                     dispatch("addToken", res.data)
+                    Toast.open({
+                        message: `Registration successfully completed`,
+                        type: 'is-success'
+                    })
                 })
                 .catch(reason => {
                     Toast.open({
                         message: `Error: ${reason}`,
-                        position: 'is-bottom',
                         type: 'is-danger'
                     })
                     throw reason;
@@ -65,7 +67,6 @@ export default new Vuex.Store({
                 .catch(reason => {
                     Toast.open({
                         message: `Error: ${reason}`,
-                        position: 'is-bottom',
                         type: 'is-danger'
                     })
                     throw reason;

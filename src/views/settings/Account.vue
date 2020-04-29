@@ -13,22 +13,30 @@
           <b-input v-model="newUser.email" type="email" placeholder="Your email"></b-input>
         </b-field>
         <hr />
-        <b-field horizontal expanded label="New password">
+        <b-field horizontal expanded label="Old password">
           <b-input
+            :required="pass.length > 0"
+            v-model="oldPass"
+            type="password"
+            password-reveal
+            placeholder="Your old password"
+          ></b-input>
+        </b-field>
+        <b-field expanded horizontal label="New password">
+          <b-input
+            expanded
             v-model="pass"
             type="password"
             password-reveal
-            placeholder="Your password"
-            disabled
+            placeholder="Your new password"
           ></b-input>
-        </b-field>
-        <b-field horizontal expanded label="Repeat Password">
           <b-input
+            expanded
             v-model="repass"
             type="password"
+            :required="pass.length > 0"
             password-reveal
-            placeholder="Your password again"
-            disabled
+            placeholder="Your new password again"
           ></b-input>
         </b-field>
         <hr />
@@ -66,6 +74,7 @@ export default {
     return {
       pass: "",
       repass: "",
+      oldPass: "",
       newUser: {
         firstName: this.user.firstName,
         lastName: this.user.lastName,
@@ -79,20 +88,9 @@ export default {
   },
   computed: {
     ...mapGetters(["getLoggedIn", "isDuplicateMail"]),
-    // newUser: {
-    //   get() {
-    //     return this.user;
-    //   },
-    //   set(values) {
-    //     console.log(values);
-    //   }
-    // },
     diets() {
       return this.$store.getters.getDiets;
     }
-  },
-  mounted() {
-    console.log(this.user);
   },
   methods: {
     ...mapActions(["updateUserSelf", "fetchFindUsers"]),
@@ -103,28 +101,38 @@ export default {
       this.newUser.settings.diets = this.user.settings.diets;
       this.pass = "";
       this.repass = "";
+      this.oldpass = "";
     },
     async formHandle() {
-      // TODO pass logic
+      // if password is to be changed
+      if (this.pass.length > 0) {
+        if (this.pass === this.repass) {
+          this.newUser.newPass = this.pass;
+          this.newUser.oldPass = this.oldPass;
+        } else {
+          this.$buefy.toast.open({
+            duration: 5000,
+            message: `Passwords do not match`,
+            position: "is-top",
+            type: "is-danger"
+          });
+          return;
+        }
+      }
       await this.fetchFindUsers(this.newUser.email).then(async () => {
         if (
           this.isDuplicateMail(this.newUser.email) === false ||
           this.newUser.email === this.user.email
         ) {
           this.newUser._id = this.user._id;
-          await this.updateUserSelf(this.newUser)
-            .then(() => {
-              // if (this.$route.fullPath !== `/user/${this.$route.params}/account`) {
-              //   this.$router.push("/discover");
-              // }
-              this.$router.push(`/user/${this.user._id}`);
-            })
-            .catch();
+          await this.updateUserSelf(this.newUser).then(() => {
+            this.$router.push(`/user/${this.user._id}`);
+          });
         } else {
           this.$buefy.toast.open({
             duration: 5000,
             message: `An user with this email already exists`,
-            position: "is-bottom",
+            position: "is-top",
             type: "is-warning"
           });
         }

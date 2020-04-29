@@ -61,6 +61,11 @@
               </b-field>
             </div>
           </div>
+          <div v-if="uploading" class="columns">
+            <div class="column">
+              <b-progress size="is-small" type="is-info">Uploading...</b-progress>
+            </div>
+          </div>
           <div class="columns is-centered">
             <div class="column is-narrow">
               <b-field label="Upload Images" expanded>
@@ -112,6 +117,7 @@ import { mapActions, mapGetters } from "vuex";
 export default {
   data() {
     return {
+      uploading: false,
       dropFiles: [],
       recipe: {
         name: "",
@@ -133,10 +139,12 @@ export default {
   methods: {
     ...mapActions(["addRecipe"]),
     async formHandle() {
+      this.uploading = true;
       this.recipe.images = this.dropFiles;
       await this.addRecipe(this.recipe).then(() => {
         this.$router.push(`/user/${this.getLoggedIn._id}`);
       });
+      this.uploading = false;
     },
     deleteDropFile(index) {
       this.dropFiles.splice(index, 1);

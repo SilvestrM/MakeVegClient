@@ -37,7 +37,7 @@ const recipes = {
                     Toast.open({
                         message: `Nothing found`,
                         position: 'is-bottom',
-                        type: 'is-danger'
+                        type: 'is-info'
                     })
                 }
             })
@@ -90,6 +90,12 @@ const recipes = {
                         recipe.images = await dispatch('uploadImage', data)
                     }
                     commit('addRecipe', recipe)
+                    Toast.open({
+                        duration: 5000,
+                        message: `Recipe ${recipe.name} successfully added`,
+                        position: 'is-top',
+                        type: 'is-success'
+                    })
                 })
                 .catch(reason => {
                     Toast.open({
@@ -140,13 +146,15 @@ const recipes = {
                 .then(res => {
                     commit('deleteRecipe', res.data._id)
                     Toast.open({
+                        duration: 5000,
                         message: `Recipe ${res.data.name} successfuly deleted`,
-                        position: 'is-bottom',
-                        type: 'is-success'
+                        position: 'is-top',
+                        type: 'is-info'
                     })
                 })
                 .catch(reason => {
                     Toast.open({
+                        duration: 5000,
                         message: `Error deleting data: ${reason}`,
                         position: 'is-bottom',
                         type: 'is-danger'

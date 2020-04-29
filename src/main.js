@@ -6,7 +6,12 @@ import store from './store'
 //import Vuex from 'vuex'
 import Buefy from 'buefy'
 
-Vue.use(Buefy)
+// Buefy constructor settings
+Vue.use(Buefy, {
+  defaultToastDuration: 4000,
+  defaultToastPosition: 'is-top',
+  defaultTooltipAnimated: true
+})
 
 import utils from './mixins/utils'
 
