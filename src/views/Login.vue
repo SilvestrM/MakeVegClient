@@ -4,7 +4,9 @@
       <div class="section">
         <div class="columns is-centered">
           <div class="column is-narrow">
-            <LoginForm :isModal="false" />
+            <div class="card">
+              <LoginForm :isModal="false" />
+            </div>
           </div>
         </div>
       </div>

@@ -79,7 +79,7 @@ export default {
       return this.getLoggedIn;
     },
     isAdmin() {
-      return this.user.tokens.adminToken ? true : false;
+      return this.user.meta.isAdmin;
     }
   },
   mounted() {},

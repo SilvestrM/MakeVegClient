@@ -2,6 +2,8 @@ import Vue from 'vue'
 import VueRouter from 'vue-router'
 import Feed from '../views/Feed.vue'
 
+import { ToastProgrammatic as Toast } from 'buefy'
+
 import store from '../store/index'
 
 Vue.use(VueRouter)
@@ -95,29 +97,37 @@ router.beforeEach((to, from, next) => {
   // Checks if route is requies user to be authenticated
   if (to.matched.some(record => record.meta.requiresAuth)) {
 
-    // Checks if user is authenticated
-    if (localStorage.getItem('jwt') !== store.state.loggedIn.tokens.authToken) {
+    if (store.state.loggedIn !== null) {
+      // Checks if user is authenticated
+      if (localStorage.getItem('jwt') === store.state.loggedIn.authToken) {
+
+        // Checks if route is requies user to be admi
+        if (to.matched.some(record => record.meta.isAdmin)) {
+          // Checks if user is admin
+          if (store.state.loggedIn.meta.isAdmin) {
+            next()
+          } else {
+            next({ path: '/' })
+          }
+        } else {
+          next()
+        }
+      }
+    } else {
+      Toast.open({
+        message: `Need to be logged in to proceed to this page!`,
+        type: 'is-warning'
+      })
       next({
         path: '/login',
         params: { nextUrl: to.fullPath }
       })
-    } else {
-      if (to.matched.some(record => record.meta.isAdmin)) {
 
-        // Checks if user is admin
-        if (!store.state.loggedIn.tokens.adminToken) {
-          next({ path: '/' })
-        } else {
-          next()
-        }
-      } else {
-        next()
-      }
     }
 
     // Checks if route is requies user not to be authenticated
   } else if (to.matched.some(record => record.meta.guest)) {
-    if (localStorage.getItem('jwt') == null) {
+    if (localStorage.getItem('jwt') === null) {
       next()
     }
     else {

@@ -14,21 +14,30 @@ export default new Vuex.Store({
     strict: true,
     state: {
         url: '/api',
-        loggedIn: null
+        loggedIn: null,
+        authToken: ''
     },
     mutations: {
+        setToken(state, token) {
+            state.authToken = token
+        },
         loginChange(state, user) {
+            if (user !== null) {
+                user.authToken = localStorage.jwt
+            }
             state.loggedIn = user
         }
     },
     actions: {
         async initApp({ commit }) {
             if (localStorage.jwt) {
-                //Todo admin token check
                 axios.defaults.headers.Authorisation = `Bearer ${localStorage.jwt}`
+
                 await axios.get("/api/auth", { headers: { Authorization: `Bearer ${localStorage.jwt}` } })
-                    .then(res => {
-                        commit("loginChange", res.data)
+                    .then(response => {
+                        const user = response.data
+                        // commit("setToken", localStorage.jwt)
+                        commit("loginChange", user)
                     })
                     .catch(reason => {
                         if (reason.response.status === 400) {
@@ -45,7 +54,7 @@ export default new Vuex.Store({
         async register({ dispatch }, data) {
             await axios.post(`${this.state.url}/register/`, data)
                 .then(res => {
-                    dispatch("addToken", res.data)
+                    dispatch("addToken", res)
                     Toast.open({
                         message: `Registration successfully completed`,
                         type: 'is-success'
@@ -53,33 +62,32 @@ export default new Vuex.Store({
                 })
                 .catch(reason => {
                     Toast.open({
-                        message: `Error: ${reason}`,
+                        message: `Error: ${reason.response.data}`,
                         type: 'is-danger'
                     })
-                    throw reason;
                 })
         },
         async login({ dispatch }, cred) {
             await axios.post(`${this.state.url}/auth/login`, cred)
                 .then(res => {
-                    dispatch("addToken", res.data)
+                    dispatch("addToken", res)
                 })
                 .catch(reason => {
                     Toast.open({
-                        message: `Error: ${reason}`,
+                        message: `Error: ${reason.response.data}`,
                         type: 'is-danger'
                     })
-                    throw reason;
                 })
         },
         async logout({ commit }) {
             localStorage.removeItem("jwt");
             commit('loginChange', null)
         },
-        async addToken({ commit }, user) {
+        async addToken({ commit }, response) {
             localStorage.removeItem("jwt");
-            localStorage.setItem("jwt", user.tokens.authToken);
-
+            localStorage.setItem("jwt", response.headers.authorisation.replace('Bearer ', ''));
+            const user = response.data
+            // commit('setToken', response.headers.authorisation)
             commit('loginChange', user)
         },
 

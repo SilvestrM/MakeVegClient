@@ -36,7 +36,6 @@ const recipes = {
                 } else {
                     Toast.open({
                         message: `Nothing found`,
-                        position: 'is-bottom',
                         type: 'is-info'
                     })
                 }
@@ -44,7 +43,6 @@ const recipes = {
                 .catch(reason => {
                     Toast.open({
                         message: `Error fetching data: ${reason}`,
-                        position: 'is-bottom',
                         type: 'is-danger'
                     })
                     throw reason;
@@ -57,7 +55,6 @@ const recipes = {
                 .catch(reason => {
                     Toast.open({
                         message: `Error fetching data: ${reason}`,
-                        position: 'is-bottom',
                         type: 'is-danger'
                     })
                     throw reason;
@@ -72,7 +69,6 @@ const recipes = {
                     .catch(reason => {
                         Toast.open({
                             message: `Error fetching data: ${reason}`,
-                            position: 'is-bottom',
                             type: 'is-danger'
                         })
                         throw reason;
@@ -91,16 +87,13 @@ const recipes = {
                     }
                     commit('addRecipe', recipe)
                     Toast.open({
-                        duration: 5000,
                         message: `Recipe ${recipe.name} successfully added`,
-                        position: 'is-top',
                         type: 'is-success'
                     })
                 })
                 .catch(reason => {
                     Toast.open({
                         message: `Error adding data: ${reason}`,
-                        position: 'is-bottom',
                         type: 'is-danger'
                     })
                     throw reason;
@@ -113,7 +106,6 @@ const recipes = {
                 }).catch(reason => {
                     Toast.open({
                         message: `Error updating recipe: ${reason.response.data}`,
-                        position: 'is-bottom',
                         type: 'is-warning'
                     })
                     throw reason;
@@ -133,9 +125,7 @@ const recipes = {
                 return images.data
             }).catch(reason => {
                 Toast.open({
-                    duration: 5000,
                     message: `Error adding images: ${reason.resolve} you need to add them later`,
-                    position: 'is-bottom',
                     type: 'is-warning'
                 })
                 return []
@@ -146,17 +136,13 @@ const recipes = {
                 .then(res => {
                     commit('deleteRecipe', res.data._id)
                     Toast.open({
-                        duration: 5000,
                         message: `Recipe ${res.data.name} successfuly deleted`,
-                        position: 'is-top',
                         type: 'is-info'
                     })
                 })
                 .catch(reason => {
                     Toast.open({
-                        duration: 5000,
                         message: `Error deleting data: ${reason}`,
-                        position: 'is-bottom',
                         type: 'is-danger'
                     })
                     throw reason;

@@ -19,8 +19,9 @@
             required
           ></b-input>
         </b-field>
-
-        <b-checkbox>Remember me</b-checkbox>
+        <!-- <b-field message="You are always remembered">
+          <b-checkbox value="true" disabled>Remember me</b-checkbox>
+        </b-field>-->
       </section>
       <footer class="modal-card-foot">
         <div class="buttons is-pulled-right">
