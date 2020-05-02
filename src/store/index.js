@@ -10,6 +10,8 @@ import { ToastProgrammatic as Toast } from 'buefy'
 
 Vue.use(Vuex)
 
+//TODO fix states
+
 export default new Vuex.Store({
     strict: true,
     state: {

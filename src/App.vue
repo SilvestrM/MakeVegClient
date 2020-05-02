@@ -5,7 +5,7 @@
         <template slot="brand">
           <b-navbar-item class="is-unselectable" tag="div">
             <div class="inline-flex is-vertical">
-              <img src="./assets/carrot.png" alt="makeveg" />
+              <img :src="`${publicPath}images/carrot.png`" alt="makeveg" />
               <span class="title is-bold is-5">
                 <span>Make</span>
                 <span class="has-text-primary">Veg</span>
@@ -104,7 +104,8 @@ export default {
   data() {
     return {
       isLoginModalActive: false,
-      isRegisterModalActive: false
+      isRegisterModalActive: false,
+      publicPath: process.env.BASE_URL
     };
   },
   computed: {

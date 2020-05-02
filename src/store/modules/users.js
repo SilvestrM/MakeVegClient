@@ -9,7 +9,9 @@ const users = {
         user: {}
     },
     mutations: {
-        addUser: (state, data) => state.users.push(data),
+        addUser: (state, data) => {
+            if (state.users.includes(data) === false) state.users.push(data)
+        },
         setUser: (state, data) => {
             state.user = data
         },
@@ -23,7 +25,6 @@ const users = {
         deleteUser: (state, id) => (state.users = state.users.filter(user => user._id !== id))
     },
     actions: {
-        //TODO users update
         async fetchFindUsers({ commit, state }, query) {
             await axios.get(`${state.url}find/${query}`).then(resolve => {
                 if (resolve.data !== undefined) {
@@ -48,6 +49,7 @@ const users = {
             if (!user) {
                 await axios.get(`${state.url}${id}`).then(resolve => {
                     commit('setUser', resolve.data)
+                    commit('addUser', resolve.data)
                 })
                     .catch(reason => {
                         Toast.open({

@@ -114,11 +114,7 @@ export default {
     async search(query) {
       if (query.length >= 1) {
         this.isLoading = true;
-        await this.fetchFindRecipes(query).then(() => {
-          // this.recipes.forEach(async recipe => {
-          //   await this.fetchUser(recipe.author)
-          // });
-        });
+        await this.fetchFindRecipes(query).then(() => {});
         this.isLoading = false;
       }
     },
