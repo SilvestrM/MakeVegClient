@@ -40,9 +40,7 @@
             <div class="level-item">
               <p>
                 Created on
-                <time
-                  :datetime="recipe.createdAt"
-                >{{`${new Date(recipe.createdAt.toLocaleDateString())} `}}</time>
+                {{`${new Date(recipe.createdAt).toLocaleDateString()} `}}
                 by
                 <router-link :to="`/user/${author._id}`">
                   <span class="is-italic">{{`${author.firstName} ${author.lastName}`}}</span>

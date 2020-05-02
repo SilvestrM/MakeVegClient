@@ -10,7 +10,12 @@ const users = {
     },
     mutations: {
         addUser: (state, data) => {
-            if (state.users.includes(data) === false) state.users.push(data)
+            if (state.users.findIndex(user => user._id === data._id) !== -1) state.users.push(data)
+        },
+        addUsers: (state, data) => {
+            data.forEach(data => {
+                if (state.users.includes(data) === false) state.users.push(data)
+            });
         },
         setUser: (state, data) => {
             state.user = data

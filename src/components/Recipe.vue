@@ -43,7 +43,9 @@
       <div class="card-footer-item">
         <span>
           Added
-          <time :datetime="recipe.createdAt">{{recipe.createdAt.toLocaleDateString()}}</time>
+          <time
+            :datetime="recipe.createdAt"
+          >{{new Date(recipe.createdAt).toLocaleDateString()}}</time>
         </span>
       </div>
     </div>

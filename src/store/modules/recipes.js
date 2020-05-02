@@ -13,15 +13,9 @@ const recipes = {
             if (state.recipes.include(data) === false) state.recipes.push(data)
         },
         setRecipe: (state, data) => {
-            data.createdAt = new Date(data.createdAt)
-            data.cookTime = new Date(data.cookTime)
             state.recipe = data
         },
-        updateRecipes: (state, data) => {
-            data.forEach(data => {
-                data.createdAt = new Date(data.createdAt)
-                data.cookTime = new Date(data.cookTime)
-            })
+        setRecipes: (state, data) => {
             state.recipes = data
         },
         updateRecipe: (state, data) => {
@@ -31,13 +25,13 @@ const recipes = {
         deleteRecipe: (state, id) => (state.recipes = state.recipes.filter(recipe => recipe._id !== id))
     },
     actions: {
-        async fetchFindRecipes({ commit, dispatch, state }, query) {
+        async fetchFindRecipes({ commit, state }, query) {
             await axios.get(`${state.url}find/${query}`).then(resolve => {
                 if (resolve.data !== undefined) {
-                    commit('updateRecipes', resolve.data)
-                    resolve.data.forEach(async recipe => {
-                        await dispatch('fetchUser', recipe.author)
-                    })
+                    commit('setRecipes', resolve.data)
+                    // resolve.data.forEach(async recipe => {
+                    //     await dispatch('fetchUser', recipe.author)
+                    // })
                 } else {
                     Toast.open({
                         message: `Nothing found`,
@@ -55,7 +49,7 @@ const recipes = {
         },
         async fetchRecipes({ commit, state }) {
             await axios.get(state.url).then(resolve => {
-                commit('updateRecipes', resolve.data)
+                commit('setRecipes', resolve.data)
             })
                 .catch(reason => {
                     Toast.open({
