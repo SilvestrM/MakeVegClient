@@ -79,7 +79,7 @@
 
 <script>
 import { mapActions, mapGetters } from "vuex";
-import Recipe from "../components/Recipe";
+// import Recipe from "../components/Recipe";
 
 export default {
   name: "Discover",
@@ -148,7 +148,7 @@ export default {
     // await this.fetchRecipes();
   },
   components: {
-    Recipe
+    Recipe: () => import("../components/Recipe")
   }
 };
 </script>

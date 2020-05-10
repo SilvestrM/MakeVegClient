@@ -1,17 +1,26 @@
 <template>
   <article class="card">
     <figure class="card-image">
-      <p class="image is-4by3">
-        <img :src="imgData" />
+      <b-skeleton height="15rem" :active="isLoading"></b-skeleton>
+      <p v-show="!isLoading" class="image is-4by3">
+        <!-- <img :src="imgData" /> -->
+        <ImageLazy
+          :src="imgData"
+          :delay="400"
+          @loading="isLoading = true"
+          @load="isLoading = false"
+        />
       </p>
     </figure>
     <div class="card-header">
       <div class="card-header-title is-centered">
-        <h3 class="title is-5 is-capitalized">{{recipe.name}}</h3>
+        <b-skeleton height="2rem" :active="isLoading"></b-skeleton>
+        <h3 v-show="!isLoading" class="title is-5 is-capitalized">{{recipe.name}}</h3>
       </div>
     </div>
     <div class="card-content">
-      <div class="content tags">
+      <b-skeleton height="3rem" :active="isLoading"></b-skeleton>
+      <div v-show="!isLoading" class="content tags">
         <span
           v-for="(type, index) in recipe.dietTypes"
           :index="index"
@@ -41,7 +50,8 @@
     </div>
     <div class="card-footer">
       <div class="card-footer-item">
-        <span>
+        <b-skeleton height="2rem" :active="isLoading"></b-skeleton>
+        <span v-show="!isLoading">
           Added
           <time
             :datetime="recipe.createdAt"
@@ -55,6 +65,11 @@
 <script>
 export default {
   props: ["recipe"],
+  data() {
+    return {
+      isLoading: false
+    };
+  },
   computed: {
     imgData() {
       return this.recipe.images.length > 0

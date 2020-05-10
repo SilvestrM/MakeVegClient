@@ -1,10 +1,10 @@
 <template>
   <div id="app">
     <div class="page">
-      <b-navbar wrapper-class="container" type="is-light" shadow fixed-top>
+      <b-navbar wrapper-class="container" type="is-light" fixed-top>
         <template slot="brand">
           <b-navbar-item class="is-unselectable" tag="div">
-            <div class="inline-flex is-vertical">
+            <div class="inline-flex is-vertical is-aligned-center">
               <img :src="`${publicPath}images/carrot.png`" alt="makeveg" />
               <span class="title is-bold is-5">
                 <span>Make</span>
@@ -14,8 +14,10 @@
           </b-navbar-item>
         </template>
         <template slot="start">
-          <b-navbar-item tag="router-link" to="/discover">
+          <!-- <b-navbar-item class="is-unselectable" tag="div"></b-navbar-item> -->
+          <b-navbar-item class="is-flex is-aligned-center" tag="router-link" to="/discover">
             <b-icon icon="compass" />
+
             <strong class="has-text-weight-semibold" style="padding-left:0.25rem;">&nbsp;Discover</strong>
           </b-navbar-item>
           <b-navbar-item v-if="logged" tag="router-link" :to="`/user/${sessionUser._id}`">

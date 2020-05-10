@@ -13,6 +13,10 @@ Vue.use(Buefy, {
   defaultTooltipAnimated: true
 })
 
+import ImageLazy from 'cube-vue-image-lazy'
+
+Vue.use(ImageLazy)
+
 import utils from './mixins/utils'
 
 Vue.mixin(utils);
