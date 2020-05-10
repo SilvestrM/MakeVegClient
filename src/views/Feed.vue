@@ -1,5 +1,29 @@
 <template>
   <div>
+    <div class="hero is-primary" :class="{'is-medium': !isLoggedIn}">
+      <div class="hero-body">
+        <div class="container is-flex is-aligned-center is-column">
+          <h1 class="title is-1">MakeVeg</h1>
+          <h2 class="subtitle is-4">Share your veggie ideas!</h2>
+
+          <template v-if="!isLoggedIn">
+            <button
+              @click.prevent="signClicked"
+              class="button is-medium is-rounded has-text-weight-bold"
+            >Sign up and add your recipe!</button>
+            <p>
+              Already an user?
+              <a @click.prevent="$router.push('/login')">Log In</a>
+            </p>
+          </template>
+          <!-- <button
+            v-else
+            @click.prevent="$router.push('/add/recipe')"
+            class="button is-medium is-rounded has-text-weight-bold"
+          >Add your recipe!</button>-->
+        </div>
+      </div>
+    </div>
     <div class="section has-background-white-bis" style="padding-top:4rem">
       <div class="columns is-centered">
         <div class="column is-half">
@@ -71,6 +95,12 @@ export default {
     },
     filters() {
       return this.getLoggedIn.settings.diets;
+    },
+    isLoggedIn() {
+      return (
+        this.$store.state.loggedIn !== null &&
+        this.$store.state.loggedIn !== undefined
+      );
     }
   },
   mounted() {},
@@ -93,6 +123,9 @@ export default {
           Math.round((arr.reduce((a, b) => a + b, 0) / arr.length) * 100) / 100
         );
       // return arr.reduce((a, b) => a + b, 0) / arr.length;
+    },
+    signClicked() {
+      this.$emit("clickedSignUp");
     }
   },
   beforeRouteEnter(to, from, next) {

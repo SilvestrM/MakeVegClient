@@ -57,7 +57,7 @@
           </template>
         </template>
       </b-navbar>
-      <router-view />
+      <router-view @clickedSignUp="isRegisterModalActive = true" />
     </div>
     <footer class="footer">
       <div class="container">

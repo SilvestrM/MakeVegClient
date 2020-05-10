@@ -135,7 +135,7 @@ export default {
     deleteDialog(recipe) {
       this.$buefy.dialog.prompt({
         title: "Deleting Recipe",
-        message: `Are you sure you want to <b>delete</b> ${recipe.name}? This action cannot be undone. To delete this recipe please type down its name below.`,
+        message: `Are you sure you want to <b>delete ${recipe.name}</b>? This action cannot be undone. To delete this recipe please type down 'DELETE' below.`,
         confirmText: "Delete Recipe",
         inputAttrs: {
           placeholder: recipe.name
@@ -148,7 +148,7 @@ export default {
           } else {
             this.$buefy.toast.open({
               duration: 3000,
-              message: `The entered name does not match the recipe's name`,
+              message: `The entered text does not match the keyword!`,
               position: "is-bottom",
               type: "is-warning"
             });
