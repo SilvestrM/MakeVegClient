@@ -1,35 +1,35 @@
 <template>
-  <div class="section">
-    <div class="container">
-      <div class="section">
-        <div class="columns is-centered">
-          <div class="column is-half">
-            <b-field
-              label="Search"
-              label-position="on-border"
-              message="Search by recipe name or diet"
+  <div>
+    <div class="section has-background-white-bis" style="padding-top:4rem">
+      <div class="columns is-centered">
+        <div class="column is-half">
+          <b-field
+            label="Search"
+            label-position="on-border"
+            message="Search by recipe name or diet"
+            expanded
+          >
+            <b-input
+              size="is-medium"
+              placeholder="Soup, vegetarian, ..."
               expanded
-            >
-              <b-input
-                size="is-medium"
-                placeholder="Soup, vegetarian, ..."
-                expanded
-                type="search"
-                icon="magnify"
-                rounded
-                @input="search"
-              ></b-input>
-            </b-field>
-            <!-- <b-field horizontal label="Your preferences" label-position="on-border" expanded>
+              type="search"
+              icon="magnify"
+              rounded
+              @input="search"
+            ></b-input>
+          </b-field>
+          <!-- <b-field horizontal label="Your preferences" label-position="on-border" expanded>
               <b-taglist>
                 <b-tag closable v-for="(diet, i) in filters" :key="i">{{diet}}</b-tag>
               </b-taglist>
-            </b-field>-->
-          </div>
+          </b-field>-->
         </div>
       </div>
-      <hr class="is-marginless" />
-      <div class="section">
+    </div>
+    <hr class="is-marginless" />
+    <div class="section">
+      <div class="container">
         <div class="columns" style="min-height: 60vh">
           <div class="column is-full">
             <div class="columns is-tablet is-multiline is-2">
