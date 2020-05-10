@@ -143,7 +143,7 @@ export default {
         type: "is-danger",
         hasIcon: true,
         onConfirm: value => {
-          if (value === recipe.name) {
+          if (value === "DELETE") {
             this.deleteRecipe(recipe._id);
           } else {
             this.$buefy.toast.open({

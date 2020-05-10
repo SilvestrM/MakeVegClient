@@ -10,7 +10,7 @@ const recipes = {
     },
     mutations: {
         addRecipe: (state, data) => {
-            if (state.recipes.include(data) === false) state.recipes.push(data)
+            if (state.recipes.includes(data) === false) state.recipes.push(data)
         },
         setRecipe: (state, data) => {
             state.recipe = data
