@@ -1,13 +1,13 @@
 <template>
   <div id="app">
     <div class="page">
-      <b-navbar wrapper-class="container" type="is-light" fixed-top>
+      <b-navbar wrapper-class="container" type="is-light" transparent fixed-top>
         <template slot="brand">
           <b-navbar-item class="is-unselectable" tag="div">
             <div class="inline-flex is-vertical is-aligned-center">
-              <img :src="`${publicPath}images/carrot.png`" alt="makeveg" />
-              <span class="title is-bold is-5">
-                <span>Make</span>
+              <!-- <img :src="`${publicPath}images/carrot.png`" alt="makeveg" /> -->
+              <span class="title is-bold is-5 is-family-secondary">
+                <span class="has-text-info">Make</span>
                 <span class="has-text-primary">Veg</span>
               </span>
             </div>
@@ -151,5 +151,11 @@ export default {
 #app {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+}
+[v-cloak] > * {
+  display: none;
+}
+[v-cloak]::before {
+  content: "loading…";
 }
 </style>

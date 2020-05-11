@@ -1,5 +1,5 @@
 <template>
-  <div class>
+  <div v-cloak>
     <!-- <div class="container"> -->
     <div
       class="hero is-info is-medium"

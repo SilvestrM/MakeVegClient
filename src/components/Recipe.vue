@@ -79,6 +79,9 @@ export default {
         : "";
     }
   },
+  mounted() {
+    if (this.recipe.images.length == 0) this.isLoading == false;
+  },
   methods: {
     countAvg(arr) {
       if (arr && arr.length > 0)

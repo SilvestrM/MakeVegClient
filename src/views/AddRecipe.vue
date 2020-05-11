@@ -110,6 +110,11 @@
                   </div>
                 </div>
               </div>
+              <div class="columns is-centered">
+                <div class="column is-half is-flex is-column is-justified-center">
+                  <b-message type="is-warning">Atleast one image is required!</b-message>
+                </div>
+              </div>
             </b-step-item>
             <b-step-item step="4" icon="check" label="Summary" clickable>
               <div class="columns is-centered">
@@ -167,6 +172,7 @@
                   style="top:3rem;"
                 >
                   <b-button
+                    style="margin-right:0.25rem;"
                     outlined
                     icon-left="chevron-left"
                     :disabled="previous.disabled"
