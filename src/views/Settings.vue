@@ -41,7 +41,7 @@
                   :to="`/user/${$route.params.id}/settings/manage_users`"
                   tag="router-link"
                   :active="$route.path === `/user/${$route.params.id}/settings/manage_users`"
-                  icon="account"
+                  icon="account-supervisor"
                   label="Users"
                 ></b-menu-item>
                 <b-menu-item

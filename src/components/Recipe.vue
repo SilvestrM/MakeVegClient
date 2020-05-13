@@ -11,6 +11,14 @@
           @load="isLoading = false"
         />
       </p>
+      <div class="tags" v-show="!isLoading" style="position:absolute;top:0; padding: 0.25em .5em">
+        <span
+          v-for="(type, index) in recipe.dietTypes"
+          :index="index"
+          :key="index"
+          class="tag is-primary has-text-weight-medium"
+        >{{type}}</span>
+      </div>
     </figure>
     <div class="card-header">
       <div class="card-header-title is-centered">
@@ -20,14 +28,9 @@
     </div>
     <div class="card-content">
       <b-skeleton height="3rem" :active="isLoading"></b-skeleton>
-      <div v-show="!isLoading" class="content tags">
-        <span
-          v-for="(type, index) in recipe.dietTypes"
-          :index="index"
-          :key="index"
-          class="tag is-medium"
-        >{{type}}</span>
-      </div>
+      <template v-show="!isLoading">
+        <p v-show="!isLoading">{{recipe.description}}</p>
+      </template>
       <!-- <nav class="level is-mobile">
         <div class="level-left">
           <a class="level-item">
@@ -47,8 +50,17 @@
           </a>
         </div>
       </nav>-->
+      <div style="margin-top:1rem">
+        <b-skeleton width="20%" height="1.25rem" :active="isLoading"></b-skeleton>
+        <p v-show="!isLoading" class="is-size-7 has-text-grey is-italic has-text-right">
+          Added
+          <time
+            :datetime="recipe.createdAt"
+          >{{new Date(recipe.createdAt).toLocaleDateString()}}</time>
+        </p>
+      </div>
     </div>
-    <div class="card-footer">
+    <!-- <div class="card-footer">
       <div class="card-footer-item">
         <b-skeleton height="2rem" :active="isLoading"></b-skeleton>
         <span v-show="!isLoading">
@@ -58,7 +70,7 @@
           >{{new Date(recipe.createdAt).toLocaleDateString()}}</time>
         </span>
       </div>
-    </div>
+    </div>-->
   </article>
 </template>
 

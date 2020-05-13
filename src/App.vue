@@ -6,7 +6,7 @@
           <b-navbar-item class="is-unselectable" tag="div">
             <div class="inline-flex is-vertical is-aligned-center">
               <!-- <img :src="`${publicPath}images/carrot.png`" alt="makeveg" /> -->
-              <span class="title is-bold is-5 is-family-secondary">
+              <span class="title is-bold is-4 is-family-secondary">
                 <span class="has-text-info">Make</span>
                 <span class="has-text-primary">Veg</span>
               </span>
@@ -18,7 +18,7 @@
           <b-navbar-item class="is-flex is-aligned-center" tag="router-link" to="/discover">
             <b-icon icon="compass" />
 
-            <strong class="has-text-weight-semibold" style="padding-left:0.25rem;">&nbsp;Discover</strong>
+            <strong class="has-text-weight-semibold" style="padding-left:0.25rem;">Discover</strong>
           </b-navbar-item>
           <b-navbar-item v-if="logged" tag="router-link" :to="`/user/${sessionUser._id}`">
             <strong class="has-text-weight-medium">My Recipes</strong>

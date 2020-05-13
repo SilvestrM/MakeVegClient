@@ -1,3 +1,7 @@
+// html {
+//     font-size: 14px;
+// }
+
 $primary: #91b162;
 $primary: #3B7523;
 $primary: #437A31;
@@ -17,11 +21,15 @@ $black: #080705;
 
 //$dropdown-content-z: 50;
 
-$family-primary: 'Open Sans';
 $family-primary: 'Exo', 'Maven Pro', 'Open Sans';
-
-$family-secondary: 'Amatic SC';
 $family-secondary: 'Playball';
+
+$body-size: 16px;
+
+$size-7: .9rem;
+$size-5: 1.2rem;
+
+$sizes: $size-1 $size-2 $size-3 $size-4 $size-5 $size-6 $size-7;
 
 $colors: (
     "white": ($white, $black),
