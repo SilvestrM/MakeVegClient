@@ -4,18 +4,26 @@
       <div class="section">
         <h1 class="title">New Recipe</h1>
         <hr />
-        <form action="post" @submit.prevent="formHandle">
+        <form ref="form" action="post" @submit.prevent="formHandle">
           <div v-if="uploading" class="columns">
             <div class="column">
               <b-progress size="is-small" type="is-primary">Uploading...</b-progress>
             </div>
           </div>
-          <b-steps>
+          <b-steps @change="validate">
             <b-step-item step="1" icon="clipboard-text" label="Description" clickable>
               <div class="columns is-centered">
                 <div class="column is-half is-narrow">
                   <b-field label="Name">
-                    <b-input v-model="recipe.name" type="text" placeholder="Recipe name" required></b-input>
+                    <b-input
+                      v-model="recipe.name"
+                      min="5"
+                      max="50"
+                      type="text"
+                      placeholder="Recipe name"
+                      validation-message="Must be between 5 and 50 characters"
+                      required
+                    ></b-input>
                   </b-field>
                   <b-field label="Diets">
                     <b-taginput
@@ -31,10 +39,12 @@
                   </b-field>
                   <b-field label="Description">
                     <b-input
+                      min="10"
                       v-model="recipe.description"
                       type="textarea"
                       maxlength="500"
                       placeholder="Recipe description"
+                      validation-message="Must be between 10 and 500 characters"
                     ></b-input>
                   </b-field>
                 </div>
@@ -65,6 +75,8 @@
                     <b-input
                       v-model="recipe.instructions"
                       type="textarea"
+                      min="10"
+                      validation-message="Must be between 10 and 1000 characters"
                       maxlength="1000"
                       placeholder="Recipe Instructions"
                       required
@@ -206,6 +218,8 @@
 
 <script>
 import { mapActions, mapGetters } from "vuex";
+import { required, between } from "vuelidate/lib/validators";
+
 export default {
   data() {
     return {
@@ -222,6 +236,21 @@ export default {
       }
     };
   },
+  validations: {
+    recipe: {
+      name: {
+        required
+      },
+      description: {
+        required,
+        minLength: between(10, 500)
+      },
+      instructions: {
+        required,
+        minLength: between(10, 1000)
+      }
+    }
+  },
   computed: {
     ...mapGetters(["getLoggedIn"]),
     diets() {
@@ -231,12 +260,15 @@ export default {
   methods: {
     ...mapActions(["addRecipe"]),
     async formHandle() {
-      this.uploading = true;
-      this.recipe.images = this.dropFiles;
-      await this.addRecipe(this.recipe).then(() => {
-        this.$router.push(`/user/${this.getLoggedIn._id}`);
-      });
-      this.uploading = false;
+      this.$v.$touch();
+      if (this.$v.$invalid) {
+        this.uploading = true;
+        this.recipe.images = this.dropFiles;
+        await this.addRecipe(this.recipe).then(() => {
+          this.$router.push(`/user/${this.getLoggedIn._id}`);
+        });
+        this.uploading = false;
+      }
     },
     deleteDropFile(index) {
       this.dropFiles.splice(index, 1);
@@ -249,6 +281,9 @@ export default {
             .toLowerCase()
             .indexOf(text.toLowerCase()) >= 0
       );
+    },
+    async validate(index) {
+      console.log(index);
     },
     checkUpload(files) {
       files.forEach(file => {

@@ -17,6 +17,10 @@ import ImageLazy from 'cube-vue-image-lazy'
 
 Vue.use(ImageLazy)
 
+import Vuelidate from 'vuelidate'
+
+Vue.use(Vuelidate)
+
 import utils from './mixins/utils'
 
 Vue.mixin(utils);

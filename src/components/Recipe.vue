@@ -28,9 +28,10 @@
     </div>
     <div class="card-content">
       <b-skeleton height="3rem" :active="isLoading"></b-skeleton>
-      <template v-show="!isLoading">
-        <p v-show="!isLoading">{{recipe.description}}</p>
-      </template>
+
+      <p
+        v-show="!isLoading"
+      >{{recipe.description.length > 150 ? recipe.description.substring(0,149) + "..." : recipe.description}}</p>
       <!-- <nav class="level is-mobile">
         <div class="level-left">
           <a class="level-item">
