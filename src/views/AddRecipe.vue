@@ -1,24 +1,25 @@
 <template>
   <div class="section">
     <div class="container">
-      <div class="section">
-        <h1 class="title">New Recipe</h1>
-        <hr />
-        <form ref="form" action="post" @submit.prevent="formHandle">
-          <div v-if="uploading" class="columns">
-            <div class="column">
-              <b-progress size="is-small" type="is-primary">Uploading...</b-progress>
-            </div>
+      <h1 class="title is-4">New Recipe</h1>
+      <hr />
+      <form ref="form" action="post" @submit.prevent="formHandle">
+        <div v-if="uploading" class="columns">
+          <div class="column">
+            <b-progress size="is-small" type="is-primary">Uploading...</b-progress>
           </div>
-          <b-steps @change="validate">
-            <b-step-item step="1" icon="clipboard-text" label="Description" clickable>
-              <div class="columns is-centered">
-                <div class="column is-half is-narrow">
+        </div>
+        <b-steps v-model="activeStep">
+          <b-step-item step="1" icon="clipboard-text" label="Description">
+            <div class="columns is-centered">
+              <div class="column is-half is-narrow">
+                <form action="post" id="form-0" @submit.prevent="goNext()">
                   <b-field label="Name">
                     <b-input
                       v-model="recipe.name"
-                      min="5"
-                      max="50"
+                      minlength="5"
+                      maxlength="50"
+                      :has-counter="false"
                       type="text"
                       placeholder="Recipe name"
                       validation-message="Must be between 5 and 50 characters"
@@ -39,20 +40,24 @@
                   </b-field>
                   <b-field label="Description">
                     <b-input
+                      required
                       min="10"
                       v-model="recipe.description"
                       type="textarea"
+                      minlength="5"
                       maxlength="500"
                       placeholder="Recipe description"
-                      validation-message="Must be between 10 and 500 characters"
+                      validation-message="Must be between 5 and 500 characters"
                     ></b-input>
                   </b-field>
-                </div>
+                </form>
               </div>
-            </b-step-item>
-            <b-step-item step="2" icon="chef-hat" label="Instructions" clickable>
-              <div class="columns is-centered">
-                <div class="column is-half">
+            </div>
+          </b-step-item>
+          <b-step-item step="2" icon="chef-hat" label="Instructions">
+            <div class="columns is-centered">
+              <div class="column is-half">
+                <form action="post" id="form-1" @submit.prevent="goNext()">
                   <b-field label="Cooktime">
                     <b-timepicker
                       :increment-minutes="5"
@@ -77,18 +82,21 @@
                       type="textarea"
                       min="10"
                       validation-message="Must be between 10 and 1000 characters"
+                      minlength="10"
                       maxlength="1000"
                       placeholder="Recipe Instructions"
                       required
                     ></b-input>
                   </b-field>
-                </div>
+                </form>
               </div>
-            </b-step-item>
+            </div>
+          </b-step-item>
 
-            <b-step-item step="3" icon="upload" label="Images" clickable>
-              <div class="columns is-centered">
-                <div class="column is-narrow is-flex is-justified-center is-column">
+          <b-step-item step="3" icon="upload" label="Images">
+            <div class="columns is-centered">
+              <div class="column is-narrow is-flex is-justified-center is-column">
+                <form action="post" id="form-2" @submit.prevent="goNext()">
                   <b-field label="Upload Images" expanded>
                     <b-upload
                       @input="checkUpload"
@@ -96,6 +104,8 @@
                       v-model="dropFiles"
                       multiple
                       drag-drop
+                      expanded
+                      required
                     >
                       <section class="section">
                         <div class="content has-text-centered">
@@ -110,79 +120,117 @@
                       </section>
                     </b-upload>
                   </b-field>
-                  <div class="tags is-multiline">
-                    <span v-for="(file, index) in dropFiles" :key="index" class="tag is-primary">
-                      {{file.name}}
-                      <button
-                        class="delete is-small"
-                        type="button"
-                        @click="deleteDropFile(index)"
-                      ></button>
-                    </span>
-                  </div>
+                </form>
+                <div class="tags is-multiline">
+                  <span v-for="(file, index) in dropFiles" :key="index" class="tag is-primary">
+                    {{file.name}}
+                    <button
+                      class="delete is-small"
+                      type="button"
+                      @click="deleteDropFile(index)"
+                    ></button>
+                  </span>
                 </div>
               </div>
-              <div class="columns is-centered">
-                <div class="column is-half is-flex is-column is-justified-center">
-                  <b-message type="is-warning">Atleast one image is required!</b-message>
-                </div>
+            </div>
+            <div class="columns is-centered">
+              <div class="column is-half is-flex is-column is-justified-center">
+                <b-message type="is-warning">Atleast one image is required!</b-message>
               </div>
-            </b-step-item>
-            <b-step-item step="4" icon="check" label="Summary" clickable>
-              <div class="columns is-centered">
-                <div
-                  class="column box is-half is-info has-background-white-bis"
-                  style="padding: 2em"
+            </div>
+          </b-step-item>
+          <b-step-item step="4" icon="check" label="Summary" clickable>
+            <div class="columns is-centered">
+              <div class="column box is-half is-info has-background-white-bis">
+                <h3 class="subtitle has-text-weight-medium">Summary</h3>
+                <hr />
+                <table
+                  style="background-color: transparent"
+                  class="table is-fullwidth is-borderless"
                 >
-                  <h3 class="subtitle has-text-weight-medium">Summary</h3>
-                  <hr />
-                  <b-field label="Name*" horizontal>
-                    <p class="is-italic">{{recipe.name ? recipe.name : "Not provided"}}</p>
-                  </b-field>
-                  <b-field label="Description" horizontal>
-                    <p
-                      class="is-italic"
-                    >{{recipe.description ? (recipe.description.length > 30 ? `${recipe.description.substring(0,30)}...`:recipe.description ) : "Not provided"}}</p>
-                  </b-field>
-                  <b-field label="Diets" horizontal>
-                    <p
-                      class="is-italic"
-                    >{{recipe.dietTypes.length > 0 ? recipe.dietTypes.slice(0,5).toString() : "Not provided"}}</p>
-                  </b-field>
-                  <b-field label="Cook Time" horizontal>
-                    <p
-                      class="is-italic"
-                    >{{recipe.cookTime.getMinutes() > 0 ? recipe.cookTime : "0"}}</p>
-                  </b-field>
-                  <b-field label="Ingredients*" horizontal>
-                    <p
-                      class="is-italic"
-                    >{{recipe.ingredients.length > 0 ? recipe.ingredients.slice(0,5).toString() : "Not provided"}}</p>
-                  </b-field>
-                  <b-field label="Instructions*" horizontal>
-                    <p
-                      class="is-italic"
-                    >{{recipe.instructions ? (recipe.instructions.length > 30 ? `${recipe.instructions.substring(0,30)}...`:recipe.instructions ): "Not provided"}}</p>
-                  </b-field>
-                  <b-field label="Images" horizontal>
-                    <p class="is-italic">{{dropFiles.length}}</p>
-                  </b-field>
-                  <hr />
-                  <p class="is-italic has-text-grey">*required</p>
-                </div>
+                  <tbody>
+                    <tr>
+                      <td>
+                        <span class="label">Name*</span>
+                      </td>
+                      <td>
+                        <p class="is-italic">{{recipe.name ? recipe.name : "None provided"}}</p>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>
+                        <span class="label">Description*</span>
+                      </td>
+                      <td>
+                        <p
+                          class="is-italic"
+                        >{{recipe.description ? (recipe.description.length > 30 ? `${recipe.description.substring(0,30)}...`:recipe.description ) : "None provided"}}</p>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>
+                        <span class="label">Diets</span>
+                      </td>
+                      <td>
+                        <p
+                          class="is-italic"
+                        >{{recipe.dietTypes.length > 0 ? recipe.dietTypes.slice(0,5).toString() : "None provided"}}</p>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>
+                        <span class="label">Cook Time</span>
+                      </td>
+                      <td>
+                        <p
+                          class="is-italic"
+                        >{{recipe.cookTime.getMinutes() > 0 ? `${recipe.cookTime.getMinutes() + (recipe.cookTime.getHours()*60)}` : "0"}} min</p>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>
+                        <span class="label">Ingredients</span>
+                      </td>
+                      <td>
+                        <p
+                          class="is-italic"
+                        >{{recipe.ingredients.length > 0 ? recipe.ingredients.slice(0,5).toString() : "None provided"}}</p>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>
+                        <span class="label">Instructions*</span>
+                      </td>
+                      <td>
+                        <p
+                          class="is-italic"
+                        >{{recipe.instructions ? (recipe.instructions.length > 30 ? `${recipe.instructions.substring(0,30)}...`:recipe.instructions ): "None provided"}}</p>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>
+                        <span class="label">Images*</span>
+                      </td>
+                      <td>
+                        <p class="is-italic">{{dropFiles.length}}</p>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+                <hr />
+                <p class="is-italic has-text-grey">*required</p>
               </div>
-              <!-- <div class="columns is-centered">
+            </div>
+            <!-- <div class="columns is-centered">
                 <div class="column is-narrow is-flex is-justified-center" style="margin-top:2rem">
                   <button class="button is-primary" type="submit">Add a new recipe</button>
                 </div>
-              </div>-->
-            </b-step-item>
-            <template slot="navigation" slot-scope="{previous, next}">
-              <div class="columns is-centered">
-                <div
-                  class="column is-half is-flex is-justified-center is-relative"
-                  style="top:3rem;"
-                >
+            </div>-->
+          </b-step-item>
+          <template slot="navigation" slot-scope="{previous, next}">
+            <div class="columns is-centered">
+              <div class="column is-narrow is-flex is-justified-center">
+                <div style>
                   <b-button
                     style="margin-right:0.25rem;"
                     outlined
@@ -193,36 +241,46 @@
                   <template v-if="!next.disabled">
                     <b-button
                       outlined
+                      :form="`form-${activeStep}`"
                       icon-right="chevron-right"
                       :disabled="next.disabled"
-                      @click.prevent="next.action"
+                      native-type="submit"
+                      @click="nextStep = next"
                     >Next</b-button>
+                    <!-- <button
+                      :form="`form-${activeStep}`"
+                      class="button is-outline"
+                      @click="nextStep = next"
+                      type="submit"
+                    >Next</button>-->
                   </template>
                   <template v-else>
                     <button class="button is-primary" type="submit">Add this recipe</button>
                   </template>
                 </div>
               </div>
-            </template>
-          </b-steps>
-          <!-- <div class="columns is-centered" style="margin-top:3rem">
+            </div>
+          </template>
+        </b-steps>
+        <!-- <div class="columns is-centered" style="margin-top:3rem">
             <div class="column is-narrow is-flex is-justified-center">
               <button class="button is-primary" type="submit">Add this recipe</button>
             </div>
-          </div>-->
-        </form>
-      </div>
+        </div>-->
+      </form>
     </div>
   </div>
 </template>
 
 <script>
 import { mapActions, mapGetters } from "vuex";
-import { required, between } from "vuelidate/lib/validators";
+import { required, minLength } from "vuelidate/lib/validators";
 
 export default {
   data() {
     return {
+      activeStep: 0,
+      nextStep: null,
       uploading: false,
       dropFiles: [],
       recipe: {
@@ -243,11 +301,15 @@ export default {
       },
       description: {
         required,
-        minLength: between(10, 500)
+        minLength: minLength(5)
       },
       instructions: {
         required,
-        minLength: between(10, 1000)
+        minLength: minLength(10)
+      },
+      images: {
+        minLength: minLength(1),
+        required
       }
     }
   },
@@ -260,14 +322,27 @@ export default {
   methods: {
     ...mapActions(["addRecipe"]),
     async formHandle() {
+      this.recipe.images = this.dropFiles;
       this.$v.$touch();
-      if (this.$v.$invalid) {
+      if (!this.$v.$invalid) {
         this.uploading = true;
-        this.recipe.images = this.dropFiles;
-        await this.addRecipe(this.recipe).then(() => {
-          this.$router.push(`/user/${this.getLoggedIn._id}`);
+        await this.addRecipe(this.recipe)
+          .then(() => {
+            this.uploading = false;
+            this.$router.push(`/user/${this.getLoggedIn._id}`);
+          })
+          .catch(() => {
+            this.uploading = false;
+            this.$buefy.toast.open({
+              message: `Something went wrong while adding recipe!`,
+              type: "is-danger"
+            });
+          });
+      } else {
+        this.$buefy.toast.open({
+          message: `There has been invalid data provided! Please check the provided data.`,
+          type: "is-warning"
         });
-        this.uploading = false;
       }
     },
     deleteDropFile(index) {
@@ -282,8 +357,13 @@ export default {
             .indexOf(text.toLowerCase()) >= 0
       );
     },
-    async validate(index) {
-      console.log(index);
+    validate(next) {
+      // this.$refs[`form-${this.activeStep}`].submit();
+      this.nextStep = next;
+      //next.action();
+    },
+    goNext() {
+      this.nextStep.action();
     },
     checkUpload(files) {
       files.forEach(file => {
@@ -302,9 +382,41 @@ export default {
 };
 </script>
 
-<style lang="scss">
-.step-content {
-  min-height: 24rem;
-  margin-top: 2rem;
+<style scoped lang="scss">
+// .section {
+//   .section {
+//     padding: 2rem 0;
+//   }
+// }
+
+.table {
+  tr {
+    overflow-x: hidden;
+  }
+  tr,
+  td {
+    border: hidden !important;
+    padding: 0.3em 0.75em;
+  }
+  td:nth-child(odd) {
+    // font-family: $family-secondary;
+    // width: 2rem;
+  }
+  td:nth-child(even) {
+    // font-family: $family-secondary;
+    color: $grey;
+  }
+}
+.step-item {
+  min-height: 30rem;
+  padding: 3rem 0 1.5rem;
+}
+
+.box {
+  overflow-x: hidden;
+  padding: 1.25rem;
+  @media (min-width: $desktop) {
+    padding: 2rem;
+  }
 }
 </style>

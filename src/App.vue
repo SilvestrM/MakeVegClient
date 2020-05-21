@@ -51,6 +51,10 @@
                 <b-icon icon="cogs" size="is-small" style="margin-right:.15rem;" />
                 <span>Settings</span>
               </b-navbar-item>
+              <b-navbar-item tag="router-link" class :to="`/user/${sessionUser._id}/settings`">
+                <b-icon icon="heart" size="is-small" style="margin-right:.15rem;" />
+                <span>Favorites</span>
+              </b-navbar-item>
               <b-navbar-item tag="a" class @click="logoutDialog">
                 <b-icon icon="logout" size="is-small" style="margin-right:.15rem;" />
                 <strong>Sign out</strong>
@@ -68,9 +72,7 @@
             <router-link to="/about">About</router-link>
           </div>
           <div class="column is-two-thirds">
-            <p
-              class="has-text-right is-italic"
-            >This website has been created as a school project for the subject TNPW2</p>
+            <p class="has-text-right is-italic">//</p>
           </div>
         </div>
       </div>
@@ -157,5 +159,8 @@ export default {
 }
 [v-cloak]::before {
   content: "loading…";
+}
+.footer {
+  margin-top: 2rem;
 }
 </style>

@@ -26,10 +26,11 @@
         <h3 v-show="!isLoading" class="title is-5 is-capitalized">{{recipe.name}}</h3>
       </div>
     </div>
-    <div class="card-content">
+    <div class="card-content is-flex is-column">
       <b-skeleton height="3rem" :active="isLoading"></b-skeleton>
 
       <p
+        class="is-size-7"
         v-show="!isLoading"
       >{{recipe.description.length > 150 ? recipe.description.substring(0,149) + "..." : recipe.description}}</p>
       <!-- <nav class="level is-mobile">
@@ -51,27 +52,14 @@
           </a>
         </div>
       </nav>-->
-      <div style="margin-top:1rem">
-        <b-skeleton width="20%" height="1.25rem" :active="isLoading"></b-skeleton>
-        <p v-show="!isLoading" class="is-size-7 has-text-grey is-italic has-text-right">
-          Added
-          <time
-            :datetime="recipe.createdAt"
-          >{{new Date(recipe.createdAt).toLocaleDateString()}}</time>
-        </p>
-      </div>
     </div>
-    <!-- <div class="card-footer">
-      <div class="card-footer-item">
-        <b-skeleton height="2rem" :active="isLoading"></b-skeleton>
-        <span v-show="!isLoading">
-          Added
-          <time
-            :datetime="recipe.createdAt"
-          >{{new Date(recipe.createdAt).toLocaleDateString()}}</time>
-        </span>
-      </div>
-    </div>-->
+    <div style="margin-top:1rem;align-self:flex-end;padding:.5em 1rem">
+      <b-skeleton width="20%" height="1.25rem" :active="isLoading"></b-skeleton>
+      <p v-show="!isLoading" class="is-size-7 has-text-grey is-italic has-text-right">
+        Added
+        <time :datetime="recipe.createdAt">{{new Date(recipe.createdAt).toLocaleDateString()}}</time>
+      </p>
+    </div>
   </article>
 </template>
 
@@ -111,6 +99,9 @@ export default {
   object-fit: cover !important;
 }
 .card {
+  .card-content {
+    min-height: 8rem;
+  }
   transition: $speed;
   &:hover {
     box-shadow: 0 0.5em 1em -0.125em rgba($black, 0.1),

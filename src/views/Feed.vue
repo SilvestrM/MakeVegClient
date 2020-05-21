@@ -39,7 +39,7 @@
                 <div class="is-size-7">Search</div>
               </template>
               <b-input
-                size="is-medium"
+                size="is-normal"
                 placeholder="Soup, vegetarian, ..."
                 expanded
                 type="search"

@@ -1,129 +1,127 @@
 <template>
   <div class="section">
     <div class="container">
-      <div class="section">
-        <h1 class="title">
-          Edit Recipe
-          <em class="has-text-grey has-text-weight-light">{{recipe.name}}</em>
-        </h1>
+      <h1 class="title is-4">
+        Edit Recipe
+        <em class="has-text-grey has-text-weight-light">{{recipe.name}}</em>
+      </h1>
+      <hr />
+      <form action="post" @submit.prevent="formHandle">
+        <div class="columns is-centered">
+          <div class="column is-half is-narrow">
+            <b-field label="Name">
+              <b-input v-model="updatedData.name" type="text" placeholder="Recipe name" required></b-input>
+            </b-field>
+            <b-field label="Diets">
+              <b-taginput
+                v-model="updatedData.dietTypes"
+                :data="diets"
+                autocomplete
+                :allow-new="false"
+                open-on-focus
+                icon="label"
+                placeholder="Add a diet"
+                @typing="getDiets"
+              ></b-taginput>
+            </b-field>
+            <b-field label="Description">
+              <b-input
+                v-model="updatedData.description"
+                type="textarea"
+                maxlength="500"
+                placeholder="Recipe description"
+              ></b-input>
+            </b-field>
+          </div>
+          <div class="column is-half">
+            <b-field label="Cooktime">
+              <b-timepicker
+                :increment-minutes="5"
+                v-model="updatedData.cookTime"
+                required
+                placeholder="Click to select..."
+                icon="clock"
+              ></b-timepicker>
+            </b-field>
+            <b-field class label="Ingredients">
+              <b-taginput
+                v-model="updatedData.ingredients"
+                :allow-new="true"
+                open-on-focus
+                icon="label"
+                placeholder="Add an ingredient"
+              ></b-taginput>
+            </b-field>
+            <b-field label="Instructions">
+              <b-input
+                v-model="updatedData.instructions"
+                type="textarea"
+                maxlength="1000"
+                placeholder="Recipe Instructions"
+                required
+              ></b-input>
+            </b-field>
+          </div>
+        </div>
         <hr />
-        <form action="post" @submit.prevent="formHandle">
-          <div class="columns is-centered">
-            <div class="column is-half is-narrow">
-              <b-field label="Name">
-                <b-input v-model="updatedData.name" type="text" placeholder="Recipe name" required></b-input>
-              </b-field>
-              <b-field label="Diets">
-                <b-taginput
-                  v-model="updatedData.dietTypes"
-                  :data="diets"
-                  autocomplete
-                  :allow-new="false"
-                  open-on-focus
-                  icon="label"
-                  placeholder="Add a diet"
-                  @typing="getDiets"
-                ></b-taginput>
-              </b-field>
-              <b-field label="Description">
-                <b-input
-                  v-model="updatedData.description"
-                  type="textarea"
-                  maxlength="500"
-                  placeholder="Recipe description"
-                ></b-input>
-              </b-field>
-            </div>
-            <div class="column is-half">
-              <b-field label="Cooktime">
-                <b-timepicker
-                  :increment-minutes="5"
-                  v-model="updatedData.cookTime"
-                  required
-                  placeholder="Click to select..."
-                  icon="clock"
-                ></b-timepicker>
-              </b-field>
-              <b-field class label="Ingredients">
-                <b-taginput
-                  v-model="updatedData.ingredients"
-                  :allow-new="true"
-                  open-on-focus
-                  icon="label"
-                  placeholder="Add an ingredient"
-                ></b-taginput>
-              </b-field>
-              <b-field label="Instructions">
-                <b-input
-                  v-model="updatedData.instructions"
-                  type="textarea"
-                  maxlength="1000"
-                  placeholder="Recipe Instructions"
-                  required
-                ></b-input>
-              </b-field>
-            </div>
-          </div>
-          <hr />
-          <div class="columns is-centered">
-            <div class="column is-full">
-              <b-field label="Images">
-                <div class="has-background-white-ter">
-                  <b-carousel-list :items-to-show="2" :data="imagesFormatted">
-                    <template slot="item" slot-scope="props">
-                      <figure class="16by9">
-                        <img :src="props.list" />
-                      </figure>
-                    </template>
-                  </b-carousel-list>
-                </div>
-              </b-field>
-            </div>
-          </div>
-          <b-message has-icon type="is-info">Updating images is not supported yet..</b-message>
-          <div class="columns is-centered">
-            <div class="column is-narrow">
-              <b-field label="Upload Images" expanded>
-                <b-upload
-                  @input="checkUpload"
-                  accept=".jpg, .png, .jpeg"
-                  v-model="dropFiles"
-                  multiple
-                  drag-drop
-                  disabled
-                >
-                  <section class="section">
-                    <div class="content has-text-centered">
-                      <p>
-                        <b-icon icon="upload" size="is-large"></b-icon>
-                      </p>
-                      <p>Drop your files here or click to upload</p>
-                      <p
-                        class="has-text-grey-light is-italic"
-                      >Accepts .jpg or .png with maximum size of 10MB</p>
-                    </div>
-                  </section>
-                </b-upload>
-              </b-field>
-              <div class="tags is-multiline">
-                <span v-for="(file, index) in dropFiles" :key="index" class="tag is-primary">
-                  {{file.name}}
-                  <button
-                    class="delete is-small"
-                    type="button"
-                    @click="deleteDropFile(index)"
-                  ></button>
-                </span>
+        <div class="columns is-centered">
+          <div class="column is-full">
+            <b-field label="Images">
+              <div class="has-background-white-ter">
+                <b-carousel-list :items-to-show="2" :data="imagesFormatted">
+                  <template slot="item" slot-scope="props">
+                    <figure class="16by9">
+                      <img :src="props.list" />
+                    </figure>
+                  </template>
+                </b-carousel-list>
               </div>
+            </b-field>
+          </div>
+        </div>
+        <b-message has-icon type="is-info">Updating images is not supported yet..</b-message>
+        <div class="columns is-centered">
+          <div class="column is-narrow">
+            <b-field label="Upload Images" expanded>
+              <b-upload
+                @input="checkUpload"
+                accept=".jpg, .png, .jpeg"
+                v-model="dropFiles"
+                multiple
+                drag-drop
+                disabled
+              >
+                <section class="section">
+                  <div class="content has-text-centered">
+                    <p>
+                      <b-icon icon="upload" size="is-large"></b-icon>
+                    </p>
+                    <p>Drop your files here or click to upload</p>
+                    <p
+                      class="has-text-grey-light is-italic"
+                    >Accepts .jpg or .png with maximum size of 10MB</p>
+                  </div>
+                </section>
+              </b-upload>
+            </b-field>
+            <div class="tags is-multiline">
+              <span v-for="(file, index) in dropFiles" :key="index" class="tag is-primary">
+                {{file.name}}
+                <button
+                  class="delete is-small"
+                  type="button"
+                  @click="deleteDropFile(index)"
+                ></button>
+              </span>
             </div>
           </div>
-          <div class="columns is-centered">
-            <div class="column is-narrow">
-              <button class="button is-primary" type="submit">Update recipe</button>
-            </div>
+        </div>
+        <div class="columns is-centered">
+          <div class="column is-narrow">
+            <button class="button is-primary" type="submit">Update recipe</button>
           </div>
-        </form>
-      </div>
+        </div>
+      </form>
     </div>
   </div>
 </template>
@@ -141,7 +139,9 @@ export default {
   computed: {
     ...mapGetters(["getLoggedIn", "getRecipe"]),
     recipe() {
-      return this.getRecipe(this.$route.params.id);
+      const recipe = this.getRecipe(this.$route.params.id);
+      recipe.cookTime = new Date(recipe.cookTime);
+      return recipe;
     },
     updatedData() {
       return {
