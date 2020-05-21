@@ -1,24 +1,44 @@
 <template>
-  <div class="section">
-    <div class="container">
-      <div class="columns is-centered">
-        <div class="column is-full">
-          <b-carousel :autoplay="false" :indicator-inside="true" :overlay="gallery">
-            <b-carousel-item v-for="(item, i) in photos" :key="i">
-              <a @click="switchGallery(false)" class="image is-16by9" style="max-height:10rem">
-                <img :src="item" />
-              </a>
-            </b-carousel-item>
-            <!-- <span v-if="gallery" @click="switchGallery(false)" class="modal-close is-large" /> -->
-            <!-- <template slot="indicators" slot-scope="props">
-            <figure class="al image" :draggable="false">
-              <img :draggable="false" :src="props.i" :title="props.i" />
-            </figure>
-            </template>-->
-          </b-carousel>
+  <span class>
+    <div
+      class="section blur-bcg"
+      style="padding: 1rem"
+      :style="`background-image: url(${photos[activeImage]})`"
+    >
+      <div class="container">
+        <div class="columns is-centered">
+          <div class="column is-full">
+            <b-carousel
+              v-model="activeImage"
+              :autoplay="false"
+              :indicator-inside="true"
+              :overlay="gallery"
+              :arrow="photos.length > 1"
+              @change="activeImage = $event"
+            >
+              <b-carousel-item v-for="(item, i) in photos" :key="i">
+                <a
+                  @click.left="switchGallery(!gallery)"
+                  class="image is-16by9"
+                  style="max-height:10rem"
+                >
+                  <img :src="item" />
+                </a>
+              </b-carousel-item>
+              <template slot="overlay">
+                <span v-if="gallery" @click="switchGallery(false)" class="modal-close is-large" />
+              </template>
+              <!-- <template slot="indicators" slot-scope="props">
+                <figure class="al image" :draggable="false">
+                  <img :draggable="false" :src="props.i" :title="props.i" />
+                </figure>
+              </template>-->
+            </b-carousel>
+          </div>
         </div>
       </div>
     </div>
+
     <div class="section">
       <div class="container">
         <div class="level">
@@ -92,16 +112,16 @@
           </div>
         </div>
       </div>
-    </div>
 
-    <!-- <div class="section">
+      <!-- <div class="section">
       <div class="container">
         <hr />
         <h2 class="title is-5">Reviews</h2>
       </div>
-    </div>-->
-    <b-loading :active.sync="isLoading" :is-full-page="false"></b-loading>
-  </div>
+      </div>-->
+      <b-loading :active.sync="isLoading" :is-full-page="false"></b-loading>
+    </div>
+  </span>
 </template>
 
 <script>
@@ -109,6 +129,7 @@ import { mapActions, mapGetters } from "vuex";
 export default {
   data() {
     return {
+      activeImage: 0,
       gallery: false,
       isLoading: false,
       images: []
@@ -163,5 +184,12 @@ export default {
 };
 </script>
 
-<style>
+<style lang="scss">
+.blur-bcg {
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-color: $grey-dark;
+  background-blend-mode: multiply;
+  transition: background-image $speed;
+}
 </style>

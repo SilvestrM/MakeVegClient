@@ -36,11 +36,11 @@
                 >{{diet}}</span>
               </div>
             </b-table-column>
-            <b-table-column
+            <!-- <b-table-column
               field="ratings"
               label="Rating"
               centered
-            >{{ countAvg(props.row.ratings) }}</b-table-column>
+            >{{ countAvg(props.row.ratings) }}</b-table-column>-->
             <b-table-column field="date" label="Date added" numeric>
               <span class="tag is-info">{{ new Date(props.row.createdAt).toLocaleDateString() }}</span>
             </b-table-column>
@@ -99,6 +99,7 @@ import { mapActions, mapGetters } from "vuex";
 export default {
   data() {
     return {
+      selectedRow: null,
       isLoading: false,
       me: false,
       publicPath: process.env.BASE_URL
@@ -184,6 +185,11 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.table {
+  td {
+    vertical-align: middle;
+  }
+}
 .hero {
   // filter: saturate(50%) brightness(50%);
 }

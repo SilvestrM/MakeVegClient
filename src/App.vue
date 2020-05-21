@@ -21,7 +21,7 @@
             <strong class="has-text-weight-semibold" style="padding-left:0.25rem;">Discover</strong>
           </b-navbar-item>
           <b-navbar-item v-if="logged" tag="router-link" :to="`/user/${sessionUser._id}`">
-            <strong class="has-text-weight-medium">My Recipes</strong>
+            <strong class="has-text-weight-medium">My Profile</strong>
           </b-navbar-item>
         </template>
 

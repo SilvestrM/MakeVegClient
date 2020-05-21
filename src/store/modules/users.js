@@ -31,7 +31,7 @@ const users = {
     },
     actions: {
         async fetchFindUsers({ commit, state }, query) {
-            await axios.get(`${state.url}find/${query}`).then(resolve => {
+            await axios.get(`${state.url}find/${query}`, { headers: { Authorization: `Bearer ${localStorage.jwt}` } }).then(resolve => {
                 if (resolve.data !== undefined) {
                     commit('setUsers', resolve.data)
                 } else {
@@ -42,8 +42,9 @@ const users = {
                 }
             })
                 .catch(reason => {
+                    console.log(reason.response.data);
                     Toast.open({
-                        message: `Error fetching data: ${reason}`,
+                        message: `Error fetching data: ${reason.response.data.error}`,
                         type: 'is-danger'
                     })
                     throw reason;
@@ -54,7 +55,6 @@ const users = {
             if (!user) {
                 await axios.get(`${state.url}${id}`).then(resolve => {
                     commit('setUser', resolve.data)
-                    commit('addUser', resolve.data)
                 })
                     .catch(reason => {
                         Toast.open({

@@ -6,14 +6,14 @@ const recipes = {
     state: {
         url: "/api/recipes/",
         recipes: [],
-        recipe: {}
+        activeRecipe: {}
     },
     mutations: {
         addRecipe: (state, data) => {
             if (state.recipes.includes(data) === false) state.recipes.push(data)
         },
         setRecipe: (state, data) => {
-            state.recipe = data
+            state.activeRecipe = data
         },
         setRecipes: (state, data) => {
             state.recipes = data
@@ -102,6 +102,10 @@ const recipes = {
             await axios.patch(`${state.url}`, data, { headers: { Authorization: `Bearer ${localStorage.jwt}` } })
                 .then(resolve => {
                     commit('updateRecipe', resolve.data)
+                    Toast.open({
+                        message: `Recipe ${resolve.data.name} successfully updated`,
+                        type: 'is-success'
+                    })
                 }).catch(reason => {
                     Toast.open({
                         message: `Error updating recipe: ${reason.response.data}`,
@@ -158,7 +162,7 @@ const recipes = {
             if (data) {
                 return data
             } else {
-                if (state.recipe) return state.recipe
+                if (state.activeRecipe) return state.activeRecipe
             }
         },
         getUserRecipes: (state) => (id) => {

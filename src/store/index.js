@@ -55,8 +55,8 @@ export default new Vuex.Store({
         },
         async register({ dispatch }, data) {
             await axios.post(`${this.state.url}/register/`, data)
-                .then(res => {
-                    dispatch("addToken", res)
+                .then(async res => {
+                    await dispatch("addToken", res)
                     Toast.open({
                         message: `Registration successfully completed`,
                         type: 'is-success'
@@ -71,8 +71,8 @@ export default new Vuex.Store({
         },
         async login({ dispatch }, cred) {
             await axios.post(`${this.state.url}/auth/login`, cred)
-                .then(res => {
-                    dispatch("addToken", res)
+                .then(async res => {
+                    await dispatch("addToken", res)
                 })
                 .catch(reason => {
                     Toast.open({

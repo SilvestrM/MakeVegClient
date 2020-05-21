@@ -251,6 +251,12 @@ export default {
       );
     }
   },
+  watch: {
+    isLoggedIn() {
+      this.filters =
+        this.getLoggedIn !== null ? this.getLoggedIn.settings.diets : [];
+    }
+  },
   mounted() {
     this.filters =
       this.getLoggedIn !== null ? this.getLoggedIn.settings.diets : [];
