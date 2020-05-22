@@ -30,12 +30,12 @@
                   icon="heart-multiple"
                   label="Favorites"
                 ></b-menu-item>
-                <b-menu-item
+                <!-- <b-menu-item
                   tag="router-link"
                   :to="`/user/${user._id}`"
                   icon="chef-hat"
                   label="My Recipes"
-                ></b-menu-item>
+                ></b-menu-item>-->
               </b-menu-list>
               <b-menu-list v-if="isAdmin" label="Admin Management">
                 <b-menu-item
