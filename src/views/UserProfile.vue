@@ -21,7 +21,14 @@
           <template v-else>{{`${user.firstName}'s recipes`}}</template>
         </h2>
         <hr />
-        <b-table :data="recipes" :paginated="paginated" per-page="10" :loading="isLoading">
+        <b-table
+          style="min-height:15rem"
+          striped
+          :data="recipes"
+          :paginated="paginated"
+          per-page="10"
+          :loading="isLoading"
+        >
           <template slot-scope="props">
             <b-table-column field="name" label="Recipe">
               <router-link :to="`/recipe/${props.row._id}`">{{ props.row.name }}</router-link>
@@ -162,12 +169,6 @@ export default {
     next(async vm => {
       vm.isLoading = true;
       await vm.fetchUser(to.params.id);
-      /* if (
-        vm.$store.state.loggedIn._id !== undefined &&
-        vm.$store.state.loggedIn._id === to.params.id
-      ) {
-        vm.me = true;
-      } */
       //TODO optimize fetch
       await vm.fetchRecipes();
       vm.isLoading = false;

@@ -2,7 +2,7 @@
   <div class>
     <h3 class="title is-4">My Account</h3>
     <hr />
-    <div class="section">
+    <div style="padding-top:.5rem;" class="section">
       <form action="post" @submit.prevent="formHandle">
         <b-field horizontal expanded is-grouped label="Name">
           <b-input v-model="newUser.firstName" type="text" placeholder="Your first name"></b-input>

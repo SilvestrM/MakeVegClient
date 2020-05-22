@@ -27,7 +27,17 @@ const users = {
             const i = state.users.findIndex(user => user._id === data._id)
             if (i !== -1) state.users.splice(i, 1, data)
         },
-        deleteUser: (state, id) => (state.users = state.users.filter(user => user._id !== id))
+
+        deleteUser: (state, id) => (state.users = state.users.filter(user => user._id !== id)),
+        updateUserFavorites: (state, data) => {
+            state.user.favorites = data
+        },
+        addFavorite: (state, data) => {
+            state.user.favorites.push(data)
+        },
+        removeFavorite: (state, data) => {
+            state.user.favorites.splice(state.user.favorites.findIndex(fav => fav === data), 1)
+        }
     },
     actions: {
         async fetchFindUsers({ commit, state }, query) {
@@ -97,6 +107,33 @@ const users = {
                         type: 'is-danger'
                     })
                     throw reason;
+                })
+        },
+        // async toggleFavorite({ dispatch, rootState }, data) {
+        //     const favorites = rootState.loggedIn.favorites
+        //     if (!favorites.includes(data)) {
+        //         favorites.push(data)
+        //         await dispatch('updateFavorites', favorites)
+        //     }
+        // },
+
+        async updateFavorites({ commit, state, rootState }, data) {
+            commit("setUser", rootState.loggedIn)
+            if (!state.user.favorites.includes(data)) {
+                commit("addFavorite", data)
+            } else {
+                commit("removeFavorite", data)
+            }
+            if (!data) return
+            await axios.patch(`${state.url}/favorites`, { uid: state.user._id, data: state.user.favorites }, { headers: { Authorization: `Bearer ${localStorage.jwt}` } })
+                .then(res => {
+                    commit("loginChange", res.data)
+                })
+                .catch(reason => {
+                    Toast.open({
+                        message: `Error: ${reason}`,
+                        type: 'is-danger'
+                    })
                 })
         },
 

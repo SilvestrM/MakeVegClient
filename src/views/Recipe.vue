@@ -46,6 +46,15 @@
             <div class="level-item">
               <h1 class="title is-italic has-text-weight-normal is-capitalized">{{recipe.name}}</h1>
             </div>
+            <div v-if="$store.state.loggedIn" class="level-item">
+              <button
+                @click="toggleLike()"
+                class="button is-inverted is-borderless is-text is-flex is-aligned-center is-justified-center"
+                :class="{'is-info': liked === true}"
+              >
+                <b-icon icon="heart"></b-icon>
+              </button>
+            </div>
           </div>
           <div class="level-item">
             <!-- <div class="level-item">
@@ -129,6 +138,7 @@ import { mapActions, mapGetters } from "vuex";
 export default {
   data() {
     return {
+      // liked: false,
       activeImage: 0,
       gallery: false,
       isLoading: false,
@@ -150,10 +160,28 @@ export default {
         arr.push(`data:image/jpeg;base64,${this.$encodeb64(img.data)}`);
       });
       return arr;
+    },
+    liked() {
+      if (this.$store.state.loggedIn) {
+        if (this.$store.state.loggedIn.favorites !== undefined) {
+          return this.$store.state.loggedIn.favorites.some(
+            fav => fav === this.recipe._id
+          );
+        }
+      }
+      return false;
     }
   },
+  // watch: {
+  //   liked() {
+  //     if (this.$store.state.loggedIn) {
+  //       console.log(this.$store.state.loggedIn.favorites.some(this.recipe._id));
+  //       this.liked = this.$store.state.loggedIn.favorites.some(this.recipe._id);
+  //     }
+  //   }
+  // },
   methods: {
-    ...mapActions(["fetchRecipe", "fetchUser"]),
+    ...mapActions(["fetchRecipe", "fetchUser", "updateFavorites"]),
     switchGallery(value) {
       this.gallery = value;
       if (value) {
@@ -161,6 +189,9 @@ export default {
       } else {
         return document.documentElement.classList.remove("is-clipped");
       }
+    },
+    async toggleLike() {
+      await this.updateFavorites(this.recipe._id);
     },
     countAvg(arr) {
       if (arr && arr.length > 0)

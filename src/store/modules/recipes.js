@@ -74,6 +74,25 @@ const recipes = {
                     })
             }
         },
+        async fetchRecipesByIds({ commit, state }, ids) {
+            try {
+                const recipes = []
+                ids.forEach(async id => {
+                    await axios.get(`${state.url}${id}`).then(resolve => {
+                        recipes.push(resolve.data)
+                    })
+
+                })
+                commit('setRecipes', recipes)
+            } catch (reason) {
+                Toast.open({
+                    message: `Error fetching data: ${reason.response.body}`,
+                    type: 'is-danger'
+                })
+                throw reason;
+            }
+
+        },
         async addRecipe({ dispatch, commit, state, rootGetters }, data) {
             data.author = rootGetters.getLoggedIn._id
 

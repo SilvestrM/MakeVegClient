@@ -2,7 +2,7 @@
   <div class>
     <h3 class="title is-4">User management</h3>
     <hr />
-    <div class="section">
+    <div style="padding-top:.5rem;" class="section">
       <b-field label="Search" message="Search by user's name or email">
         <b-input type="search" icon="magnify" @input="search"></b-input>
       </b-field>

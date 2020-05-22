@@ -23,7 +23,13 @@
                   icon="account-cog"
                   label="My Account"
                 ></b-menu-item>
-                <b-menu-item tag="router-link" :to="$route.path" icon="heart" label="Preferences"></b-menu-item>
+                <b-menu-item
+                  :active="$route.path === `/user/${$route.params.id}/settings/favorites`"
+                  tag="router-link"
+                  :to="`/user/${$route.params.id}/settings/favorites`"
+                  icon="heart-multiple"
+                  label="Favorites"
+                ></b-menu-item>
                 <b-menu-item
                   tag="router-link"
                   :to="`/user/${user._id}`"

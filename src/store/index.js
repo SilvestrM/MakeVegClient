@@ -91,7 +91,7 @@ export default new Vuex.Store({
             const user = response.data
             // commit('setToken', response.headers.authorisation)
             commit('loginChange', user)
-        },
+        }
 
     },
     getters: {

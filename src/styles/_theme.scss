@@ -4,18 +4,18 @@
 
 // $primary: #91b162;
 // $primary: #3B7523;
-$primary: #437A31;
+$primary: #437a31;
 $primary-invert: findColorInvert($primary);
 
-$success: #3B7523;
+$success: #3b7523;
 
 $info: #ee7d32;
-$link:#ee7d32;
+$link: #ee7d32;
 
 //$info: #DD691B;
 
 // $danger: #DE1A1A;
-$danger: #D62828;
+$danger: #d62828;
 
 $black: #080705;
 
@@ -25,25 +25,52 @@ $menu-item-active-background-color: #ee7d32;
 // $table-row-active-background-color: #e2c8b6;
 // $table-row-active-color: $black;
 
-$family-primary: 'Exo', 'Maven Pro', 'Open Sans';
-$family-secondary: 'Playball';
+$family-primary: "Exo", "Maven Pro", "Open Sans";
+$family-secondary: "Playball";
 
 $body-size: 16px;
 
-$size-7: .9rem;
+$size-7: 0.9rem;
 $size-5: 1.2rem;
 
 $sizes: $size-1 $size-2 $size-3 $size-4 $size-5 $size-6 $size-7;
 
 $colors: (
-    "white": ($white, $black),
-    "black": ($black, $white),
-    "light": ($light, $light-invert),
-    "dark": ($dark, $dark-invert),
-    "primary": ($primary, $primary-invert),
-    "info": ($info, $info-invert),
-    "success": ($success, $success-invert),
-    "warning": ($warning, $warning-invert),
-    "danger": ($danger, $danger-invert),
+    "white": (
+        $white,
+        $black,
+    ),
+    "black": (
+        $black,
+        $white,
+    ),
+    "light": (
+        $light,
+        $light-invert,
+    ),
+    "dark": (
+        $dark,
+        $dark-invert,
+    ),
+    "primary": (
+        $primary,
+        $primary-invert,
+    ),
+    "info": (
+        $info,
+        $info-invert,
+    ),
+    "success": (
+        $success,
+        $success-invert,
+    ),
+    "warning": (
+        $warning,
+        $warning-invert,
+    ),
+    "danger": (
+        $danger,
+        $danger-invert,
+    ),
     //"twitter": ($twitter, $twitter-invert)
 );

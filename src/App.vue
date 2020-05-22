@@ -47,12 +47,20 @@
                 <b-icon icon="account" size style="margin-right:.15rem;" />
                 <span class="has-text-weight-medium">{{sessionUser.firstName}}</span>
               </template>
-              <b-navbar-item tag="router-link" class :to="`/user/${sessionUser._id}/settings`">
+              <b-navbar-item
+                tag="router-link"
+                class
+                :to="`/user/${sessionUser._id}/settings/account`"
+              >
                 <b-icon icon="cogs" size="is-small" style="margin-right:.15rem;" />
                 <span>Settings</span>
               </b-navbar-item>
-              <b-navbar-item tag="router-link" class :to="`/user/${sessionUser._id}/settings`">
-                <b-icon icon="heart" size="is-small" style="margin-right:.15rem;" />
+              <b-navbar-item
+                tag="router-link"
+                class
+                :to="`/user/${sessionUser._id}/settings/favorites`"
+              >
+                <b-icon icon="heart-multiple" size="is-small" style="margin-right:.15rem;" />
                 <span>Favorites</span>
               </b-navbar-item>
               <b-navbar-item tag="a" class @click="logoutDialog">
