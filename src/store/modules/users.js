@@ -2,7 +2,7 @@ import { ToastProgrammatic as Toast } from 'buefy'
 import axios from 'axios'
 
 const users = {
-    strict: true,
+    strict: process.env.NODE_ENV !== 'production',
     state: {
         url: "/api/users/",
         users: [],

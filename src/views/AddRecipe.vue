@@ -4,11 +4,6 @@
       <h1 class="title is-4">New Recipe</h1>
       <hr />
       <form ref="form" action="post" @submit.prevent="formHandle">
-        <div v-if="uploading" class="columns">
-          <div class="column">
-            <b-progress size="is-small" type="is-primary">Uploading...</b-progress>
-          </div>
-        </div>
         <b-steps v-model="activeStep">
           <b-step-item step="1" icon="clipboard-text" label="Description">
             <div class="columns is-centered">
@@ -103,6 +98,7 @@
                       accept=".jpg, .png, .jpeg"
                       v-model="dropFiles"
                       multiple
+                      validation-message="Choose atleast one file."
                       drag-drop
                       expanded
                       required
@@ -227,6 +223,15 @@
                 </div>
             </div>-->
           </b-step-item>
+          <div v-if="uploading" class="columns is-centered">
+            <div class="column is-two-fifths" style="padding-top:1.5rem; padding-bottom:1rem">
+              <b-progress
+                size="is-medium"
+                type="is-primary"
+                show-value
+              >Uploading... This process can take a while.</b-progress>
+            </div>
+          </div>
           <template slot="navigation" slot-scope="{previous, next}">
             <div class="columns is-centered">
               <div class="column is-narrow is-flex is-justified-center">
@@ -262,6 +267,7 @@
             </div>
           </template>
         </b-steps>
+
         <!-- <div class="columns is-centered" style="margin-top:3rem">
             <div class="column is-narrow is-flex is-justified-center">
               <button class="button is-primary" type="submit">Add this recipe</button>

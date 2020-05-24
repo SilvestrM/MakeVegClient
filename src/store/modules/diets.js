@@ -1,6 +1,6 @@
 
 const diets = {
-    strict: true,
+    strict: process.env.NODE_ENV !== 'production',
     state: {
         diets: [
             { _id: 1, name: "Lactose Free", color: "" },

@@ -155,10 +155,12 @@ export default {
     },
     photos() {
       const arr = [];
-      this.images.forEach(img => {
-        if (img.data !== undefined);
-        arr.push(`data:image/jpeg;base64,${this.$encodeb64(img.data)}`);
-      });
+      if (this.images) {
+        this.images.forEach(img => {
+          if (img.data !== undefined);
+          arr.push(`data:image/jpeg;base64,${this.$encodeb64(img.data)}`);
+        });
+      }
       return arr;
     },
     liked() {

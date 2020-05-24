@@ -66,7 +66,7 @@
         <hr />
         <div class="columns is-centered">
           <div class="column is-full">
-            <b-field label="Images">
+            <b-field label="Recipe images">
               <div class="has-background-white-ter">
                 <b-carousel-list :items-to-show="2" :data="imagesFormatted">
                   <template slot="item" slot-scope="props">
@@ -75,7 +75,7 @@
                       <button
                         style="position:absolute; top:.5rem; right:.5rem;"
                         type="button"
-                        class="delete"
+                        class="delete is-medium"
                         @click.prevent="removeImage(props.index)"
                       ></button>
                     </figure>
@@ -85,7 +85,8 @@
             </b-field>
           </div>
         </div>
-        <b-message has-icon type="is-info">Updating images is not supported yet..</b-message>
+
+        <!-- <b-message has-icon type="is-info">Updating images is not supported yet..</b-message> -->
         <div class="columns is-centered">
           <div class="column is-narrow">
             <b-field label="Upload Images" expanded>
@@ -95,6 +96,8 @@
                 v-model="dropFiles"
                 multiple
                 drag-drop
+                expanded
+                :required="!this.images.length > 0 && this.dropFiles.length === 0"
               >
                 <section class="section">
                   <div class="content has-text-centered">
@@ -121,12 +124,18 @@
             </div>
           </div>
         </div>
+        <div v-if="uploading" class="columns is-centered">
+          <div class="column is-two-fifths">
+            <b-progress size="is-medium" type="is-primary" show-value>Processing...</b-progress>
+          </div>
+        </div>
         <div class="columns is-centered">
-          <div class="column is-narrow">
-            <button class="button is-primary" type="submit">Update recipe</button>
+          <div class="column is-narrow is-flex is-justified-center">
+            <button class="button is-primary" type="submit">Save changes</button>
           </div>
         </div>
       </form>
+      <b-loading :active.sync="isLoading"></b-loading>
     </div>
   </div>
 </template>
@@ -136,9 +145,11 @@ import { mapActions, mapGetters } from "vuex";
 export default {
   data() {
     return {
+      uploading: false,
       isLoading: false,
       dropFiles: [],
-      images: []
+      removedImages: []
+      // images: []
     };
   },
   computed: {
@@ -159,6 +170,14 @@ export default {
         instructions: this.recipe.instructions
       };
     },
+    images: {
+      get() {
+        return this.getRecipe(this.$route.params.id).images;
+      }
+      // set(images) {
+      //   this.$store.commit("setRecipe", { images });
+      // }
+    },
     imagesFormatted() {
       const arr = [];
       if (this.images) {
@@ -178,7 +197,7 @@ export default {
     async formHandle() {
       // @todo images upload
       // this.recipe.images = this.dropFiles;
-      if (!(this.images.length > 0 || this.dropFiles > 0)) {
+      if (!(this.images.length > 0 || this.dropFiles.length > 0)) {
         this.$buefy.toast.open({
           message: `Recipe has to have atleast one image!`,
           type: "is-danger"
@@ -187,6 +206,7 @@ export default {
       }
       this.updatedData.images = this.images;
       this.updatedData.newImages = this.dropFiles;
+      this.updatedData.removedImages = this.removedImages;
       this.uploading = true;
       await this.updateRecipe(this.updatedData)
         .then(() => {
@@ -205,7 +225,9 @@ export default {
       this.dropFiles.splice(index, 1);
     },
     removeImage(index) {
-      this.images.splice(index, 1);
+      this.removedImages = this.removedImages.concat(
+        this.images.splice(index, 1)
+      );
     },
     getDiets(text) {
       return this.diets.filter(
@@ -219,7 +241,7 @@ export default {
     checkUpload(files) {
       files.forEach(file => {
         if (file.size >= 10000000) {
-          this.dropFiles.splice(files.indexOf(file));
+          this.dropFiles.splice(files.indexOf(file), 1);
           this.$buefy.toast.open({
             message: `File ${file.name} is too big`,
             position: "is-bottom",
@@ -236,7 +258,7 @@ export default {
     next(async vm => {
       vm.isLoading = true;
       await vm.fetchRecipe(to.params.id);
-      vm.images = vm.getRecipe(to.params.id).images;
+      // vm.images = vm.getRecipe(to.params.id).images;
       vm.isLoading = false;
     });
   },
@@ -244,7 +266,7 @@ export default {
     next(async vm => {
       vm.isLoading = true;
       await vm.fetchRecipe(to.params.id);
-      vm.images = vm.getRecipe(to.params.id).images;
+      // vm.images = vm.getRecipe(to.params.id).images;
       vm.isLoading = false;
     });
   }

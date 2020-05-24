@@ -2,7 +2,7 @@ import { ToastProgrammatic as Toast } from 'buefy'
 import axios from 'axios'
 
 const recipes = {
-    strict: true,
+    strict: process.env.NODE_ENV !== 'production',
     state: {
         url: "/api/recipes/",
         recipes: [],
@@ -120,24 +120,34 @@ const recipes = {
                     throw reason;
                 })
         },
+        /** 
+         *  @desc Updates a recipe
+         *  @params recipe + newImages and removedImages
+        */
         async updateRecipe({ dispatch, commit, state }, data) {
-            const images = data.newImages
-            // const updatedImages = []
-            if (images.length > 0) {
-                data.images.concat(await dispatch('uploadImage', { _id: data._id, images: images }))
+            if (data.newImages) {
+                if (data.newImages.length > 0) {
+                    data.images.concat(await dispatch('uploadImage', { _id: data._id, images: data.newImages }))
+                }
             }
+            delete data.newImages
             delete data.images
-            // data.images = updatedImages.concat(data.images)
-            await axios.patch(`${state.url}`, data, { headers: { Authorization: `Bearer ${localStorage.jwt}` } })
+
+            await axios.patch(`${state.url}`, data,
+                {
+                    headers: {
+                        Authorization: `Bearer ${localStorage.jwt}`
+                    }
+                })
                 .then(async resolve => {
-                    commit('setRecipe', resolve.data)
+                    commit('updateRecipe', resolve.data)
                     Toast.open({
                         message: `Recipe ${resolve.data.name} successfully updated`,
                         type: 'is-success'
                     })
                 }).catch(reason => {
                     Toast.open({
-                        message: `Error updating recipe: ${reason.response.data}`,
+                        message: `Error updating recipe: ${reason.response}`,
                         type: 'is-danger'
                     })
                     throw reason;
