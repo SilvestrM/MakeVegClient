@@ -15,6 +15,7 @@
               :overlay="gallery"
               :arrow="photos.length > 1"
               @change="activeImage = $event"
+              :indicator="photos.length > 1"
             >
               <b-carousel-item v-for="(item, i) in photos" :key="i">
                 <a
@@ -47,13 +48,21 @@
               <h1 class="title is-italic has-text-weight-normal is-capitalized">{{recipe.name}}</h1>
             </div>
             <div v-if="$store.state.loggedIn" class="level-item">
-              <button
-                @click="toggleLike()"
-                class="button is-inverted is-borderless is-text is-flex is-aligned-center is-justified-center"
-                :class="{'is-info': liked === true}"
+              <b-tooltip
+                type="is-light"
+                :delay="500"
+                position="is-bottom"
+                :label="liked === true ? 'Remove Favorite' : 'Add Favorite'"
+                animated
               >
-                <b-icon icon="heart"></b-icon>
-              </button>
+                <button
+                  @click="toggleLike()"
+                  class="button is-inverted is-borderless is-text is-flex is-aligned-center is-justified-center"
+                  :class="{'is-info': liked === true}"
+                >
+                  <b-icon :icon="liked === true ? 'heart' : 'heart-outline'"></b-icon>
+                </button>
+              </b-tooltip>
             </div>
           </div>
           <div class="level-item">
