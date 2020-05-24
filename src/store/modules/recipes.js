@@ -130,7 +130,7 @@ const recipes = {
             // data.images = updatedImages.concat(data.images)
             await axios.patch(`${state.url}`, data, { headers: { Authorization: `Bearer ${localStorage.jwt}` } })
                 .then(async resolve => {
-                    commit('updateRecipe', resolve.data)
+                    commit('setRecipe', resolve.data)
                     Toast.open({
                         message: `Recipe ${resolve.data.name} successfully updated`,
                         type: 'is-success'

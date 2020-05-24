@@ -70,8 +70,14 @@
               <div class="has-background-white-ter">
                 <b-carousel-list :items-to-show="2" :data="imagesFormatted">
                   <template slot="item" slot-scope="props">
-                    <figure class="16by9">
+                    <figure class="16by9 is-relative">
                       <img :src="props.list" />
+                      <button
+                        style="position:absolute; top:.5rem; right:.5rem;"
+                        type="button"
+                        class="delete"
+                        @click.prevent="removeImage(props.index)"
+                      ></button>
                     </figure>
                   </template>
                 </b-carousel-list>
@@ -152,7 +158,6 @@ export default {
         dietTypes: this.recipe.dietTypes,
         instructions: this.recipe.instructions
       };
-      //images
     },
     imagesFormatted() {
       const arr = [];
@@ -173,6 +178,13 @@ export default {
     async formHandle() {
       // @todo images upload
       // this.recipe.images = this.dropFiles;
+      if (!(this.images.length > 0 || this.dropFiles > 0)) {
+        this.$buefy.toast.open({
+          message: `Recipe has to have atleast one image!`,
+          type: "is-danger"
+        });
+        return;
+      }
       this.updatedData.images = this.images;
       this.updatedData.newImages = this.dropFiles;
       this.uploading = true;
@@ -191,6 +203,9 @@ export default {
     },
     deleteDropFile(index) {
       this.dropFiles.splice(index, 1);
+    },
+    removeImage(index) {
+      this.images.splice(index, 1);
     },
     getDiets(text) {
       return this.diets.filter(
