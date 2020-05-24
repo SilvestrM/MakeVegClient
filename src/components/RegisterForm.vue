@@ -101,38 +101,28 @@ export default {
       if (this.pass.length > 0) {
         if (this.pass === this.repass) {
           this.newUser.pass = this.pass;
-          await this.fetchFindUsers(this.newUser.email).then(async () => {
-            if (this.isDuplicateMail(this.newUser.email) === false) {
-              await this.register(this.newUser)
-                .then(() => {
-                  if (this.isModal) this.$parent.close();
-                  if (this.$route.fullPath !== "/discover") {
-                    this.$router.push("/discover");
-                  }
-                })
-                .catch();
-            } else {
+          await this.register(this.newUser)
+            .then(() => {
+              if (this.isModal) this.$parent.close();
+              if (this.$route.fullPath !== "/discover") {
+                this.$router.push("/discover");
+              }
+            })
+            .catch(reason => {
               this.$buefy.toast.open({
-                duration: 5000,
-                message: `An user with this email already exists`,
-                position: "is-bottom",
+                message: `Registration error! ${reason}`,
                 type: "is-warning"
               });
-            }
-          });
+            });
         } else {
           this.$buefy.toast.open({
-            duration: 5000,
             message: `Passwords do not match`,
-            position: "is-bottom",
             type: "is-warning"
           });
         }
       } else {
         this.$buefy.toast.open({
-          duration: 5000,
           message: `Please enter a valid password`,
-          position: "is-bottom",
           type: "is-warning"
         });
       }

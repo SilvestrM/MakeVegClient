@@ -52,7 +52,6 @@ const users = {
                 }
             })
                 .catch(reason => {
-                    console.log(reason.response.data);
                     Toast.open({
                         message: `Error fetching data: ${reason.response.data.error}`,
                         type: 'is-danger'

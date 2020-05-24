@@ -3,7 +3,7 @@
     <div class="page">
       <b-navbar wrapper-class="container" type="is-light" transparent fixed-top>
         <template slot="brand">
-          <b-navbar-item class="is-unselectable" tag="div">
+          <b-navbar-item class="is-unselectable" tag="router-link" to="/">
             <div class="inline-flex is-vertical is-aligned-center">
               <!-- <img :src="`${publicPath}images/carrot.png`" alt="makeveg" /> -->
               <span class="title is-bold is-4 is-family-secondary">
@@ -21,7 +21,7 @@
             <strong class="has-text-weight-semibold" style="padding-left:0.25rem;">Discover</strong>
           </b-navbar-item>
           <b-navbar-item v-if="logged" tag="router-link" :to="`/user/${sessionUser._id}`">
-            <strong class="has-text-weight-medium">My Profile</strong>
+            <strong class="has-text-weight-medium">My Recipes</strong>
           </b-navbar-item>
         </template>
 

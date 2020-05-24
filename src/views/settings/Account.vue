@@ -111,31 +111,15 @@ export default {
           this.newUser.oldPass = this.oldPass;
         } else {
           this.$buefy.toast.open({
-            duration: 5000,
             message: `Passwords do not match`,
-            position: "is-top",
             type: "is-danger"
           });
           return;
         }
       }
-      await this.fetchFindUsers(this.newUser.email).then(async () => {
-        if (
-          this.isDuplicateMail(this.newUser.email) === false ||
-          this.newUser.email === this.user.email
-        ) {
-          this.newUser._id = this.user._id;
-          await this.updateUserSelf(this.newUser).then(() => {
-            this.$router.push(`/user/${this.user._id}`);
-          });
-        } else {
-          this.$buefy.toast.open({
-            duration: 5000,
-            message: `An user with this email already exists`,
-            position: "is-top",
-            type: "is-warning"
-          });
-        }
+      this.newUser._id = this.user._id;
+      await this.updateUserSelf(this.newUser).then(() => {
+        this.$router.push(`/user/${this.user._id}`);
       });
     },
     getDiets(text) {

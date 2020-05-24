@@ -64,7 +64,7 @@ export default new Vuex.Store({
                 })
                 .catch(reason => {
                     Toast.open({
-                        message: `Error: ${reason.response.data}`,
+                        message: `${reason.response.data}`,
                         type: 'is-danger'
                     })
                 })
