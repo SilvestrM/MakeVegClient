@@ -123,9 +123,7 @@ export default {
             this.deleteUser(user._id);
           } else {
             this.$buefy.toast.open({
-              duration: 3000,
               message: `The entered name does not match the user's name`,
-              position: "is-bottom",
               type: "is-warning"
             });
           }

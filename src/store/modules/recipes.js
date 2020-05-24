@@ -95,13 +95,16 @@ const recipes = {
         },
         async addRecipe({ dispatch, commit, state, rootGetters }, data) {
             data.author = rootGetters.getLoggedIn._id
+            const images = data.images
+
+            delete data.images
 
             await axios.post(`${state.url}`, data, { headers: { Authorization: `Bearer ${localStorage.jwt}` } })
                 .then(async res => {
                     const recipe = res.data
-                    if (data.images.length !== 0) {
+                    if (images.length !== 0) {
                         data._id = recipe._id
-                        recipe.images = await dispatch('uploadImage', data)
+                        recipe.images = await dispatch('uploadImage', { _id: data._id, images: images })
                     }
                     commit('addRecipe', recipe)
                     Toast.open({
@@ -117,9 +120,16 @@ const recipes = {
                     throw reason;
                 })
         },
-        async updateRecipe({ commit, state }, data) {
+        async updateRecipe({ dispatch, commit, state }, data) {
+            const images = data.newImages
+            // const updatedImages = []
+            if (images.length > 0) {
+                data.images.concat(await dispatch('uploadImage', { _id: data._id, images: images }))
+            }
+            delete data.images
+            // data.images = updatedImages.concat(data.images)
             await axios.patch(`${state.url}`, data, { headers: { Authorization: `Bearer ${localStorage.jwt}` } })
-                .then(resolve => {
+                .then(async resolve => {
                     commit('updateRecipe', resolve.data)
                     Toast.open({
                         message: `Recipe ${resolve.data.name} successfully updated`,
@@ -128,7 +138,7 @@ const recipes = {
                 }).catch(reason => {
                     Toast.open({
                         message: `Error updating recipe: ${reason.response.data}`,
-                        type: 'is-warning'
+                        type: 'is-danger'
                     })
                     throw reason;
                 })

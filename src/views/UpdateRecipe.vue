@@ -89,7 +89,6 @@
                 v-model="dropFiles"
                 multiple
                 drag-drop
-                disabled
               >
                 <section class="section">
                   <div class="content has-text-centered">
@@ -157,10 +156,12 @@ export default {
     },
     imagesFormatted() {
       const arr = [];
-      this.images.forEach(img => {
-        if (img.data !== undefined)
-          arr.push(`data:image/jpeg;base64,${this.$encodeb64(img.data)}`);
-      });
+      if (this.images) {
+        this.images.forEach(img => {
+          if (img.data !== undefined)
+            arr.push(`data:image/jpeg;base64,${this.$encodeb64(img.data)}`);
+        });
+      }
       return arr;
     },
     diets() {
@@ -172,9 +173,21 @@ export default {
     async formHandle() {
       // @todo images upload
       // this.recipe.images = this.dropFiles;
-      await this.updateRecipe(this.updatedData).then(() => {
-        this.$router.push(`/recipe/${this.recipe._id}`);
-      });
+      this.updatedData.images = this.images;
+      this.updatedData.newImages = this.dropFiles;
+      this.uploading = true;
+      await this.updateRecipe(this.updatedData)
+        .then(() => {
+          this.uploading = false;
+          this.$router.push(`/recipe/${this.recipe._id}`);
+        })
+        .catch(reason => {
+          this.uploading = false;
+          this.$buefy.toast.open({
+            message: `Something went wrong while updating recipe! ${reason}`,
+            type: "is-danger"
+          });
+        });
     },
     deleteDropFile(index) {
       this.dropFiles.splice(index, 1);
