@@ -15,6 +15,16 @@
     padding-bottom: 4vh;
 } */
 
+::-moz-selection {
+    color: $info-invert;
+    background: $info;
+}
+
+::selection {
+    color: $info-invert;
+    background: $info;
+}
+
 .modal-card-foot {
     justify-content: center;
 }
@@ -37,6 +47,6 @@
 
 .table {
     td {
-      vertical-align: middle;
+        vertical-align: middle;
     }
-  }
+}

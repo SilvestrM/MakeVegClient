@@ -9,10 +9,18 @@
       <form action="post" @submit.prevent="formHandle">
         <div class="columns is-centered">
           <div class="column is-half is-narrow">
-            <b-field label="Name">
-              <b-input v-model="updatedData.name" type="text" placeholder="Recipe name" required></b-input>
+            <b-field label="Name" message="Your recipe's name. Maximum 50 characters">
+              <b-input
+                minlength="1"
+                maxlength="50"
+                validation-message="Must be between 5 and 50 characters"
+                v-model="updatedData.name"
+                type="text"
+                placeholder="Recipe name"
+                required
+              ></b-input>
             </b-field>
-            <b-field label="Diets">
+            <b-field label="Diets" message="Recipe diet tags">
               <b-taginput
                 v-model="updatedData.dietTypes"
                 :data="diets"
@@ -24,26 +32,38 @@
                 @typing="getDiets"
               ></b-taginput>
             </b-field>
-            <b-field label="Description">
+            <b-field
+              label="Description"
+              message="Describe your recipe here. Maximum 500 characters"
+            >
               <b-input
                 v-model="updatedData.description"
                 type="textarea"
+                minlength="1"
                 maxlength="500"
                 placeholder="Recipe description"
               ></b-input>
             </b-field>
           </div>
           <div class="column is-half">
-            <b-field label="Cooktime">
-              <b-timepicker
+            <b-field label="Cooktime" message="Format HH:MM">
+              <b-clockpicker
                 :increment-minutes="5"
-                v-model="updatedData.cookTime"
+                v-model="recipe.cookTime"
                 required
                 placeholder="Click to select..."
                 icon="clock"
-              ></b-timepicker>
+                hour-format="24"
+              >
+                <div class="is-flex is-justified-center">
+                  <b-button class @click="recipe.cookTime=new Date(0,0)">Clear</b-button>
+                </div>
+              </b-clockpicker>
             </b-field>
-            <b-field class label="Ingredients">
+            <b-field
+              label="Ingredients"
+              message="Preferred format is: 'amount+unit ingredient' e.g. '1l water'"
+            >
               <b-taginput
                 v-model="updatedData.ingredients"
                 :allow-new="true"
@@ -52,10 +72,15 @@
                 placeholder="Add an ingredient"
               ></b-taginput>
             </b-field>
-            <b-field label="Instructions">
+            <b-field
+              label="Instructions"
+              message="Write your cooking instructions/directions here. Must be atleast 10 and maximum 1000 characters"
+            >
               <b-input
                 v-model="updatedData.instructions"
                 type="textarea"
+                validation-message="Must be between 10 and 1000 characters"
+                minlength="10"
                 maxlength="1000"
                 placeholder="Recipe Instructions"
                 required

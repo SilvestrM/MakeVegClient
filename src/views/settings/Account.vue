@@ -45,7 +45,7 @@
             <b-tag v-for="(diet, i) in user.diets" :key="i">{{diet}}</b-tag>
           </b-taglist>
         </b-field>
-        <b-field horizontal :label-position="'on-border'" expanded label="Dietary preferences">
+        <b-field horizontal :label-position="'on-border'" expanded label="Filter tags">
           <b-taginput
             v-model="newUser.settings.diets"
             :data="diets"
@@ -53,7 +53,7 @@
             :allow-new="false"
             open-on-focus
             icon="label"
-            placeholder="Add a diet"
+            placeholder="Add a filter"
             @typing="getDiets"
           ></b-taginput>
         </b-field>

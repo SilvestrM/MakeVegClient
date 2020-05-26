@@ -9,19 +9,22 @@
             <div class="columns is-centered">
               <div class="column is-half is-narrow">
                 <form action="post" id="form-0" @submit.prevent="goNext()">
-                  <b-field label="Name">
+                  <b-field label="Name" message="Your recipe's name. Maximum 50 characters">
                     <b-input
                       v-model="recipe.name"
-                      minlength="5"
+                      minlength="1"
                       maxlength="50"
                       :has-counter="false"
                       type="text"
-                      placeholder="Recipe name"
-                      validation-message="Must be between 5 and 50 characters"
+                      placeholder="Vegetable Soup"
+                      validation-message="Must be between 1 and 50 characters"
                       required
                     ></b-input>
                   </b-field>
-                  <b-field label="Diets">
+                  <b-field
+                    label="Diets"
+                    message="Recipe diet tags. Choose those that best describe the recipe."
+                  >
                     <b-taginput
                       v-model="recipe.dietTypes"
                       :data="diets"
@@ -33,16 +36,19 @@
                       @typing="getDiets"
                     ></b-taginput>
                   </b-field>
-                  <b-field label="Description">
+                  <b-field
+                    message="Describe your recipe here. Maximum 500 characters"
+                    label="Description"
+                  >
                     <b-input
                       required
                       min="10"
                       v-model="recipe.description"
                       type="textarea"
-                      minlength="5"
+                      minlength="1"
                       maxlength="500"
-                      placeholder="Recipe description"
-                      validation-message="Must be between 5 and 500 characters"
+                      placeholder="Lovely soup..."
+                      validation-message="Must be between 1 and 500 characters"
                     ></b-input>
                   </b-field>
                 </form>
@@ -53,16 +59,24 @@
             <div class="columns is-centered">
               <div class="column is-half">
                 <form action="post" id="form-1" @submit.prevent="goNext()">
-                  <b-field label="Cooktime">
-                    <b-timepicker
+                  <b-field label="Cooktime" message="Format HH:MM">
+                    <b-clockpicker
                       :increment-minutes="5"
                       v-model="recipe.cookTime"
                       required
                       placeholder="Click to select..."
                       icon="clock"
-                    ></b-timepicker>
+                      hour-format="24"
+                    >
+                      <div class="is-flex is-justified-center">
+                        <b-button class @click="recipe.cookTime=new Date(0,0)">Clear</b-button>
+                      </div>
+                    </b-clockpicker>
                   </b-field>
-                  <b-field class label="Ingredients">
+                  <b-field
+                    :message="`Preferred format is: 'amount+unit ingredient' e.g. '1l water'`"
+                    label="Ingredients"
+                  >
                     <b-taginput
                       v-model="recipe.ingredients"
                       :allow-new="true"
@@ -71,15 +85,18 @@
                       placeholder="Add an ingredient"
                     ></b-taginput>
                   </b-field>
-                  <b-field label="Instructions">
+                  <b-field
+                    message="Write your cooking instructions/directions here. Must be atleast 10 and maximum 1000 characters"
+                    label="Instructions"
+                  >
                     <b-input
                       v-model="recipe.instructions"
                       type="textarea"
                       min="10"
-                      validation-message="Must be between 10 and 1000 characters"
+                      validation-message="Must be between 10 and 1000 characters!"
                       minlength="10"
                       maxlength="1000"
-                      placeholder="Recipe Instructions"
+                      placeholder="Prepare and boil for 20 minutes..."
                       required
                     ></b-input>
                   </b-field>
@@ -131,7 +148,7 @@
             </div>
             <div class="columns is-centered">
               <div class="column is-half is-flex is-column is-justified-center">
-                <b-message type="is-warning">Atleast one image is required!</b-message>
+                <b-message type="is-info">Atleast one image is required!</b-message>
               </div>
             </div>
           </b-step-item>
@@ -367,6 +384,21 @@ export default {
       // this.$refs[`form-${this.activeStep}`].submit();
       this.nextStep = next;
       //next.action();
+    },
+    parseTime(str) {
+      try {
+        const times = str.split(":");
+        console.log(times);
+        if (times.length !== 2) {
+          throw new Error("Bad format");
+        }
+        const time = new Date();
+        time.setHours(times[0]);
+        time.setMinutes(times[1]);
+        return time;
+      } catch (e) {
+        throw new Error(e);
+      }
     },
     goNext() {
       this.nextStep.action();

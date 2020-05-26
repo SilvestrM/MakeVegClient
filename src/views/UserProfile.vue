@@ -52,7 +52,7 @@
               <span class="tag is-info">{{ new Date(props.row.createdAt).toLocaleDateString() }}</span>
             </b-table-column>
             <b-table-column v-if="me" field="_id" label="Controls" numeric>
-              <div class="buttons is-pulled-right">
+              <div class="buttons is-pulled-right row-controls">
                 <b-tooltip
                   type="is-light"
                   :delay="500"
@@ -190,6 +190,14 @@ export default {
   td {
     vertical-align: middle;
   }
+  // .row-controls {
+  //   visibility: hidden;
+  // }
+
+  // tr:hover .row-controls {
+  //   visibility: initial;
+  //   transition: visibility $speed;
+  // }
 }
 .hero {
   // filter: saturate(50%) brightness(50%);
