@@ -95,7 +95,7 @@
                         keep-in-bounds
                         v-slot="{ commands, isActive}"
                       >
-                        <div class="level is-marginless">
+                        <div class="level is-marginless has-background-light">
                           <div class="level-left">
                             <div class="level-item">
                               <div class="field has-addons">
@@ -119,11 +119,27 @@
                                 </p>
                                 <p class="control">
                                   <button
-                                    class="control button"
+                                    class="button"
                                     :class="{ 'is-active': isActive.underline() }"
                                     @click.prevent="commands.underline"
                                   >
                                     <b-icon icon="format-underline" />
+                                  </button>
+                                </p>
+                              </div>
+                            </div>
+                          </div>
+                          <div class="level-right">
+                            <div class="level-item">
+                              <div class="field has-addons">
+                                <p class="control">
+                                  <button class="button" @click.prevent="commands.undo">
+                                    <b-icon icon="undo" />
+                                  </button>
+                                </p>
+                                <p class="control">
+                                  <button class="button" @click.prevent="commands.redo">
+                                    <b-icon icon="redo" />
                                   </button>
                                 </p>
                               </div>
@@ -343,7 +359,13 @@
 import { mapActions, mapGetters } from "vuex";
 import { required, minLength } from "vuelidate/lib/validators";
 import { Editor, EditorContent, EditorMenuBar } from "tiptap";
-import { Bold, Italic, HardBreak, Underline } from "tiptap-extensions";
+import {
+  Bold,
+  Italic,
+  Underline,
+  Placeholder,
+  History
+} from "tiptap-extensions";
 
 export default {
   data() {
@@ -360,16 +382,16 @@ export default {
         dietTypes: [],
         instructions: "",
         images: []
-      },
-      editor: new Editor({
-        extensions: [
-          new Bold(),
-          new Italic(),
-          new Underline(),
-          new HardBreak()
-        ],
-        content: "tt"
-      })
+      }
+      // editor: new Editor({
+      //   extensions: [
+      //     new Bold(),
+      //     new Italic(),
+      //     new Underline(),
+      //     new HardBreak()
+      //   ],
+      //   content: "tt"
+      // })
     };
   },
   validations: {
@@ -395,23 +417,23 @@ export default {
     ...mapGetters(["getLoggedIn"]),
     diets() {
       return this.$store.getters.getDiets;
+    },
+    editor() {
+      return new Editor({
+        extensions: [
+          new Bold(),
+          new Italic(),
+          new Underline(),
+          new History(),
+          new Placeholder({
+            emptyNodeText: "Prepare and boil for 20 minutes...",
+            showOnlyWhenEditable: true,
+            showOnlyCurrent: true
+          })
+        ],
+        content: this.recipe.instructions
+      });
     }
-    /*   editor: {
-      get() {
-        return new Editor({
-          extensions: [
-            new Bold(),
-            new Italic(),
-            new Underline(),
-            new HardBreak()
-          ],
-          content: this.recipe.instructions
-        });
-      },
-      set(value) {
-        this.editor.content = value;
-      }
-    } */
   },
   watch: {
     editor() {}
@@ -421,8 +443,6 @@ export default {
     async formHandle() {
       this.recipe.images = this.dropFiles;
       this.recipe.instructions = this.editor.getHTML().toString();
-      console.log(typeof this.editor.getHTML());
-      console.log(this.recipe.instructions);
       this.$v.$touch();
       if (!this.$v.$invalid) {
         this.uploading = true;
