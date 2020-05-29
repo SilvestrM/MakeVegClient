@@ -388,7 +388,6 @@ export default {
     parseTime(str) {
       try {
         const times = str.split(":");
-        console.log(times);
         if (times.length !== 2) {
           throw new Error("Bad format");
         }

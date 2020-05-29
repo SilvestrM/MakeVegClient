@@ -2,7 +2,7 @@
   <div v-cloak>
     <!-- <div class="container"> -->
     <div
-      class="hero is-info is-medium"
+      class="hero is-info is-normal"
       :style="{'background':`url(${publicPath}images/board_food.jpg) center 62% / cover`}"
     >
       <div class="hero-body">
@@ -16,84 +16,89 @@
     </div>
     <div class="section">
       <div class="container">
-        <h2 class="subtitle is-4">
-          <template v-if="me">{{`Your recipes`}}</template>
-          <template v-else>{{`${user.firstName}'s recipes`}}</template>
-        </h2>
-        <hr />
-        <b-table
-          style="min-height:15rem"
-          striped
-          :data="recipes"
-          :paginated="paginated"
-          per-page="10"
-          :loading="isLoading"
-        >
-          <template slot-scope="props">
-            <b-table-column field="name" label="Recipe">
-              <router-link :to="`/recipe/${props.row._id}`">{{ props.row.name }}</router-link>
-            </b-table-column>
-            <b-table-column field="dietTypes" label="Diets">
-              <div class="tags">
-                <span
-                  class="tag"
-                  v-for="(diet, i) in props.row.dietTypes.slice(0,5)"
-                  :index="i"
-                  :key="i"
-                >{{diet}}</span>
-              </div>
-            </b-table-column>
-            <!-- <b-table-column
+        <div class="columns">
+          <div class="column is-one-fifth has-background-white-bis"></div>
+          <div class="column is-four-fifths">
+            <h2 class="subtitle is-4">
+              <template v-if="me">{{`Your recipes`}}</template>
+              <template v-else>{{`${user.firstName}'s recipes`}}</template>
+            </h2>
+            <hr />
+            <b-table
+              style="min-height:15rem"
+              striped
+              :data="recipes"
+              :paginated="paginated"
+              per-page="10"
+              :loading="isLoading"
+            >
+              <template slot-scope="props">
+                <b-table-column field="name" label="Recipe">
+                  <router-link :to="`/recipe/${props.row._id}`">{{ props.row.name }}</router-link>
+                </b-table-column>
+                <b-table-column field="dietTypes" label="Diets">
+                  <div class="tags">
+                    <span
+                      class="tag"
+                      v-for="(diet, i) in props.row.dietTypes.slice(0,5)"
+                      :index="i"
+                      :key="i"
+                    >{{diet}}</span>
+                  </div>
+                </b-table-column>
+                <!-- <b-table-column
               field="ratings"
               label="Rating"
               centered
-            >{{ countAvg(props.row.ratings) }}</b-table-column>-->
-            <b-table-column field="date" label="Date added" numeric>
-              <span class="tag is-info">{{ new Date(props.row.createdAt).toLocaleDateString() }}</span>
-            </b-table-column>
-            <b-table-column v-if="me" field="_id" label="Controls" numeric>
-              <div class="buttons is-pulled-right row-controls">
-                <b-tooltip
-                  type="is-light"
-                  :delay="500"
-                  position="is-bottom"
-                  label="Edit recipe"
-                  animated
-                >
-                  <router-link
-                    tag="button"
-                    :to="`/recipe/${props.row._id}/update`"
-                    class="button is-text"
-                  >
-                    <b-icon icon="pencil"></b-icon>
-                  </router-link>
-                </b-tooltip>
-                <b-tooltip
-                  type="is-light"
-                  :delay="500"
-                  position="is-bottom"
-                  label="Delete recipe"
-                  animated
-                >
-                  <button class="button is-text" @click="deleteDialog(props.row)">
-                    <b-icon icon="delete"></b-icon>
-                  </button>
-                </b-tooltip>
-              </div>
-            </b-table-column>
-          </template>
+                >{{ countAvg(props.row.ratings) }}</b-table-column>-->
+                <b-table-column field="date" label="Date added" numeric>
+                  <span class="tag is-info">{{ new Date(props.row.createdAt).toLocaleDateString() }}</span>
+                </b-table-column>
+                <b-table-column v-if="me" field="_id" label="Controls" numeric>
+                  <div class="buttons is-pulled-right row-controls">
+                    <b-tooltip
+                      type="is-light"
+                      :delay="500"
+                      position="is-bottom"
+                      label="Edit recipe"
+                      animated
+                    >
+                      <router-link
+                        tag="button"
+                        :to="`/recipe/${props.row._id}/update`"
+                        class="button is-text"
+                      >
+                        <b-icon icon="pencil"></b-icon>
+                      </router-link>
+                    </b-tooltip>
+                    <b-tooltip
+                      type="is-light"
+                      :delay="500"
+                      position="is-bottom"
+                      label="Delete recipe"
+                      animated
+                    >
+                      <button class="button is-text" @click="deleteDialog(props.row)">
+                        <b-icon icon="delete"></b-icon>
+                      </button>
+                    </b-tooltip>
+                  </div>
+                </b-table-column>
+              </template>
 
-          <template slot="empty">
-            <section class="section">
-              <div class="content has-text-grey has-text-centered">
-                <p>
-                  <b-icon icon="emoticon-sad" size="is-large"></b-icon>
-                </p>
-                <p>No recipes found</p>
-              </div>
-            </section>
-          </template>
-        </b-table>
+              <template slot="empty">
+                <section class="section">
+                  <div class="content has-text-grey has-text-centered">
+                    <p>
+                      <b-icon icon="emoticon-sad" size="is-large"></b-icon>
+                    </p>
+                    <p>No recipes found</p>
+                  </div>
+                </section>
+              </template>
+            </b-table>
+          </div>
+        </div>
       </div>
     </div>
     <!-- </div> -->
@@ -187,19 +192,16 @@ export default {
 
 <style lang="scss" scoped>
 .table {
-  td {
-    vertical-align: middle;
+  tbody {
+    // border: 2px solid $border;
   }
-  // .row-controls {
-  //   visibility: hidden;
-  // }
-
-  // tr:hover .row-controls {
-  //   visibility: initial;
-  //   transition: visibility $speed;
-  // }
 }
 .hero {
-  // filter: saturate(50%) brightness(50%);
+  .hero-body {
+    @media (min-width: $tablet) {
+      padding: 5rem 1.5rem;
+    }
+    //
+  }
 }
-</style>>
+</style>
