@@ -126,7 +126,7 @@
 
             <div class="content has-text-left">
               <h3 class="subtitle is-5">Directions</h3>
-              <p>{{recipe.instructions}}</p>
+              <p v-html="recipe.instructions"></p>
             </div>
             <figure class="image">
               <img

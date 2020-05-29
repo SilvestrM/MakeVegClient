@@ -50,3 +50,9 @@
         vertical-align: middle;
     }
 }
+
+.ProseMirror {
+    @extend .textarea;
+    overflow-y: visible;
+    height: auto;
+}

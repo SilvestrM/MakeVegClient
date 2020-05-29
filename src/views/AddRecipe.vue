@@ -89,7 +89,51 @@
                     message="Write your cooking instructions/directions here. Must be atleast 10 and maximum 1000 characters"
                     label="Instructions"
                   >
-                    <b-input
+                    <div>
+                      <editor-menu-bar
+                        :editor="editor"
+                        keep-in-bounds
+                        v-slot="{ commands, isActive}"
+                      >
+                        <div class="level is-marginless">
+                          <div class="level-left">
+                            <div class="level-item">
+                              <div class="field has-addons">
+                                <p class="control">
+                                  <button
+                                    class="button"
+                                    :class="{ 'is-active': isActive.bold() }"
+                                    @click.prevent="commands.bold"
+                                  >
+                                    <b-icon icon="format-bold" />
+                                  </button>
+                                </p>
+                                <p class="control">
+                                  <button
+                                    class="button"
+                                    :class="{ 'is-active': isActive.italic() }"
+                                    @click.prevent="commands.italic"
+                                  >
+                                    <b-icon icon="format-italic" />
+                                  </button>
+                                </p>
+                                <p class="control">
+                                  <button
+                                    class="control button"
+                                    :class="{ 'is-active': isActive.underline() }"
+                                    @click.prevent="commands.underline"
+                                  >
+                                    <b-icon icon="format-underline" />
+                                  </button>
+                                </p>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </editor-menu-bar>
+                      <EditorContent style="max-height:auto" :editor="editor" />
+                    </div>
+                    <!-- <b-input
                       v-model="recipe.instructions"
                       type="textarea"
                       min="10"
@@ -98,7 +142,7 @@
                       maxlength="1000"
                       placeholder="Prepare and boil for 20 minutes..."
                       required
-                    ></b-input>
+                    ></b-input>-->
                   </b-field>
                 </form>
               </div>
@@ -298,6 +342,8 @@
 <script>
 import { mapActions, mapGetters } from "vuex";
 import { required, minLength } from "vuelidate/lib/validators";
+import { Editor, EditorContent, EditorMenuBar } from "tiptap";
+import { Bold, Italic, HardBreak, Underline } from "tiptap-extensions";
 
 export default {
   data() {
@@ -314,7 +360,16 @@ export default {
         dietTypes: [],
         instructions: "",
         images: []
-      }
+      },
+      editor: new Editor({
+        extensions: [
+          new Bold(),
+          new Italic(),
+          new Underline(),
+          new HardBreak()
+        ],
+        content: "tt"
+      })
     };
   },
   validations: {
@@ -341,11 +396,33 @@ export default {
     diets() {
       return this.$store.getters.getDiets;
     }
+    /*   editor: {
+      get() {
+        return new Editor({
+          extensions: [
+            new Bold(),
+            new Italic(),
+            new Underline(),
+            new HardBreak()
+          ],
+          content: this.recipe.instructions
+        });
+      },
+      set(value) {
+        this.editor.content = value;
+      }
+    } */
+  },
+  watch: {
+    editor() {}
   },
   methods: {
     ...mapActions(["addRecipe"]),
     async formHandle() {
       this.recipe.images = this.dropFiles;
+      this.recipe.instructions = this.editor.getHTML().toString();
+      console.log(typeof this.editor.getHTML());
+      console.log(this.recipe.instructions);
       this.$v.$touch();
       if (!this.$v.$invalid) {
         this.uploading = true;
@@ -415,7 +492,13 @@ export default {
       });
     }
   },
-  components: {}
+  components: {
+    EditorContent,
+    EditorMenuBar
+  },
+  beforeDestroy() {
+    this.editor.destroy();
+  }
 };
 </script>
 
