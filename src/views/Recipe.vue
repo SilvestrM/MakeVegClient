@@ -104,6 +104,13 @@
             <div class="content has-text-left">
               <p>{{recipe.description}}</p>
             </div>
+            <hr />
+            <div class="content has-text-left">
+              <h3 class="subtitle is-5">Ingredients</h3>
+              <ul>
+                <li v-for="(ing, i) in recipe.ingredients" :key="i">{{ing.toString()}}</li>
+              </ul>
+            </div>
           </div>
           <div class="column is-half">
             <hr class="is-hidden-tablet" />
@@ -116,17 +123,17 @@
                 <em>{{`${new Date(recipe.cookTime).getHours() * 60 + new Date(recipe.cookTime).getMinutes()} min`}}</em>
               </p>
             </div>
-            <div class="content has-text-left">
-              <h3 class="subtitle is-5">Ingredients</h3>
-              <ul>
-                <li v-for="(ing, i) in recipe.ingredients" :key="i">{{ing.toString()}}</li>
-              </ul>
-            </div>
-            <hr />
+
             <div class="content has-text-left">
               <h3 class="subtitle is-5">Directions</h3>
               <p>{{recipe.instructions}}</p>
             </div>
+            <figure class="image">
+              <img
+                style="opacity: .1; bottom:0; left:0; margin-top:5rem; width:90%"
+                :src="`${publicPath}images/decoration_ingredients2.svg`"
+              />
+            </figure>
           </div>
         </div>
       </div>
@@ -151,7 +158,8 @@ export default {
       activeImage: 0,
       gallery: false,
       isLoading: false,
-      images: []
+      images: [],
+      publicPath: process.env.BASE_URL
     };
   },
   computed: {

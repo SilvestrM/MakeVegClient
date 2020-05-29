@@ -16,9 +16,15 @@
     </div>
     <div class="section">
       <div class="container">
-        <div class="columns">
-          <div class="column is-one-fifth has-background-white-bis"></div>
-          <div class="column is-four-fifths">
+        <!-- <div class="columns is-centered">
+          <div class="column">
+            <figure class="image">
+              <img style="width:50%" :src="`${publicPath}images/decoration_ingredients.svg`" />
+            </figure>
+          </div>
+        </div>-->
+        <div class="columns is-centered">
+          <div class="column is-four-fifths-desktop is-full-tablet">
             <h2 class="subtitle is-4">
               <template v-if="me">{{`Your recipes`}}</template>
               <template v-else>{{`${user.firstName}'s recipes`}}</template>
@@ -97,7 +103,21 @@
                 </section>
               </template>
             </b-table>
+            <figure class="image">
+              <img
+                style="opacity: .1; top:0; right:0; margin-top:2rem"
+                :src="`${publicPath}images/decoration_ingredients.svg`"
+              />
+            </figure>
           </div>
+          <!-- <div class="column is-one-fifth-desktop is-hidden-mobile is-hidden-tablet-only">
+            <figure class="image">
+              <img
+                style="opacity: .7; top:0; right:0; width:70%;"
+                :src="`${publicPath}images/decoration_hat.svg`"
+              />
+            </figure>
+          </div>-->
         </div>
       </div>
     </div>
