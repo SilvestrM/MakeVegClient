@@ -151,6 +151,22 @@ const users = {
                     })
                 })
         },
+        async updateUserRole({ commit, state }, data) {
+            await axios.patch(`${state.url}/role`, { _id: data }, { headers: { Authorization: `Bearer ${localStorage.jwt}` } })
+                .then(resolve => {
+                    commit('updateUser', resolve.data)
+                    Toast.open({
+                        message: `User  ${resolve.data.firstName} ${resolve.data.lastName} successfully updated.`,
+                        type: 'is-success'
+                    })
+                })
+                .catch(reason => {
+                    Toast.open({
+                        message: `An error occured: ${reason.response.data ? reason.response.data : reason}`,
+                        type: 'is-danger'
+                    })
+                })
+        },
         async deleteUser({ commit, state, rootState }, id) {
             if (id !== rootState.loggedIn._id) {
                 await axios.delete(`${state.url}${id}`, { headers: { Authorization: `Bearer ${localStorage.jwt}` } })
