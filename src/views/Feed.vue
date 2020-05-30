@@ -19,7 +19,7 @@
             </button>
             <p class="is-size-7" style="margin-top:1em">
               Already an user?
-              <a @click.prevent="$router.push('/login')">Log In</a>
+              <a @click.prevent="loginClicked">Log In</a>
             </p>
           </template>
           <!-- <button
@@ -283,6 +283,9 @@ export default {
     },
     signClicked() {
       this.$emit("clickedSignUp");
+    },
+    loginClicked() {
+      this.$emit("clickedLogin");
     }
   },
   beforeRouteEnter(to, from, next) {
