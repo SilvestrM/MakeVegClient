@@ -139,14 +139,14 @@ const users = {
         async resetPassword(...data) {
             await axios.post(`/api/auth/reset`, { email: data[1] })
                 .then(() => {
-                    this.$buefy.toast.open({
+                    Toast.open({
                         message: `An email with new passsword has been sent to the provided email.`,
                         type: "is-info"
                     });
                 })
                 .catch(reason => {
                     Toast.open({
-                        message: `An error occured: ${reason.response.data}`,
+                        message: `An error occured: ${reason.response.data ? reason.response.data : reason}`,
                         type: 'is-danger'
                     })
                 })
