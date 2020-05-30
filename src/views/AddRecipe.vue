@@ -83,72 +83,17 @@
                       open-on-focus
                       icon="label"
                       placeholder="Add an ingredient"
+                      maxtags="30"
+                      maxlength="70"
+                      allow-duplicates
+                      ellipsis
                     ></b-taginput>
                   </b-field>
                   <b-field
                     message="Write your cooking instructions/directions here. Must be atleast 10 and maximum 1000 characters"
                     label="Instructions"
                   >
-                    <div>
-                      <editor-menu-bar
-                        :editor="editor"
-                        keep-in-bounds
-                        v-slot="{ commands, isActive}"
-                      >
-                        <div class="level is-marginless has-background-light">
-                          <div class="level-left">
-                            <div class="level-item">
-                              <div class="field has-addons">
-                                <p class="control">
-                                  <button
-                                    class="button"
-                                    :class="{ 'is-active': isActive.bold() }"
-                                    @click.prevent="commands.bold"
-                                  >
-                                    <b-icon icon="format-bold" />
-                                  </button>
-                                </p>
-                                <p class="control">
-                                  <button
-                                    class="button"
-                                    :class="{ 'is-active': isActive.italic() }"
-                                    @click.prevent="commands.italic"
-                                  >
-                                    <b-icon icon="format-italic" />
-                                  </button>
-                                </p>
-                                <p class="control">
-                                  <button
-                                    class="button"
-                                    :class="{ 'is-active': isActive.underline() }"
-                                    @click.prevent="commands.underline"
-                                  >
-                                    <b-icon icon="format-underline" />
-                                  </button>
-                                </p>
-                              </div>
-                            </div>
-                          </div>
-                          <div class="level-right">
-                            <div class="level-item">
-                              <div class="field has-addons">
-                                <p class="control">
-                                  <button class="button" @click.prevent="commands.undo">
-                                    <b-icon icon="undo" />
-                                  </button>
-                                </p>
-                                <p class="control">
-                                  <button class="button" @click.prevent="commands.redo">
-                                    <b-icon icon="redo" />
-                                  </button>
-                                </p>
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                      </editor-menu-bar>
-                      <EditorContent style="max-height:auto" :editor="editor" />
-                    </div>
+                    <TextEditor v-model="recipe.instructions" />
                     <!-- <b-input
                       v-model="recipe.instructions"
                       type="textarea"
@@ -327,7 +272,7 @@
                       icon-right="chevron-right"
                       :disabled="next.disabled"
                       native-type="submit"
-                      @click="nextStep = next"
+                      @click="validate(next)"
                     >Next</b-button>
                     <!-- <button
                       :form="`form-${activeStep}`"
@@ -358,14 +303,7 @@
 <script>
 import { mapActions, mapGetters } from "vuex";
 import { required, minLength } from "vuelidate/lib/validators";
-import { Editor, EditorContent, EditorMenuBar } from "tiptap";
-import {
-  Bold,
-  Italic,
-  Underline,
-  Placeholder,
-  History
-} from "tiptap-extensions";
+import TextEditor from "../components/TextEditor";
 
 export default {
   data() {
@@ -383,15 +321,6 @@ export default {
         instructions: "",
         images: []
       }
-      // editor: new Editor({
-      //   extensions: [
-      //     new Bold(),
-      //     new Italic(),
-      //     new Underline(),
-      //     new HardBreak()
-      //   ],
-      //   content: "tt"
-      // })
     };
   },
   validations: {
@@ -417,32 +346,13 @@ export default {
     ...mapGetters(["getLoggedIn"]),
     diets() {
       return this.$store.getters.getDiets;
-    },
-    editor() {
-      return new Editor({
-        extensions: [
-          new Bold(),
-          new Italic(),
-          new Underline(),
-          new History(),
-          new Placeholder({
-            emptyNodeText: "Prepare and boil for 20 minutes...",
-            showOnlyWhenEditable: true,
-            showOnlyCurrent: true
-          })
-        ],
-        content: this.recipe.instructions
-      });
     }
   },
-  watch: {
-    editor() {}
-  },
+  watch: {},
   methods: {
     ...mapActions(["addRecipe"]),
     async formHandle() {
       this.recipe.images = this.dropFiles;
-      this.recipe.instructions = this.editor.getHTML().toString();
       this.$v.$touch();
       if (!this.$v.$invalid) {
         this.uploading = true;
@@ -478,9 +388,10 @@ export default {
       );
     },
     validate(next) {
-      // this.$refs[`form-${this.activeStep}`].submit();
       this.nextStep = next;
-      //next.action();
+    },
+    goNext() {
+      this.nextStep.action();
     },
     parseTime(str) {
       try {
@@ -496,9 +407,6 @@ export default {
         throw new Error(e);
       }
     },
-    goNext() {
-      this.nextStep.action();
-    },
     checkUpload(files) {
       files.forEach(file => {
         if (file.size >= 10000000) {
@@ -513,11 +421,7 @@ export default {
     }
   },
   components: {
-    EditorContent,
-    EditorMenuBar
-  },
-  beforeDestroy() {
-    this.editor.destroy();
+    TextEditor
   }
 };
 </script>

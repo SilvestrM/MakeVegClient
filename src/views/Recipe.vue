@@ -48,21 +48,42 @@
               <h1 class="title is-italic has-text-weight-normal is-capitalized">{{recipe.name}}</h1>
             </div>
             <div v-if="$store.state.loggedIn" class="level-item">
-              <b-tooltip
-                type="is-light"
-                :delay="500"
-                position="is-bottom"
-                :label="liked === true ? 'Remove Favorite' : 'Add Favorite'"
-                animated
-              >
-                <button
-                  @click="toggleLike()"
-                  class="button is-inverted is-borderless is-text is-flex is-aligned-center is-justified-center"
-                  :class="{'is-info': liked === true}"
+              <div class="buttons attached">
+                <b-tooltip
+                  type="is-light"
+                  :delay="500"
+                  position="is-bottom"
+                  :label="liked === true ? 'Remove Favorite' : 'Add Favorite'"
+                  animated
                 >
-                  <b-icon :icon="liked === true ? 'heart' : 'heart-outline'"></b-icon>
-                </button>
-              </b-tooltip>
+                  <button
+                    @click="toggleLike()"
+                    class="button is-inverted is-borderless is-text is-flex is-aligned-center is-justified-center"
+                    :class="{'is-info': liked === true}"
+                  >
+                    <b-icon :icon="liked === true ? 'heart' : 'heart-outline'"></b-icon>
+                  </button>
+                </b-tooltip>
+                <div
+                  v-if="$store.getters.isLoggedIn ? $store.state.loggedIn._id === recipe.author ? true : false : false"
+                >
+                  <b-tooltip
+                    type="is-light"
+                    :delay="500"
+                    position="is-bottom"
+                    label="Edit recipe"
+                    animated
+                  >
+                    <router-link
+                      tag="button"
+                      :to="`/recipe/${recipe._id}/update`"
+                      class="button is-text"
+                    >
+                      <b-icon icon="pencil"></b-icon>
+                    </router-link>
+                  </b-tooltip>
+                </div>
+              </div>
             </div>
           </div>
           <div class="level-item">
@@ -102,13 +123,17 @@
             </div>
 
             <div class="content has-text-left">
-              <p>{{recipe.description}}</p>
+              <p class="has-text-justified">{{recipe.description}}</p>
             </div>
             <hr />
             <div class="content has-text-left">
               <h3 class="subtitle is-5">Ingredients</h3>
               <ul>
-                <li v-for="(ing, i) in recipe.ingredients" :key="i">{{ing.toString()}}</li>
+                <li
+                  style="word-wrap: break-word"
+                  v-for="(ing, i) in recipe.ingredients"
+                  :key="i"
+                >{{ing.toString()}}</li>
               </ul>
             </div>
           </div>
@@ -125,8 +150,8 @@
             </div>
 
             <div class="content has-text-left">
-              <h3 class="subtitle is-5">Directions</h3>
-              <p v-html="recipe.instructions"></p>
+              <h3 class="subtitle is-5">Instructions</h3>
+              <p class="has-text-justified" v-html="recipe.instructions"></p>
             </div>
             <figure class="image">
               <img
@@ -144,7 +169,7 @@
         <h2 class="title is-5">Reviews</h2>
       </div>
       </div>-->
-      <b-loading :active.sync="isLoading" :is-full-page="false"></b-loading>
+      <b-loading :active.sync="isLoading" closable :is-full-page="false"></b-loading>
     </div>
   </span>
 </template>

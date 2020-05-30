@@ -25,6 +25,7 @@
     >{{new Date(user.updatedAt).toLocaleDateString()}}</b-field>
     <hr />
     <div class="buttons is-centered">
+      <button @click="resetPw()" class="button is-light" type="button">Reset Password</button>
       <button class="button is-primary" type="submit">Update</button>
     </div>
   </form>
@@ -43,7 +44,10 @@ export default {
     };
   },
   methods: {
-    ...mapActions(["updateUser"]),
+    ...mapActions(["updateUser", "resetPassword"]),
+    async resetPw() {
+      await this.resetPassword(this.user.email);
+    },
     async formHandle(data) {
       data._id = this.user._id;
       data.email = this.user.email;

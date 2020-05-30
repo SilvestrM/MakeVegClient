@@ -136,6 +136,21 @@ const users = {
                 })
         },
 
+        async resetPassword(...data) {
+            await axios.post(`/api/auth/reset`, { email: data[1] })
+                .then(() => {
+                    this.$buefy.toast.open({
+                        message: `An email with new passsword has been sent to the provided email.`,
+                        type: "is-info"
+                    });
+                })
+                .catch(reason => {
+                    Toast.open({
+                        message: `An error occured: ${reason.response.data}`,
+                        type: 'is-danger'
+                    })
+                })
+        },
         async deleteUser({ commit, state, rootState }, id) {
             if (id !== rootState.loggedIn._id) {
                 await axios.delete(`${state.url}${id}`, { headers: { Authorization: `Bearer ${localStorage.jwt}` } })

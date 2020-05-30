@@ -98,6 +98,13 @@ export default new Vuex.Store({
         getLoggedIn(state) {
             return state.loggedIn
         },
+        getLoggedInId(state) {
+            if (state.loggedIn) {
+                return state.loggedIn._id
+            } else {
+                return false
+            }
+        },
         isLoggedIn(state) {
             return state.loggedIn ? true : false
         }

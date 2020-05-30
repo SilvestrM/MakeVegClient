@@ -70,13 +70,18 @@
                 open-on-focus
                 icon="label"
                 placeholder="Add an ingredient"
+                maxtags="30"
+                maxlength="100"
+                allow-duplicates
+                ellipsis
               ></b-taginput>
             </b-field>
             <b-field
               label="Instructions"
               message="Write your cooking instructions/directions here. Must be atleast 10 and maximum 1000 characters"
             >
-              <b-input
+              <TextEditor v-model="updatedData.instructions" />
+              <!-- <b-input
                 v-model="updatedData.instructions"
                 type="textarea"
                 validation-message="Must be between 10 and 1000 characters"
@@ -84,7 +89,7 @@
                 maxlength="1000"
                 placeholder="Recipe Instructions"
                 required
-              ></b-input>
+              ></b-input>-->
             </b-field>
           </div>
         </div>
@@ -167,7 +172,12 @@
 
 <script>
 import { mapActions, mapGetters } from "vuex";
+import TextEditor from "../components/TextEditor";
+
 export default {
+  components: {
+    TextEditor
+  },
   data() {
     return {
       uploading: false,

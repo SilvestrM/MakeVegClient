@@ -19,6 +19,12 @@
             required
           ></b-input>
         </b-field>
+        <b-field>
+          <a
+            @click.prevent="resetDialog()"
+            class="is-italic is-size-7"
+          >Have you forgotten your password?</a>
+        </b-field>
         <!-- <b-field message="You are always remembered">
           <b-checkbox value="true" disabled>Remember me</b-checkbox>
         </b-field>-->
@@ -47,7 +53,7 @@ export default {
     ...mapGetters(["getLoggedIn"])
   },
   methods: {
-    ...mapActions(["login"]),
+    ...mapActions(["login", "resetPassword"]),
     async formHandle() {
       if (this.pass.length > 0) {
         await this.login({ email: this.email, pass: this.pass })
@@ -76,6 +82,23 @@ export default {
           type: "is-warning"
         });
       }
+    },
+    resetDialog() {
+      this.$buefy.dialog.prompt({
+        title: "Password reset",
+        message: `<p><strong>Forgot your password?</strong></p> <p>Type your account email below. If it matches an registered user's email, email with new password will be sent.</p>`,
+        confirmText: "Send Reset Instructions",
+        inputAttrs: {
+          placeholder: "jon.doe@example.com",
+          type: "email",
+          required: true
+        },
+        type: "is-info",
+        hasIcon: true,
+        onConfirm: async value => {
+          await this.resetPassword(value);
+        }
+      });
     }
   }
 };
