@@ -55,8 +55,13 @@
     }
 }
 
+.is-error {
+    border-radius: $radius;
+    border: 1px solid $danger;
+}
+
 .ProseMirror {
     @extend .textarea;
-    overflow-y: visible;
+    overflow-y: scroll;
     height: auto;
 }

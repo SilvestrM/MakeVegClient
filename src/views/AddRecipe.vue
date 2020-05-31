@@ -70,6 +70,7 @@
                     >
                       <div class="is-flex is-justified-center">
                         <b-button class @click="recipe.cookTime=new Date(0,0)">Clear</b-button>
+                        <!-- <b-button type="is-primary" @click="close()">Confirm</b-button> -->
                       </div>
                     </b-clockpicker>
                   </b-field>
@@ -90,10 +91,11 @@
                     ></b-taginput>
                   </b-field>
                   <b-field
-                    message="Write your cooking instructions/directions here. Must be atleast 10 and maximum 1000 characters"
+                    :message="[`Write your cooking instructions/directions here. Maximum 1000 characters`,` ${recipe.instructions.length} / 1000`]"
                     label="Instructions"
+                    :type="{'is-danger' : recipe.instructions.length >= 1000}"
                   >
-                    <TextEditor v-model="recipe.instructions" />
+                    <TextEditor :max="1000" v-model="recipe.instructions" />
                     <!-- <b-input
                       v-model="recipe.instructions"
                       type="textarea"
@@ -302,7 +304,7 @@
 
 <script>
 import { mapActions, mapGetters } from "vuex";
-import { required, minLength } from "vuelidate/lib/validators";
+import { required, minLength, maxLength } from "vuelidate/lib/validators";
 import TextEditor from "../components/TextEditor";
 
 export default {
@@ -326,15 +328,18 @@ export default {
   validations: {
     recipe: {
       name: {
-        required
+        required,
+        minLength: minLength(1),
+        maxLength: maxLength(50)
       },
       description: {
         required,
-        minLength: minLength(5)
+        minLength: minLength(5),
+        maxLength: maxLength(500)
       },
       instructions: {
         required,
-        minLength: minLength(10)
+        maxLength: maxLength(1000)
       },
       images: {
         minLength: minLength(1),
