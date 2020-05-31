@@ -23,7 +23,7 @@
                   class="image is-16by9"
                   style="max-height:10rem"
                 >
-                  <img :src="item" />
+                  <img :alt="`${recipe.name} photo`" :src="item" />
                 </a>
               </b-carousel-item>
               <template slot="overlay">

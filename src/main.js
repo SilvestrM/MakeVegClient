@@ -10,6 +10,8 @@ import Buefy from 'buefy'
 Vue.use(Buefy, {
   defaultToastDuration: 4000,
   defaultToastPosition: 'is-top',
+  defaultNotificationDuration: 4000,
+  defaultNotificationPosition: 'is-top',
   defaultTooltipAnimated: true
 })
 

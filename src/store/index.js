@@ -6,7 +6,7 @@ import recipes from './modules/recipes'
 import users from './modules/users'
 import diets from './modules/diets'
 
-import { ToastProgrammatic as Toast } from 'buefy'
+import { ToastProgrammatic as Toast, NotificationProgrammatic as Notify } from 'buefy'
 
 Vue.use(Vuex)
 
@@ -42,11 +42,15 @@ export default new Vuex.Store({
                         commit("loginChange", user)
                     })
                     .catch(reason => {
-                        if (reason.response.status === 400) {
+                        if (reason.response.status === 400 || reason.response.status === 401) {
                             localStorage.removeItem("jwt");
+                            Notify.open({
+                                message: `You have been logged out`,
+                                type: 'is-info'
+                            })
                         } else {
                             Toast.open({
-                                message: `Error fetching user: ${reason}`,
+                                message: `An error occured: ${reason}`,
                                 type: 'is-danger'
                             })
                         }

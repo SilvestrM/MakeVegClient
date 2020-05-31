@@ -5,6 +5,8 @@
       <p v-show="!isLoading" class="image is-4by3">
         <!-- <img :src="imgData" /> -->
         <ImageLazy
+          :title="recipe.name"
+          :alt="`${recipe.name} photo`"
           :src="imgData"
           :delay="400"
           @loading="isLoading = true"
