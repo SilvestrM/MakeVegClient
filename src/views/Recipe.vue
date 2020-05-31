@@ -23,6 +23,12 @@
                   class="image is-16by9"
                   style="max-height:10rem"
                 >
+                  <!-- <ImageLazy
+                    :alt="`${recipe.name} photo`"
+                    :src="item"
+                    @loading="isLoading = true"
+                    @load="isLoading = false"
+                  />-->
                   <img :alt="`${recipe.name} photo`" :src="item" />
                 </a>
               </b-carousel-item>
@@ -260,7 +266,7 @@ export default {
   mounted() {
     this.$refs.imgContainer.style.minHeight =
       (this.$refs.imgContainer.getBoundingClientRect().width / 16) * 9 + "px";
-    // await this.fetchRecipe(this.$route.params.id);
+    // // await this.fetchRecipe(this.$route.params.id);
   }
 };
 </script>
