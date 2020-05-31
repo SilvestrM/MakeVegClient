@@ -71,10 +71,12 @@
           </template>
         </template>
       </b-navbar>
-      <router-view
-        @clickedLogin="isLoginModalActive = true"
-        @clickedSignUp="isRegisterModalActive = true"
-      />
+      <transition :duration="86" name="fade" mode="out-in">
+        <router-view
+          @clickedLogin="isLoginModalActive = true"
+          @clickedSignUp="isRegisterModalActive = true"
+        />
+      </transition>
     </div>
     <footer class="footer">
       <div class="container">

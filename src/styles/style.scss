@@ -25,6 +25,10 @@
     background: $info;
 }
 
+.res-image {
+    height: calc(((100vw - (2 *#{$gap}px)) / 16) * 9);
+}
+
 .modal-card-foot {
     justify-content: center;
 }

@@ -2,12 +2,12 @@
   <span class>
     <div
       class="section blur-bcg"
-      style="padding: 1rem"
+      style="padding: 1rem; "
       :style="`background-image: url(${photos[activeImage]})`"
     >
       <div class="container">
         <div class="columns is-centered">
-          <div class="column is-full">
+          <div ref="imgContainer" class="column is-full">
             <b-carousel
               v-model="activeImage"
               :autoplay="false"
@@ -253,7 +253,13 @@ export default {
       vm.isLoading = false;
     });
   },
-  async created() {
+  updated() {
+    this.$refs.imgContainer.style.minHeight =
+      (this.$refs.imgContainer.getBoundingClientRect().width / 16) * 9 + "px";
+  },
+  mounted() {
+    this.$refs.imgContainer.style.minHeight =
+      (this.$refs.imgContainer.getBoundingClientRect().width / 16) * 9 + "px";
     // await this.fetchRecipe(this.$route.params.id);
   }
 };

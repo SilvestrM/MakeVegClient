@@ -114,7 +114,7 @@ const recipes = {
                 })
                 .catch(reason => {
                     Toast.open({
-                        message: `Error adding data: ${reason}`,
+                        message: `Error adding data: ${reason.response.data}`,
                         type: 'is-danger'
                     })
                     throw reason;
