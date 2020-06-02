@@ -193,7 +193,7 @@
                   <Recipe :recipe="recipe" />
                 </router-link>
               </div>
-              <b-loading can-cancel :active.sync="isLoading"></b-loading>
+              <b-loading :is-full-page="false" can-cancel :active.sync="isLoading"></b-loading>
               <!-- <b-skeleton :active="isLoading" height="20rem"></b-skeleton> -->
             </div>
             <b-message v-if="recipes.length === 0 && !isLoading">No results</b-message>

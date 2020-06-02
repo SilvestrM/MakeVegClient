@@ -37,6 +37,10 @@
     justify-content: center;
 }
 
+.is-justified-right {
+    justify-content: flex-end;
+}
+
 .is-aligned-center {
     align-items: center;
 }
@@ -49,10 +53,14 @@
     border: none !important;
 }
 
-.table {
-    td {
-        vertical-align: middle;
+.table-wrapper {
+    .table {
+        td {
+            vertical-align: middle;
+            align-items: center;
+        }
     }
+    overflow: hidden;
 }
 
 .is-error {

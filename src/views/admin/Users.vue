@@ -25,26 +25,34 @@
           <b-table-column field="email" label="Email">
             <span class>{{ props.row.email }}</span>
           </b-table-column>
-          <b-table-column v-if="true" field="_id" label="Controls" numeric>
+          <b-table-column
+            class="is-flex is-justified-right"
+            v-if="true"
+            field="_id"
+            label="Controls"
+            numeric
+          >
             <!-- <button class="button is-text" @click="toggle(props.row)">
               <b-icon icon="pencil"></b-icon>
             </button>-->
-            <b-tooltip
-              type="is-light"
-              :delay="500"
-              position="is-bottom"
-              label="User profile"
-              animated
-            >
-              <router-link class="button is-text" :to="`/user/${props.row._id}`">
-                <b-icon icon="account"></b-icon>
-              </router-link>
-            </b-tooltip>
-            <b-tooltip type="is-light" :delay="500" position="is-bottom" label="Delete" animated>
-              <button class="button is-text" @click="deleteDialog(props.row)">
-                <b-icon icon="delete"></b-icon>
-              </button>
-            </b-tooltip>
+            <div class="buttons row-controls">
+              <b-tooltip
+                type="is-light"
+                :delay="500"
+                position="is-bottom"
+                label="User profile"
+                animated
+              >
+                <router-link class="button is-text" :to="`/user/${props.row._id}`">
+                  <b-icon icon="account"></b-icon>
+                </router-link>
+              </b-tooltip>
+              <b-tooltip type="is-light" :delay="500" position="is-bottom" label="Delete" animated>
+                <button class="button is-text" @click="deleteDialog(props.row)">
+                  <b-icon icon="delete"></b-icon>
+                </button>
+              </b-tooltip>
+            </div>
           </b-table-column>
         </template>
 

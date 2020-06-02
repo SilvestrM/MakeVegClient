@@ -9,13 +9,16 @@
 
     <b-field horizontal expanded label="Email:">{{user.email}}</b-field>
     <b-field horizontal expanded label="Diets:">
-      <div class="tags">
+      <div v-if="user.settings.diets.length > 0" class="tags">
         <span
           class="tag"
           v-for="(diet, i) in user.settings.diets.slice(0,5)"
           :index="i"
           :key="i"
         >{{diet}}</span>
+      </div>
+      <div v-else class>
+        <span class="is-italic has-text-grey">None provided</span>
       </div>
     </b-field>
     <b-field horizontal expanded label="Created:">{{new Date(user.createdAt).toLocaleDateString()}}</b-field>
