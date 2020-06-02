@@ -142,9 +142,7 @@ export default {
             this.deleteRecipe(recipe._id);
           } else {
             this.$buefy.toast.open({
-              duration: 3000,
               message: `The entered name does not match the recipe's name`,
-              position: "is-bottom",
               type: "is-warning"
             });
           }

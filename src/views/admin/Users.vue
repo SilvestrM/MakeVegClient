@@ -80,6 +80,7 @@
 <script>
 import { mapActions, mapGetters } from "vuex";
 import UpdateUserRow from "../../components/UpdateUserRow";
+
 export default {
   components: { UpdateUserRow },
   data() {
@@ -122,13 +123,33 @@ export default {
         message: `Are you sure you want to <b>delete <em>${user.firstName} ${user.lastName}</em></b>? This action cannot be undone. To delete this user please type down their full name below.`,
         confirmText: "Delete User",
         inputAttrs: {
-          placeholder: `${user.firstName} ${user.lastName}`
+          placeholder: `${user.firstName} ${user.lastName}`,
+          required: true
         },
         type: "is-danger",
         hasIcon: true,
-        onConfirm: value => {
+        closeOnConfirm: false,
+        onConfirm: async value => {
           if (value === user.firstName + " " + user.lastName) {
-            this.deleteUser(user._id);
+            this.$buefy.dialog.confirm({
+              title: "Deleting User",
+              message: `Do you want to keep user's recipes?`,
+              confirmText: "No, delete all",
+              cancelText: "Yes, keep Recipes",
+              type: "is-danger",
+              hasIcon: true,
+              focusOn: "cancel",
+              closeOnConfirm: false,
+              trapFocus: true,
+              onConfirm: async ({ close }) => {
+                await this.deleteUser({ _id: user._id, keepRecipes: false });
+                close();
+              },
+              onCancel: async ({ close }) => {
+                await this.deleteUser({ _id: user._id, keepRecipes: true });
+                close();
+              }
+            });
           } else {
             this.$buefy.toast.open({
               message: `The entered name does not match the user's name`,
