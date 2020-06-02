@@ -2,9 +2,10 @@
   <article class="card">
     <figure class="card-image">
       <b-skeleton height="15rem" :active="isLoading"></b-skeleton>
-      <p v-show="!isLoading" class="image is-4by3">
+      <figure v-show="!isLoading" class="image is-4by3">
         <!-- <img :src="imgData" /> -->
         <ImageLazy
+          v-if="recipe.images.length > 0"
           :title="recipe.name"
           :alt="`${recipe.name} photo`"
           :src="imgData"
@@ -12,7 +13,7 @@
           @loading="isLoading = true"
           @load="isLoading = false"
         />
-      </p>
+      </figure>
       <div class="tags" v-show="!isLoading" style="position:absolute;top:0; padding: 0.25em .5em">
         <span
           v-for="(type, index) in recipe.dietTypes"

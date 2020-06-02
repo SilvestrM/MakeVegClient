@@ -2,7 +2,6 @@ import { ToastProgrammatic as Toast } from 'buefy'
 import axios from 'axios'
 
 const users = {
-    strict: process.env.NODE_ENV !== 'production',
     state: {
         url: "/api/users/",
         users: [],
@@ -32,12 +31,6 @@ const users = {
         updateUserFavorites: (state, data) => {
             state.user.favorites = data
         },
-        addFavorite: (state, data) => {
-            state.user.favorites.push(data)
-        },
-        removeFavorite: (state, data) => {
-            state.user.favorites.splice(state.user.favorites.findIndex(fav => fav === data), 1)
-        }
     },
     actions: {
         async fetchFindUsers({ commit, state }, query) {
@@ -101,30 +94,22 @@ const users = {
                     })
                 }).catch(reason => {
                     Toast.open({
-                        duration: 5000,
                         message: `Error updating user: ${reason.response.data}`,
                         type: 'is-danger'
                     })
                     throw reason;
                 })
         },
-        // async toggleFavorite({ dispatch, rootState }, data) {
-        //     const favorites = rootState.loggedIn.favorites
-        //     if (!favorites.includes(data)) {
-        //         favorites.push(data)
-        //         await dispatch('updateFavorites', favorites)
-        //     }
-        // },
 
         async updateFavorites({ commit, state, rootState }, data) {
-            commit("setUser", rootState.loggedIn)
-            if (!state.user.favorites.includes(data)) {
-                commit("addFavorite", data)
+            const user = rootState.loggedIn
+            if (!user.favorites.includes(data)) {
+                user.favorites.push(data)
             } else {
-                commit("removeFavorite", data)
+                user.favorites.splice(user.favorites.findIndex(fav => fav === data), 1)
             }
             if (!data) return
-            await axios.patch(`${state.url}/favorites`, { uid: state.user._id, data: state.user.favorites }, { headers: { Authorization: `Bearer ${localStorage.jwt}` } })
+            await axios.patch(`${state.url}/favorites`, { uid: user._id, data: user.favorites }, { headers: { Authorization: `Bearer ${localStorage.jwt}` } })
                 .then(res => {
                     commit("loginChange", res.data)
                 })

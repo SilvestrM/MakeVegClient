@@ -13,7 +13,7 @@ Vue.use(Vuex)
 //TODO fix states
 
 export default new Vuex.Store({
-    strict: process.env.NODE_ENV !== 'production',
+    // strict: process.env.NODE_ENV !== 'production',
     state: {
         url: '/api',
         loggedIn: null,
