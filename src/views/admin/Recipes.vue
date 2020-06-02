@@ -69,10 +69,10 @@
         </template>
 
         <template slot="detail" slot-scope="props">
-          <!-- <b-field
+          <b-field
             horizontal
             label="Author:"
-          >{{`${getUser(props.row.author).firstName} ${getUser(props.row.author).lastName}`}}</b-field>-->
+          >{{`${getUser(props.row.author).firstName} ${getUser(props.row.author).lastName}`}}</b-field>
           <b-field horizontal label="Added:">{{new Date(props.row.createdAt).toLocaleDateString()}}</b-field>
           <b-field
             horizontal
@@ -116,7 +116,7 @@ export default {
   },
   async mounted() {},
   methods: {
-    ...mapActions(["fetchFindRecipes", "fetchUser", "deleteRecipe"]),
+    ...mapActions(["fetchFindRecipes", "fetchFindUsers", "deleteRecipe"]),
     async search(query) {
       if (query.length >= 1) {
         this.isLoading = true;

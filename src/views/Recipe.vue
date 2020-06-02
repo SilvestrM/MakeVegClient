@@ -104,12 +104,16 @@
           <div class="level-right">
             <div class="level-item">
               <p>
-                Created on
+                Added on
                 {{`${new Date(recipe.createdAt).toLocaleDateString()} `}}
-                by
-                <router-link :to="`/user/${author._id}`">
-                  <span class="is-italic">{{`${author.firstName} ${author.lastName}`}}</span>
-                </router-link>
+                <template
+                  v-if="author"
+                >
+                  by
+                  <router-link :to="`/user/${author._id}`">
+                    <span class="is-italic">{{`${author.firstName} ${author.lastName}`}}</span>
+                  </router-link>
+                </template>
               </p>
             </div>
           </div>
