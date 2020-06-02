@@ -85,7 +85,10 @@
             <router-link to="/about">About</router-link>
           </div>
           <div class="column is-two-thirds">
-            <p class="has-text-right is-italic">//</p>
+            <p class="has-text-right is-italic">
+              Send your opinions to
+              <a href="mailto:silvestr@screation.site">silvestr@screation.site</a>
+            </p>
           </div>
         </div>
       </div>

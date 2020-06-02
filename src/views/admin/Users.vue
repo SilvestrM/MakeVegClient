@@ -131,25 +131,26 @@ export default {
         closeOnConfirm: false,
         onConfirm: async value => {
           if (value === user.firstName + " " + user.lastName) {
-            this.$buefy.dialog.confirm({
-              title: "Deleting User",
-              message: `Do you want to keep user's recipes?`,
-              confirmText: "No, delete all",
-              cancelText: "Yes, keep Recipes",
-              type: "is-danger",
-              hasIcon: true,
-              focusOn: "cancel",
-              closeOnConfirm: false,
-              trapFocus: true,
-              onConfirm: async ({ close }) => {
-                await this.deleteUser({ _id: user._id, keepRecipes: false });
-                close();
-              },
-              onCancel: async ({ close }) => {
-                await this.deleteUser({ _id: user._id, keepRecipes: true });
-                close();
-              }
-            });
+            await this.deleteUser(user._id);
+            // this.$buefy.dialog.confirm({
+            //   title: "Deleting User",
+            //   message: `Do you want to keep user's recipes?`,
+            //   confirmText: "No, delete all",
+            //   cancelText: "Yes, keep Recipes",
+            //   type: "is-danger",
+            //   hasIcon: true,
+            //   focusOn: "cancel",
+            //   closeOnConfirm: false,
+            //   trapFocus: true,
+            //   onConfirm: async ({ close }) => {
+
+            //     close();
+            //   },
+            //   onCancel: async ({ close }) => {
+            //     await this.deleteUser({ _id: user._id, keepRecipes: true });
+            //     close();
+            //   }
+            // });
           } else {
             this.$buefy.toast.open({
               message: `The entered name does not match the user's name`,

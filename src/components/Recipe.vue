@@ -22,7 +22,7 @@
         >{{type}}</span>
       </div>
     </figure>
-    <div class="card-header">
+    <div class="card-header is-shadowless">
       <div class="card-header-title is-centered">
         <b-skeleton height="2rem" :active="isLoading"></b-skeleton>
         <h3 v-show="!isLoading" class="title is-5 is-capitalized">{{recipe.name}}</h3>
@@ -101,13 +101,15 @@ export default {
   object-fit: cover !important;
 }
 .card {
+  box-shadow: 0 0.5em 1em -0.125em rgba($grey, 0.1),
+    0 0px 0 1px rgba($grey, 0.02);
   .card-content {
     min-height: 8rem;
+    padding: 0 1em;
   }
   transition: $speed;
   &:hover {
-    box-shadow: 0 0.5em 1em -0.125em rgba($black, 0.1),
-      0 0px 0 1px rgba($black, 0.02);
+    box-shadow: 0 0.5em 1em -0.125em rgba($black, 0.1) !important;
     transition: $speed;
   }
 }
