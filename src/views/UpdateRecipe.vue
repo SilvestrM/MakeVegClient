@@ -239,6 +239,13 @@ export default {
         });
         return;
       }
+      if (this.updatedData.instructions.length >= 1000) {
+        this.$buefy.toast.open({
+          message: `Instructions can't be longer than 1000 characters!`,
+          type: "is-danger"
+        });
+        return;
+      }
       this.updatedData.images = this.images;
       this.updatedData.newImages = this.dropFiles;
       this.updatedData.removedImages = this.removedImages;

@@ -71,6 +71,7 @@ export default new Vuex.Store({
                         message: `${reason.response.data}`,
                         type: 'is-danger'
                     })
+                    throw new Error()
                 })
         },
         async login({ dispatch }, cred) {
@@ -83,6 +84,7 @@ export default new Vuex.Store({
                         message: `Error: ${reason.response.data}`,
                         type: 'is-danger'
                     })
+                    throw new Error()
                 })
         },
         async logout({ commit }) {

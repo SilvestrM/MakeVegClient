@@ -6,7 +6,7 @@
       </header>
       <section class="modal-card-body">
         <b-field label="Email">
-          <b-input v-model="email" type="email" placeholder="Your email" required></b-input>
+          <b-input autocomplete v-model="email" type="email" placeholder="Your email" required></b-input>
         </b-field>
 
         <b-field label="Password">
@@ -76,9 +76,7 @@ export default {
           .catch();
       } else {
         this.$buefy.toast.open({
-          duration: 5000,
           message: `Please enter valid password`,
-          position: "is-bottom",
           type: "is-warning"
         });
       }

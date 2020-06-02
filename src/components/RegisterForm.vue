@@ -1,5 +1,5 @@
 <template>
-  <form action="post" @submit.prevent="formHandle">
+  <form id="reg" action="post" @submit.prevent="formHandle">
     <div class="modal-card" style="max-width:40rem;">
       <header class="modal-card-head">
         <p class="modal-card-title">Register</p>
@@ -18,12 +18,24 @@
           </div>
           <div class="column is-half">
             <b-field label="Last name">
-              <b-input v-model="newUser.lastName" type="text" placeholder="Your last name" required></b-input>
+              <b-input
+                form="reg"
+                v-model="newUser.lastName"
+                type="text"
+                placeholder="Your last name"
+                required
+              ></b-input>
             </b-field>
           </div>
         </div>
         <b-field label="Email">
-          <b-input v-model="newUser.email" type="email" placeholder="Your email" required></b-input>
+          <b-input
+            autocomplete
+            v-model="newUser.email"
+            type="email"
+            placeholder="Your email"
+            required
+          ></b-input>
         </b-field>
 
         <b-field label="Password">

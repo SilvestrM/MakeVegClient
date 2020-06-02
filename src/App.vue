@@ -96,7 +96,6 @@
     <b-modal
       :active.sync="isLoginModalActive"
       has-modal-card
-      custom-class
       trap-focus
       aria-role="dialog"
       aria-modal
