@@ -1,6 +1,9 @@
 <template>
   <div>
-    <div class="hero is-info">
+    <div
+      :style="{'background':`url(${publicPath}images/tactile-noise.jpg) repeat center`}"
+      class="hero is-info"
+    >
       <div class="hero-body">
         <div class="container">
           <h1 class="title">{{`${user.firstName} ${user.lastName}`}}</h1>
@@ -70,6 +73,7 @@ import { mapActions, mapGetters } from "vuex";
 export default {
   data() {
     return {
+      publicPath: process.env.BASE_URL,
       isLoading: false
     };
   },

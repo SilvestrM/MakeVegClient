@@ -30,7 +30,11 @@
         </div>
       </div>
     </div>
-    <div class="section has-background-white-bis" style="padding-top:4rem">
+    <div
+      class="section has-background-white-bis"
+      style="padding-top:4rem"
+      :style="{'background':`url(${publicPath}images/so-white.png) repeat center`}"
+    >
       <div class="columns is-centered">
         <div class="column is-half">
           <b-field grouped group-multiline>
