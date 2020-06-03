@@ -16,7 +16,7 @@
         :loading="isLoading"
       >
         <template slot-scope="props">
-          <b-table-column field="name" label="Name">
+          <b-table-column field="name" label="Name" sortable>
             <button class="button is-text" @click="toggle(props.row)">{{`${props.row.name}`}}</button>
           </b-table-column>
           <!-- <b-table-column field="email" label="Email">

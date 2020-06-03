@@ -16,13 +16,13 @@
         :loading="isLoading"
       >
         <template slot-scope="props">
-          <b-table-column field="lastName" label="Name">
+          <b-table-column field="firstName" label="Name" sortable>
             <button
               class="button is-text"
               @click="toggle(props.row)"
             >{{`${props.row.firstName} ${props.row.lastName}`}}</button>
           </b-table-column>
-          <b-table-column field="email" label="Email">
+          <b-table-column field="email" label="Email" sortable>
             <span class>{{ props.row.email }}</span>
           </b-table-column>
           <b-table-column

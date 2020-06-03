@@ -84,8 +84,9 @@
           <div class="column is-one-third">
             <router-link to="/about">About</router-link>
           </div>
+          <hr class="is-mobile is-marginless" />
           <div class="column is-two-thirds">
-            <p class="has-text-right is-italic">
+            <p class="has-text-right-tablet is-italic">
               Send your opinions to
               <a href="mailto:silvestr@screation.site">silvestr@screation.site</a>
             </p>

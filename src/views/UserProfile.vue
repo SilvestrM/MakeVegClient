@@ -39,21 +39,21 @@
               :loading="isLoading"
             >
               <template slot-scope="props">
-                <b-table-column field="name" label="Recipe">
+                <b-table-column field="name" label="Recipe" sortable>
                   <router-link :to="`/recipe/${props.row._id}`">{{ props.row.name }}</router-link>
                 </b-table-column>
                 <b-table-column field="dietTypes" label="Diets">
                   <div class="tags">
                     <span
-                      class="tag"
+                      class="tag is-info"
                       v-for="(diet, i) in props.row.dietTypes.slice(0,5)"
                       :index="i"
                       :key="i"
                     >{{diet}}</span>
                   </div>
                 </b-table-column>
-                <b-table-column field="date" label="Date added" numeric>
-                  <span class="tag is-info">{{ new Date(props.row.createdAt).toLocaleDateString() }}</span>
+                <b-table-column field="createdAt" label="Date added" sortable numeric>
+                  <span class>{{ new Date(props.row.createdAt).toLocaleDateString() }}</span>
                 </b-table-column>
                 <b-table-column
                   class="is-flex is-justified-right"
