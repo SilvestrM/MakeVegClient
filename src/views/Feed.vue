@@ -61,9 +61,11 @@
                       <b-icon :icon="props.open ? 'chevron-down' : 'chevron-up'"></b-icon>
                     </div>
                   </template>
-                  <b-taglist v-show="!filtersOpen">
-                    <b-tag type="is-primary" v-for="(diet, i) in filters" :key="i">{{diet}}</b-tag>
-                  </b-taglist>
+                  <transition :duration="86" name="fade">
+                    <b-taglist v-show="!filtersOpen">
+                      <b-tag type="is-primary" v-for="(diet, i) in filters" :key="i">{{diet}}</b-tag>
+                    </b-taglist>
+                  </transition>
                 </b-field>
                 <b-field rounded position="is-centered">
                   <b-taginput
