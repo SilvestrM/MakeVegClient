@@ -4,112 +4,118 @@
       <div class="is-flex is-justified-center">
         <h1 class="title is-4">Adding a new recipe</h1>
       </div>
-      <form ref="form" action="post" @submit.prevent="formHandle">
+      <form id="form-main" ref="form" action="post" @submit.prevent="formHandle">
         <b-steps style="padding-top:2rem" v-model="activeStep">
           <hr class="is-marginless" />
           <b-step-item step="1" icon="clipboard-text" label="Description">
             <div class="columns is-centered">
               <div class="column is-half is-narrow">
-                <form action="post" id="form-0" @submit.prevent="goNext()">
-                  <b-field label="Name" message="Your recipe's name. Maximum 50 characters">
-                    <b-input
-                      v-model="recipe.name"
-                      minlength="1"
-                      maxlength="50"
-                      :has-counter="false"
-                      type="text"
-                      placeholder="Vegetable Soup"
-                      validation-message="Must be between 1 and 50 characters"
-                      required
-                    ></b-input>
-                  </b-field>
-                  <b-field
-                    label="Diets"
-                    message="Recipe diet tags. Choose those that best describe the recipe."
-                  >
-                    <b-taginput
-                      v-model="recipe.dietTypes"
-                      :data="diets"
-                      autocomplete
-                      :allow-new="false"
-                      open-on-focus
-                      icon="label"
-                      placeholder="Add a diet"
-                      @typing="getDiets"
-                    ></b-taginput>
-                  </b-field>
-                  <b-field
-                    message="Describe your recipe here. Maximum 500 characters"
-                    label="Description"
-                  >
-                    <b-input
-                      required
-                      min="10"
-                      v-model="recipe.description"
-                      type="textarea"
-                      minlength="1"
-                      maxlength="500"
-                      placeholder="Lovely soup..."
-                      validation-message="Must be between 1 and 500 characters"
-                      spellcheck
-                    ></b-input>
-                  </b-field>
-                </form>
+                <b-field
+                  :type="{'is-danger' : errors.name}"
+                  label="Name"
+                  :message="[`Your recipe's name. Maximum 50 characters`,
+                     {'Must be minimum of 3 characters!': errors.name}]"
+                >
+                  <b-input
+                    @blur="validate()"
+                    v-model="recipe.name"
+                    minlength="1"
+                    maxlength="50"
+                    :has-counter="false"
+                    type="text"
+                    placeholder="Vegetable Soup"
+                    validation-message="Must be between 1 and 50 characters"
+                    required
+                  ></b-input>
+                </b-field>
+                <b-field
+                  :type="{'is-danger' : errors.diets}"
+                  label="Diets"
+                  :message="['Recipe diet tags. Choose those that best describe the recipe.',{'You need to choose atleast one!' : errors.diets}]"
+                >
+                  <b-taginput
+                    @blur="validate()"
+                    v-model="recipe.dietTypes"
+                    :data="diets"
+                    autocomplete
+                    :allow-new="false"
+                    open-on-focus
+                    icon="label"
+                    placeholder="Add a diet"
+                    @typing="getDiets"
+                  ></b-taginput>
+                </b-field>
+                <b-field
+                  message="Describe your recipe here. Maximum 500 characters"
+                  label="Description"
+                >
+                  <b-input
+                    required
+                    min="10"
+                    v-model="recipe.description"
+                    type="textarea"
+                    minlength="1"
+                    maxlength="500"
+                    placeholder="Lovely soup..."
+                    validation-message="Must be between 1 and 500 characters"
+                    spellcheck
+                  ></b-input>
+                </b-field>
               </div>
             </div>
           </b-step-item>
           <b-step-item step="2" icon="chef-hat" label="Instructions">
             <div class="columns is-centered">
               <div class="column is-half">
-                <form action="post" id="form-1" @submit.prevent="goNext()">
-                  <b-field label="Cooktime" message="Format HH:MM">
-                    <b-clockpicker
-                      :increment-minutes="5"
-                      v-model="recipe.cookTime"
-                      required
-                      placeholder="Click to select..."
-                      icon="clock"
-                      hour-format="24"
-                    >
-                      <div class="is-flex is-justified-center">
-                        <b-button class @click="recipe.cookTime=new Date(0,0)">Clear</b-button>
-                        <!-- <b-button type="is-primary" @click="close()">Confirm</b-button> -->
-                      </div>
-                    </b-clockpicker>
-                  </b-field>
-                  <b-field
-                    :message="`Preferred format is: 'amount+unit ingredient' e.g. '1l water'`"
-                    label="Ingredients"
+                <b-field label="Cooktime" message="Format HH:MM">
+                  <b-clockpicker
+                    :increment-minutes="5"
+                    v-model="recipe.cookTime"
+                    required
+                    placeholder="Click to select..."
+                    icon="clock"
+                    hour-format="24"
                   >
-                    <b-taginput
-                      v-model="recipe.ingredients"
-                      :allow-new="true"
-                      open-on-focus
-                      icon="label"
-                      placeholder="Add an ingredient"
-                      maxtags="30"
-                      maxlength="70"
-                      allow-duplicates
-                      ellipsis
-                    ></b-taginput>
-                  </b-field>
-                  <b-field
-                    :message="[`Write your cooking instructions/directions here. Maximum 2000 characters`]"
-                    label="Instructions"
-                    :type="{'is-danger' : recipe.instructions.length >= 1000}"
-                  >
-                    <!-- <TextEditor :max="1000" v-model="recipe.instructions" /> -->
-                    <b-input
-                      v-model="recipe.instructions"
-                      type="textarea"
-                      validation-message="Maximum 2000 characters."
-                      maxlength="2000"
-                      placeholder="Prepare and boil for 20 minutes..."
-                      required
-                      spellcheck
-                    ></b-input>
-                  </b-field>
-                </form>
+                    <div class="is-flex is-justified-center">
+                      <b-button class @click="recipe.cookTime=new Date(0,0)">Clear</b-button>
+                      <!-- <b-button type="is-primary" @click="close()">Confirm</b-button> -->
+                    </div>
+                  </b-clockpicker>
+                </b-field>
+                <b-field
+                  :message="[`Preferred format is: 'amount+unit ingredient' e.g. '1l water'`, {'You need to provide atleast 1 ingredient!': errors.ingredients}]"
+                  label="Ingredients"
+                  :type="{'is-danger' : errors.ingredients}"
+                >
+                  <b-taginput
+                    v-model="recipe.ingredients"
+                    :allow-new="true"
+                    open-on-focus
+                    icon="label"
+                    placeholder="Add an ingredient"
+                    maxtags="30"
+                    maxlength="70"
+                    allow-duplicates
+                    ellipsis
+                    @blur="validate()"
+                  ></b-taginput>
+                </b-field>
+                <b-field
+                  :message="[`Write your cooking instructions/directions here. Maximum 2000 characters`]"
+                  label="Instructions"
+                  :type="{'is-danger' : errors.instructions === true}"
+                >
+                  <!-- <TextEditor :max="1000" v-model="recipe.instructions" /> -->
+                  <b-input
+                    v-model="recipe.instructions"
+                    type="textarea"
+                    validation-message="Maximum 2000 characters."
+                    maxlength="2000"
+                    placeholder="Prepare and boil for 20 minutes..."
+                    required
+                    spellcheck
+                  ></b-input>
+                </b-field>
               </div>
             </div>
           </b-step-item>
@@ -117,32 +123,29 @@
           <b-step-item step="3" icon="upload" label="Images">
             <div class="columns is-centered">
               <div class="column is-narrow is-flex is-justified-center is-column">
-                <form action="post" id="form-2" @submit.prevent="goNext()">
-                  <b-field label="Upload Images" expanded>
-                    <b-upload
-                      @input="checkUpload"
-                      accept=".jpg, .png, .jpeg"
-                      v-model="dropFiles"
-                      multiple
-                      validation-message="Choose atleast one file."
-                      drag-drop
-                      expanded
-                      required
-                    >
-                      <section class="section">
-                        <div class="content has-text-centered">
-                          <p>
-                            <b-icon icon="upload" size="is-large"></b-icon>
-                          </p>
-                          <p>Drop your files here or click to upload</p>
-                          <p
-                            class="has-text-grey-light is-italic"
-                          >Accepts .jpg or .png with maximum size of 10MB</p>
-                        </div>
-                      </section>
-                    </b-upload>
-                  </b-field>
-                </form>
+                <b-field :type="{'is-danger' : errors.image}" label="Upload Images" expanded>
+                  <b-upload
+                    @input="checkUpload"
+                    accept=".jpg, .png, .jpeg"
+                    v-model="dropFiles"
+                    multiple
+                    validation-message="Choose atleast one file."
+                    drag-drop
+                    expanded
+                  >
+                    <section class="section">
+                      <div class="content has-text-centered">
+                        <p>
+                          <b-icon icon="upload" size="is-large"></b-icon>
+                        </p>
+                        <p>Drop your files here or click to upload</p>
+                        <p
+                          class="has-text-grey-light is-italic"
+                        >Accepts .jpg or .png with maximum size of 10MB</p>
+                      </div>
+                    </section>
+                  </b-upload>
+                </b-field>
                 <div class="tags is-multiline">
                   <span v-for="(file, index) in dropFiles" :key="index" class="tag is-primary">
                     {{file.name}}
@@ -157,7 +160,12 @@
             </div>
             <div class="columns is-centered">
               <div class="column is-half is-flex is-column is-justified-center">
-                <b-message type="is-info">Atleast one image is required!</b-message>
+                <b-message
+                  :has-icon="true"
+                  :icon="!errors.image ? dropFiles.length > 0 ? 'check' : 'exclamation':'alert-circle'"
+                  icon-size="is-small"
+                  :class="{'is-primary' : !errors.image, 'is-danger' : errors.image}"
+                >Atleast one image is required!</b-message>
               </div>
             </div>
           </b-step-item>
@@ -181,7 +189,7 @@
                     </tr>
                     <tr>
                       <td>
-                        <span class="label">Description*</span>
+                        <span class="label">Description</span>
                       </td>
                       <td>
                         <p
@@ -191,7 +199,7 @@
                     </tr>
                     <tr>
                       <td>
-                        <span class="label">Diets</span>
+                        <span class="label">Diets*</span>
                       </td>
                       <td>
                         <p
@@ -211,7 +219,7 @@
                     </tr>
                     <tr>
                       <td>
-                        <span class="label">Ingredients</span>
+                        <span class="label">Ingredients*</span>
                       </td>
                       <td>
                         <p
@@ -221,7 +229,7 @@
                     </tr>
                     <tr>
                       <td>
-                        <span class="label">Instructions*</span>
+                        <span class="label">Instructions</span>
                       </td>
                       <td>
                         <p
@@ -275,8 +283,8 @@
                       :form="`form-${activeStep}`"
                       icon-right="chevron-right"
                       :disabled="next.disabled"
-                      native-type="submit"
-                      @click="validate(next)"
+                      native-type="button"
+                      @click.prevent="goNext(next)"
                     >Next</b-button>
                     <!-- <button
                       :form="`form-${activeStep}`"
@@ -286,7 +294,7 @@
                     >Next</button>-->
                   </template>
                   <template v-else>
-                    <button class="button is-primary" type="submit">Add this recipe</button>
+                    <button class="button is-primary" form="form-main" type="submit">Add this recipe</button>
                   </template>
                 </div>
               </div>
@@ -312,6 +320,7 @@ import { required, minLength, maxLength } from "vuelidate/lib/validators";
 export default {
   data() {
     return {
+      errors: {},
       activeStep: 0,
       nextStep: null,
       uploading: false,
@@ -355,7 +364,12 @@ export default {
       return this.$store.getters.getDiets;
     }
   },
-  watch: {},
+  watch: {
+    errors: {
+      deep: true,
+      handler() {}
+    }
+  },
   methods: {
     ...mapActions(["addRecipe"]),
     async formHandle() {
@@ -384,6 +398,7 @@ export default {
     },
     deleteDropFile(index) {
       this.dropFiles.splice(index, 1);
+      this.validate();
     },
     getDiets(text) {
       return this.diets.filter(
@@ -394,11 +409,54 @@ export default {
             .indexOf(text.toLowerCase()) >= 0
       );
     },
-    validate(next) {
-      this.nextStep = next;
+    validate() {
+      switch (this.activeStep) {
+        case 0:
+          if (this.recipe.name.length < 3) {
+            this.$set(this.errors, "name", true);
+            return false;
+          } else {
+            this.$set(this.errors, "name", false);
+          }
+          if (this.recipe.description.length > 500) {
+            return false;
+          }
+          if (this.recipe.dietTypes.length === 0) {
+            this.$set(this.errors, "diets", true);
+            return false;
+          } else {
+            this.$set(this.errors, "diets", false);
+          }
+          break;
+        case 1:
+          if (this.recipe.ingredients.length === 0) {
+            this.$set(this.errors, "ingredients", true);
+            return false;
+          } else {
+            this.$set(this.errors, "ingredients", false);
+          }
+          if (this.recipe.instructions.length > 2000) {
+            this.$set(this.errors, "instructions", true);
+            return false;
+          } else {
+            this.$set(this.errors, "instructions", false);
+          }
+          break;
+        case 2:
+          if (this.dropFiles.length === 0) {
+            this.$set(this.errors, "image", true);
+            return false;
+          } else {
+            this.$set(this.errors, "image", false);
+            break;
+          }
+      }
+      return true;
     },
-    goNext() {
-      this.nextStep.action();
+    goNext(next) {
+      if (this.validate()) {
+        next.action();
+      }
     },
     parseTime(str) {
       try {
@@ -423,6 +481,8 @@ export default {
             position: "is-bottom",
             type: "is-warning"
           });
+        } else {
+          this.validate();
         }
       });
     }
