@@ -4,7 +4,7 @@
       <div class="is-flex is-justified-center">
         <h1 class="title is-4">Adding a new recipe</h1>
       </div>
-      <form id="form-main" ref="form" action="post" @submit.prevent="formHandle">
+      <form novalidate ref="form" action="post" @submit.prevent="formHandle">
         <b-steps style="padding-top:2rem" v-model="activeStep">
           <hr class="is-marginless" />
           <b-step-item step="1" icon="clipboard-text" label="Description">
@@ -46,18 +46,19 @@
                   ></b-taginput>
                 </b-field>
                 <b-field
-                  message="Describe your recipe here. Maximum 500 characters"
+                  :type="{'is-danger' : errors.desc}"
+                  message="Describe your recipe here. Atleast 10 and maximum 500 characters"
                   label="Description"
                 >
                   <b-input
+                    @blur="validate()"
                     required
-                    min="10"
                     v-model="recipe.description"
                     type="textarea"
-                    minlength="1"
+                    minlength="10"
                     maxlength="500"
                     placeholder="Lovely soup..."
-                    validation-message="Must be between 1 and 500 characters"
+                    validation-message="Must be between 5 and 500 characters"
                     spellcheck
                   ></b-input>
                 </b-field>
@@ -112,7 +113,6 @@
                     validation-message="Maximum 2000 characters."
                     maxlength="2000"
                     placeholder="Prepare and boil for 20 minutes..."
-                    required
                     spellcheck
                   ></b-input>
                 </b-field>
@@ -294,7 +294,7 @@
                     >Next</button>-->
                   </template>
                   <template v-else>
-                    <button class="button is-primary" form="form-main" type="submit">Add this recipe</button>
+                    <button class="button is-primary" type="submit">Add this recipe</button>
                   </template>
                 </div>
               </div>
@@ -345,11 +345,10 @@ export default {
       },
       description: {
         required,
-        minLength: minLength(5),
+        minLength: minLength(10),
         maxLength: maxLength(500)
       },
       instructions: {
-        required,
         maxLength: maxLength(2000)
       },
       images: {
@@ -418,8 +417,14 @@ export default {
           } else {
             this.$set(this.errors, "name", false);
           }
-          if (this.recipe.description.length > 500) {
+          if (
+            this.recipe.description.length > 500 ||
+            this.recipe.description.length < 10
+          ) {
+            this.$set(this.errors, "desc", true);
             return false;
+          } else {
+            this.$set(this.errors, "desc", false);
           }
           if (this.recipe.dietTypes.length === 0) {
             this.$set(this.errors, "diets", true);
