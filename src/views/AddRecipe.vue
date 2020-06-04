@@ -1,10 +1,12 @@
 <template>
   <div class="section">
     <div class="container">
-      <h1 class="title is-4">New Recipe</h1>
-      <hr />
+      <div class="is-flex is-justified-center">
+        <h1 class="title is-4">Adding a new recipe</h1>
+      </div>
       <form ref="form" action="post" @submit.prevent="formHandle">
-        <b-steps v-model="activeStep">
+        <b-steps style="padding-top:2rem" v-model="activeStep">
+          <hr class="is-marginless" />
           <b-step-item step="1" icon="clipboard-text" label="Description">
             <div class="columns is-centered">
               <div class="column is-half is-narrow">

@@ -2,7 +2,7 @@
   <div class="section">
     <div class="container">
       <h1 class="title is-4">
-        Edit Recipe
+        Editing Recipe
         <em class="has-text-grey has-text-weight-light">{{recipe.name}}</em>
       </h1>
       <hr />
