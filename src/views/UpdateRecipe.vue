@@ -78,18 +78,17 @@
             </b-field>
             <b-field
               label="Instructions"
-              message="Write your cooking instructions/directions here. Must be atleast 10 and maximum 1000 characters"
+              message="Write your cooking instructions/directions here. Maximum 2000 characters"
             >
-              <TextEditor v-model="updatedData.instructions" />
-              <!-- <b-input
+              <!-- <TextEditor v-model="updatedData.instructions" /> -->
+              <b-input
                 v-model="updatedData.instructions"
                 type="textarea"
-                validation-message="Must be between 10 and 1000 characters"
-                minlength="10"
-                maxlength="1000"
+                validation-message="Maximum 2000 characters"
+                maxlength="2000"
                 placeholder="Recipe Instructions"
                 required
-              ></b-input>-->
+              ></b-input>
             </b-field>
           </div>
         </div>
@@ -172,11 +171,11 @@
 
 <script>
 import { mapActions, mapGetters } from "vuex";
-import TextEditor from "../components/TextEditor";
+//import TextEditor from "../components/TextEditor";
 
 export default {
   components: {
-    TextEditor
+    //TextEditor
   },
   data() {
     return {
@@ -239,9 +238,9 @@ export default {
         });
         return;
       }
-      if (this.updatedData.instructions.length >= 1000) {
+      if (this.updatedData.instructions.length >= 2000) {
         this.$buefy.toast.open({
-          message: `Instructions can't be longer than 1000 characters!`,
+          message: `Instructions can't be longer than 2000 characters!`,
           type: "is-danger"
         });
         return;

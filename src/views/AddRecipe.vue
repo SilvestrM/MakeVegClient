@@ -49,6 +49,7 @@
                       maxlength="500"
                       placeholder="Lovely soup..."
                       validation-message="Must be between 1 and 500 characters"
+                      spellcheck
                     ></b-input>
                   </b-field>
                 </form>
@@ -91,21 +92,20 @@
                     ></b-taginput>
                   </b-field>
                   <b-field
-                    :message="[`Write your cooking instructions/directions here. Maximum 1000 characters`,` ${recipe.instructions.length} / 1000`]"
+                    :message="[`Write your cooking instructions/directions here. Maximum 2000 characters`]"
                     label="Instructions"
                     :type="{'is-danger' : recipe.instructions.length >= 1000}"
                   >
-                    <TextEditor :max="1000" v-model="recipe.instructions" />
-                    <!-- <b-input
+                    <!-- <TextEditor :max="1000" v-model="recipe.instructions" /> -->
+                    <b-input
                       v-model="recipe.instructions"
                       type="textarea"
-                      min="10"
-                      validation-message="Must be between 10 and 1000 characters!"
-                      minlength="10"
-                      maxlength="1000"
+                      validation-message="Maximum 2000 characters."
+                      maxlength="2000"
                       placeholder="Prepare and boil for 20 minutes..."
                       required
-                    ></b-input>-->
+                      spellcheck
+                    ></b-input>
                   </b-field>
                 </form>
               </div>
@@ -305,7 +305,7 @@
 <script>
 import { mapActions, mapGetters } from "vuex";
 import { required, minLength, maxLength } from "vuelidate/lib/validators";
-import TextEditor from "../components/TextEditor";
+//import TextEditor from "../components/TextEditor";
 
 export default {
   data() {
@@ -339,7 +339,7 @@ export default {
       },
       instructions: {
         required,
-        maxLength: maxLength(1000)
+        maxLength: maxLength(2000)
       },
       images: {
         minLength: minLength(1),
@@ -426,7 +426,7 @@ export default {
     }
   },
   components: {
-    TextEditor
+    //TextEditor
   }
 };
 </script>
