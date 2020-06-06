@@ -507,7 +507,7 @@ export default {
 
 .table {
   tr {
-    overflow-x: hidden;
+    // overflow-x: hidden;
   }
   tr,
   td {

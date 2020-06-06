@@ -59,8 +59,14 @@
             vertical-align: middle;
             align-items: center;
         }
+        .b-tooltip {
+            overflow: visible;
+        }
     }
     overflow: hidden;
+    @media (min-width: $tablet) {
+        overflow: initial;
+    }
 }
 
 .is-error {
