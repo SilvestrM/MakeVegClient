@@ -5,13 +5,13 @@
 
 // $primary: #91b162;
 // $primary: #3B7523;
-$primary: #437a31;
+$primary: #547f33;
 $primary-invert: findColorInvert($primary);
 
 $success: #3b7523;
 
-$info: #ee7d32;
-$link: #ee7d32;
+$info: #8f653a;
+$link: #8f653a;
 
 //$info: #DD691B;
 
@@ -22,7 +22,7 @@ $black: #080705;
 
 //$dropdown-content-z: 50;
 
-$menu-item-active-background-color: #ee7d32;
+$menu-item-active-background-color: $link;
 // $table-row-active-background-color: #e2c8b6;
 // $table-row-active-color: $black;
 
@@ -37,6 +37,7 @@ $size-5: 1.2rem;
 $sizes: $size-1 $size-2 $size-3 $size-4 $size-5 $size-6 $size-7;
 
 $hero-body-padding-medium: 5rem 1.5rem;
+$table-cell-padding: 0.25rem 0.75rem;
 
 $colors: (
     "white": (
