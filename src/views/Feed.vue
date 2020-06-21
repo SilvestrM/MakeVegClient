@@ -49,7 +49,7 @@
                 type="search"
                 icon="magnify"
                 rounded
-                @input="search"
+                v-model="searchQuery"
               ></b-input>
             </b-field>
             <b-field>
@@ -102,94 +102,16 @@
               </b-collapse>
             </b-field>
           </b-field>
-          <!-- <div v-if="isLoggedIn" style="margin-top:2rem; padding: 0 2.5rem;">
-            <b-field label="Filters" rounded label-position="on-border" position="is-centered">
-              <b-taginput
-                type="is-primary"
-                :data="diets"
-                autocomplete
-                :allow-new="false"
-                ellipsis
-                v-model="filters"
-                open-on-focus
-                readonly
-                placeholder="..."
-              >
-                <template slot="empty">
-                  <p>None found</p>
-                </template>
-                <template slot="header">
-                  <div>
-                    <strong>Diets</strong>
-                    <hr class="is-marginless" />
-                  </div>
-                </template>
-              </b-taginput>
-            </b-field>
-            <b-field expanded>
-              <router-link
-                class="is-size-7 is-italic"
-                :to="`/user/${$store.state.loggedIn._id}/settings/account`"
-              >Update your preferences</router-link>
-            </b-field>
-          </div>-->
         </div>
       </div>
-      <!-- <div class="columns is-centered">
-        <div class="column is-two-fifths">
-          <b-collapse v-if="isLoggedIn" :open.sync="filtersOpen">
-            <b-field label="Filters" slot="trigger" slot-scope="props" rounded>
-              <template slot="label">
-                <div class="is-flex">
-                  <span>Filters</span>
-                  <b-icon :icon="props.open ? 'chevron-down' : 'chevron-up'"></b-icon>
-                </div>
-              </template>
-              <b-taglist v-show="!filtersOpen">
-                <b-tag type="is-primary" v-for="(diet, i) in filters" :key="i">{{diet}}</b-tag>
-              </b-taglist>
-            </b-field>
-            <b-field rounded position="is-centered">
-
-              <b-taginput
-                type="is-primary"
-                :data="diets"
-                autocomplete
-                :allow-new="false"
-                ellipsis
-                v-model="filters"
-                open-on-focus
-                readonly
-                placeholder="..."
-              >
-                <template slot="empty">
-                  <p>None found</p>
-                </template>
-                <template slot="header">
-                  <div>
-                    <strong>Diets</strong>
-                    <hr class="is-marginless" />
-                  </div>
-                </template>
-              </b-taginput>
-  
-            </b-field>
-            <b-field expanded>
-              <router-link
-                class="is-size-7 is-italic"
-                :to="`/user/${$store.state.loggedIn._id}/settings/account`"
-              >Update your preferences</router-link>
-            </b-field>
-          </b-collapse>
-        </div>
-      </div>-->
     </div>
     <hr class="is-marginless" />
     <div class="section">
       <div class="container">
         <div class="columns" style="min-height: 60vh">
           <div class="column is-full">
-            <div class="columns is-tablet is-multiline is-2">
+            <b-message v-if="recipes.length === 0 && !isLoading">No results</b-message>
+            <div v-else class="columns is-tablet is-multiline is-2">
               <div
                 class="column recipe-card is-full-mobile is-half-tablet is-half-desktop is-one-third-widescreen is-one-third-fullhd"
                 v-for="recipe in recipes"
@@ -202,7 +124,12 @@
               <b-loading :is-full-page="false" can-cancel :active.sync="isLoading"></b-loading>
               <!-- <b-skeleton :active="isLoading" height="20rem"></b-skeleton> -->
             </div>
-            <b-message v-if="recipes.length === 0 && !isLoading">No results</b-message>
+            <div id="loadMore" class="is-flex is-justified-center">
+              <!-- <b-button
+                v-if="!searchQuery && recipes.length % 6 === 0 && !isLoading"
+                @click.prevent="fetchMore()"
+              >Load More</b-button>-->
+            </div>
           </div>
         </div>
       </div>
@@ -213,6 +140,7 @@
 <script>
 import { mapActions, mapGetters } from "vuex";
 // import Recipe from "../components/Recipe";
+import ScrollTrigger from "@terwanerik/scrolltrigger";
 
 export default {
   name: "Discover",
@@ -221,6 +149,7 @@ export default {
       publicPath: process.env.BASE_URL,
       isLoading: false,
       filtersOpen: false,
+      searchQuery: "",
       filters: []
     };
   },
@@ -261,22 +190,38 @@ export default {
     isLoggedIn() {
       this.filters =
         this.getLoggedIn !== null ? this.getLoggedIn.settings.diets : [];
+    },
+    async searchQuery(oldQuery, newQuery) {
+      if (newQuery.length === 0) {
+        await this.fetchRecipes(true);
+      } else if (newQuery.length >= 1) {
+        await this.search();
+      }
     }
+  },
+  beforeDestroy() {
+    this.trigger.kill();
   },
   mounted() {
     this.filters =
       this.getLoggedIn !== null ? this.getLoggedIn.settings.diets : [];
+
+    this.trigger = new ScrollTrigger();
+    this.trigger.add("#loadMore", {
+      toggle: {
+        callback: {
+          in: async () => await this.fetchMore()
+        }
+      }
+    });
   },
   methods: {
     ...mapActions(["fetchRecipes", "fetchFindRecipes"]),
-    async search(query) {
+    async search() {
+      const query = this.searchQuery;
       if (query.length >= 1) {
         this.isLoading = true;
         await this.fetchFindRecipes(query);
-        this.isLoading = false;
-      } else if (query.length === 0) {
-        this.isLoading = true;
-        await this.fetchRecipes(query);
         this.isLoading = false;
       }
     },
@@ -286,6 +231,11 @@ export default {
           Math.round((arr.reduce((a, b) => a + b, 0) / arr.length) * 100) / 100
         );
       // return arr.reduce((a, b) => a + b, 0) / arr.length;
+    },
+    async fetchMore() {
+      if (this.recipes.length > 0 && this.searchQuery.length === 0) {
+        await this.fetchRecipes();
+      }
     },
     signClicked() {
       this.$emit("clickedSignUp");

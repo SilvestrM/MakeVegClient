@@ -26,7 +26,7 @@ const recipes = {
     },
     actions: {
         async fetchFindRecipes({ commit, state }, query) {
-            await axios.get(`${state.url}find/${query}`).then(resolve => {
+            await axios.get(`${state.url}search/${query}`).then(resolve => {
                 if (resolve.data !== undefined) {
                     commit('setRecipes', resolve.data)
                     // resolve.data.forEach(async recipe => {
@@ -47,9 +47,13 @@ const recipes = {
                     throw reason;
                 })
         },
-        async fetchRecipes({ commit, state }) {
-            await axios.get(state.url).then(resolve => {
-                commit('setRecipes', resolve.data)
+        async fetchRecipes({ commit, state }, clean = false) {
+            if (clean) {
+                commit('setRecipes', [])
+            }
+            await axios.get(`${state.url}fetch/${state.recipes.length}`).then(resolve => {
+                const recipes = state.recipes.concat(resolve.data)
+                commit('setRecipes', recipes)
             })
                 .catch(reason => {
                     Toast.open({

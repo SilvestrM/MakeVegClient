@@ -3,15 +3,16 @@
 //     font-size: 14px;
 // }
 
-// $primary: #91b162;
-// $primary: #3B7523;
 $primary: #437a31;
 $primary-invert: findColorInvert($primary);
 
-$success: #3b7523;
+$secondary: #dd7616;
+// $secondary: #e67914;
 
-$info: #90643a;
-$link: #90643a;
+$success: #669c55;
+
+$info: $secondary;
+$link: darken($secondary, 5);
 
 //$info: #DD691B;
 
