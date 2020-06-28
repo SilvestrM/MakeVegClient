@@ -2,7 +2,7 @@
   <div>
     <div
       class="hero is-primary"
-      :style="{'background':`url(${publicPath}images/board_food.jpg) center 82% / cover`}"
+      :style="{'background':`url(${publicPath}images/board_food.jpg) center 82% / cover ${isLoggedIn ? 'fixed' : 'scroll'} hsl(0, 0%, 14%)`}"
       :class="{'is-medium': !isLoggedIn}"
     >
       <div class="hero-body">
@@ -30,10 +30,11 @@
         </div>
       </div>
     </div>
+    <!-- <hr class="is-marginless" /> -->
     <div
       class="section has-background-white-bis"
-      style="padding-top:4rem"
-      :style="{'background':`url(${publicPath}images/so-white.png) repeat center`}"
+      style="padding-top:3rem;"
+      :style="{'background': isLoggedIn ? `linear-gradient(360deg,  rgba(250,250,250,1) 0%,  rgba(250,250,250,0.9) 75%,  rgba(250,250,250,0.85) 100%), url(${publicPath}images/board_food.jpg) center 82% / cover fixed` : `url(${publicPath}images/so-white.png) repeat center`}"
     >
       <div class="columns is-centered">
         <div class="column is-half">
@@ -121,10 +122,18 @@
                   <Recipe :recipe="recipe" />
                 </router-link>
               </div>
-              <b-loading :is-full-page="false" can-cancel :active.sync="isLoading"></b-loading>
+              <!-- <b-loading :is-full-page="false" can-cancel :active.sync="isLoading"></b-loading> -->
               <!-- <b-skeleton :active="isLoading" height="20rem"></b-skeleton> -->
             </div>
-            <div id="loadMore" class="is-flex is-justified-center">
+            <div id="loadMore" style="height:80px;" class="is-flex is-relative is-justified-center">
+              <b-loading :active="isLoading" :is-full-page="false">
+                <div class="lds-ellipsis">
+                  <div></div>
+                  <div></div>
+                  <div></div>
+                  <div></div>
+                </div>
+              </b-loading>
               <!-- <b-button
                 v-if="!searchQuery && recipes.length % 6 === 0 && !isLoading"
                 @click.prevent="fetchMore()"
@@ -234,7 +243,9 @@ export default {
     },
     async fetchMore() {
       if (this.recipes.length > 0 && this.searchQuery.length === 0) {
+        this.isLoading = true;
         await this.fetchRecipes();
+        this.isLoading = false;
       }
     },
     signClicked() {

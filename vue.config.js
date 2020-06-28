@@ -14,6 +14,7 @@ module.exports = {
                     @import "_theme.scss";
                     @import "bulma";
                     @import "~buefy/src/scss/buefy";
+                    @import "animations.scss";
                     @import "style.scss";
                     `
             }
